@@ -20,4 +20,9 @@
         <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.23.0" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Companies\Infrastructure\" />
+      <Folder Include="Companies\Interfaces\" />
+    </ItemGroup>
+
 </Project>
