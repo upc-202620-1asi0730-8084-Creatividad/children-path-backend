@@ -21,7 +21,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Companies\Infrastructure\" />
       <Folder Include="Companies\Interfaces\" />
     </ItemGroup>
 
