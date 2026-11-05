@@ -15,11 +15,194 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8cf4aace-7fad-4774-85b0-73282254bbf7" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/ChildrenPath.Platform/Drivers/Domain/Driver.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ChildrenPath.Platform/Drivers/Interfaces/Resources/CreateDriverResource.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ChildrenPath.Platform/Drivers/Interfaces/Rest/DriversController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.ChildrenPath.Backend/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.ChildrenPath.Backend/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ChildrenPath.Platform/Alerts/Domain/Alert.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ChildrenPath.Platform/Alerts/Interfaces/Resources/CreateAlertResource.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ChildrenPath.Platform/Alerts/Interfaces/Rest/AlertsController.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ChildrenPath.Platform/Analytics/Domain/Report.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ChildrenPath.Platform/Analytics/Interfaces/Resources/CreateReportResource.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ChildrenPath.Platform/Assignments/Domain/Assignment.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ChildrenPath.Platform/Assignments/Interfaces/Resources/AssignmentsController.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ChildrenPath.Platform/Assignments/Interfaces/Resources/CreateAssignmentResource.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ChildrenPath.Platform/Attendance/Domain/Attendance.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ChildrenPath.Platform/Attendance/Interfaces/Resources/CreateAttendanceResource.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ChildrenPath.Platform/Attendance/Interfaces/Rest/AttendanceController.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ChildrenPath.Platform/Fleet/Domain/Fleet.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ChildrenPath.Platform/Fleet/Interfaces/Resources/CreateFleetResource.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ChildrenPath.Platform/Fleet/Interfaces/Rest/FleetsController.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ChildrenPath.Platform/Tracking/Domain/Tracking.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ChildrenPath.Platform/Tracking/Interfaces/Resources/CreateTrackingResource.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ChildrenPath.Platform/Tracking/Interfaces/Rest/TrackingController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.ChildrenPath.Backend/.idea/conventionalCommit.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.ChildrenPath.Backend/.idea/gitflow-helper.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.ChildrenPath.Backend/.idea/indexLayout.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.ChildrenPath.Backend/.idea/projectSettingsUpdater.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.ChildrenPath.Backend/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.ChildrenPath.Backend/.idea/workspace.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/Fleet/Domain/Vehicle.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/Fleet/Interfaces/Resources/CreateVehicleResource.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ChildrenPath.Platform/Fleet/Interfaces/Resources/CreateVehicleResource.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/Fleet/Interfaces/Rest/FleetController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ChildrenPath.Platform/Fleet/Interfaces/Rest/FleetController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/Shared/Infrastructure/AppDbContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ChildrenPath.Platform/Shared/Infrastructure/AppDbContext.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/BCrypt-Net-Next.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/BouncyCastle.Cryptography.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/ChildrenPath.Platform.deps.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/ChildrenPath.Platform.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/ChildrenPath.Platform.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/ChildrenPath.Platform.pdb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/ChildrenPath.Platform.runtimeconfig.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/ChildrenPath.Platform.staticwebassets.endpoints.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/Google.Protobuf.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/Humanizer.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/K4os.Compression.LZ4.Streams.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/K4os.Compression.LZ4.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/K4os.Hash.xxHash.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/Microsoft.AspNetCore.OpenApi.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/Microsoft.Bcl.Cryptography.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/Microsoft.Build.Framework.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/Microsoft.CodeAnalysis.CSharp.Workspaces.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/Microsoft.CodeAnalysis.CSharp.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/Microsoft.CodeAnalysis.ExternalAccess.RazorCompiler.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/Microsoft.CodeAnalysis.Workspaces.MSBuild.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/Microsoft.CodeAnalysis.Workspaces.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/Microsoft.CodeAnalysis.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/Microsoft.EntityFrameworkCore.Abstractions.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/Microsoft.EntityFrameworkCore.Design.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/Microsoft.EntityFrameworkCore.Relational.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/Microsoft.EntityFrameworkCore.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/Microsoft.Extensions.DependencyModel.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/Microsoft.IdentityModel.Abstractions.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/Microsoft.IdentityModel.JsonWebTokens.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/Microsoft.IdentityModel.Logging.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/Microsoft.IdentityModel.Protocols.OpenIdConnect.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/Microsoft.IdentityModel.Protocols.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/Microsoft.IdentityModel.Tokens.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/Microsoft.OpenApi.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/Microsoft.VisualStudio.SolutionPersistence.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/Mono.TextTemplating.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/MySql.Data.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/MySql.EntityFrameworkCore.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/Newtonsoft.Json.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/Scalar.AspNetCore.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/System.CodeDom.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/System.Composition.AttributedModel.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/System.Composition.Convention.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/System.Composition.Hosting.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/System.Composition.Runtime.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/System.Composition.TypedParts.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/System.Configuration.ConfigurationManager.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/System.IdentityModel.Tokens.Jwt.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/System.Security.Cryptography.ProtectedData.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/System.Security.Permissions.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/System.Windows.Extensions.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/ZstdSharp.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/appsettings.Development.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/appsettings.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/cs/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/cs/Microsoft.CodeAnalysis.CSharp.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/cs/Microsoft.CodeAnalysis.Workspaces.MSBuild.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/cs/Microsoft.CodeAnalysis.Workspaces.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/cs/Microsoft.CodeAnalysis.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/de/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/de/Microsoft.CodeAnalysis.CSharp.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/de/Microsoft.CodeAnalysis.Workspaces.MSBuild.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/de/Microsoft.CodeAnalysis.Workspaces.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/de/Microsoft.CodeAnalysis.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/es/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/es/Microsoft.CodeAnalysis.CSharp.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/es/Microsoft.CodeAnalysis.Workspaces.MSBuild.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/es/Microsoft.CodeAnalysis.Workspaces.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/es/Microsoft.CodeAnalysis.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/fr/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/fr/Microsoft.CodeAnalysis.CSharp.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/fr/Microsoft.CodeAnalysis.Workspaces.MSBuild.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/fr/Microsoft.CodeAnalysis.Workspaces.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/fr/Microsoft.CodeAnalysis.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/it/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/it/Microsoft.CodeAnalysis.CSharp.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/it/Microsoft.CodeAnalysis.Workspaces.MSBuild.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/it/Microsoft.CodeAnalysis.Workspaces.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/it/Microsoft.CodeAnalysis.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/ja/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/ja/Microsoft.CodeAnalysis.CSharp.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/ja/Microsoft.CodeAnalysis.Workspaces.MSBuild.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/ja/Microsoft.CodeAnalysis.Workspaces.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/ja/Microsoft.CodeAnalysis.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/ko/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/ko/Microsoft.CodeAnalysis.CSharp.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/ko/Microsoft.CodeAnalysis.Workspaces.MSBuild.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/ko/Microsoft.CodeAnalysis.Workspaces.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/ko/Microsoft.CodeAnalysis.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/pl/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/pl/Microsoft.CodeAnalysis.CSharp.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/pl/Microsoft.CodeAnalysis.Workspaces.MSBuild.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/pl/Microsoft.CodeAnalysis.Workspaces.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/pl/Microsoft.CodeAnalysis.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/pt-BR/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/pt-BR/Microsoft.CodeAnalysis.CSharp.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/pt-BR/Microsoft.CodeAnalysis.Workspaces.MSBuild.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/pt-BR/Microsoft.CodeAnalysis.Workspaces.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/pt-BR/Microsoft.CodeAnalysis.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/ru/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/ru/Microsoft.CodeAnalysis.CSharp.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/ru/Microsoft.CodeAnalysis.Workspaces.MSBuild.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/ru/Microsoft.CodeAnalysis.Workspaces.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/ru/Microsoft.CodeAnalysis.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/runtimes/win-x64/native/comerr64.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/runtimes/win-x64/native/gssapi64.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/runtimes/win-x64/native/k5sprt64.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/runtimes/win-x64/native/krb5_64.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/runtimes/win-x64/native/krbcc64.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/runtimes/win/lib/net10.0/System.Windows.Extensions.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/tr/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/tr/Microsoft.CodeAnalysis.CSharp.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/tr/Microsoft.CodeAnalysis.Workspaces.MSBuild.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/tr/Microsoft.CodeAnalysis.Workspaces.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/tr/Microsoft.CodeAnalysis.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/zh-Hans/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/zh-Hans/Microsoft.CodeAnalysis.CSharp.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/zh-Hans/Microsoft.CodeAnalysis.Workspaces.MSBuild.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/zh-Hans/Microsoft.CodeAnalysis.Workspaces.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/zh-Hans/Microsoft.CodeAnalysis.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/zh-Hant/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/zh-Hant/Microsoft.CodeAnalysis.CSharp.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/zh-Hant/Microsoft.CodeAnalysis.Workspaces.MSBuild.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/zh-Hant/Microsoft.CodeAnalysis.Workspaces.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/bin/Debug/net10.0/zh-Hant/Microsoft.CodeAnalysis.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/obj/ChildrenPath.Platform.csproj.EntityFrameworkCore.targets" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/obj/ChildrenPath.Platform.csproj.nuget.dgspec.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/obj/ChildrenPath.Platform.csproj.nuget.g.props" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/obj/ChildrenPath.Platform.csproj.nuget.g.targets" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/obj/Debug/net10.0/.NETCoreApp,Version=v10.0.AssemblyAttributes.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/obj/Debug/net10.0/Children.7E53E66D.Up2Date" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/obj/Debug/net10.0/ChildrenPath.Platform.AssemblyInfo.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/obj/Debug/net10.0/ChildrenPath.Platform.AssemblyInfoInputs.cache" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/obj/Debug/net10.0/ChildrenPath.Platform.GeneratedMSBuildEditorConfig.editorconfig" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/obj/Debug/net10.0/ChildrenPath.Platform.GlobalUsings.g.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/obj/Debug/net10.0/ChildrenPath.Platform.MvcApplicationPartsAssemblyInfo.cache" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/obj/Debug/net10.0/ChildrenPath.Platform.MvcApplicationPartsAssemblyInfo.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/obj/Debug/net10.0/ChildrenPath.Platform.assets.cache" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/obj/Debug/net10.0/ChildrenPath.Platform.csproj.AssemblyReference.cache" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/obj/Debug/net10.0/ChildrenPath.Platform.csproj.CoreCompileInputs.cache" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/obj/Debug/net10.0/ChildrenPath.Platform.csproj.FileListAbsolute.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/obj/Debug/net10.0/ChildrenPath.Platform.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/obj/Debug/net10.0/ChildrenPath.Platform.genruntimeconfig.cache" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/obj/Debug/net10.0/ChildrenPath.Platform.pdb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/obj/Debug/net10.0/ChildrenPath.Platform.sourcelink.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/obj/Debug/net10.0/apphost.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/obj/Debug/net10.0/ref/ChildrenPath.Platform.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/obj/Debug/net10.0/refint/ChildrenPath.Platform.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/obj/Debug/net10.0/rjsmcshtml.dswa.cache.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/obj/Debug/net10.0/rjsmrazor.dswa.cache.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/obj/Debug/net10.0/rpswa.dswa.cache.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/obj/Debug/net10.0/staticwebassets.build.endpoints.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/obj/Debug/net10.0/staticwebassets.build.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/obj/Debug/net10.0/staticwebassets.build.json.cache" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/obj/Debug/net10.0/swae.build.ex.cache" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/obj/project.assets.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/obj/project.nuget.cache" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/obj/project.packagespec.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/obj/rider.project.model.nuget.info" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/obj/rider.project.restore.info" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -59,16 +242,31 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/ChildrenPath.Platform/Alerts/Domain/Alert.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/ChildrenPath.Platform/Alerts/Interfaces/Resources/CreateAlertResource.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/ChildrenPath.Platform/Alerts/Interfaces/Rest/AlertsController.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/ChildrenPath.Platform/Analytics/Analytics/Interfaces/Resources/CreateReportResource.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/ChildrenPath.Platform/Analytics/Domain/Report.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/ChildrenPath.Platform/Analytics/Interfaces/Resources/CreateReportResource.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/ChildrenPath.Platform/Assignments/Domain/Assignment.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/ChildrenPath.Platform/Assignments/Interfaces/Resources/AssignmentsController.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/ChildrenPath.Platform/Assignments/Interfaces/Resources/CreateAssignmentResource.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/ChildrenPath.Platform/Attendance/Domain/Attendance.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/ChildrenPath.Platform/Attendance/Interfaces/Resources/CreateAttendanceResource.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/ChildrenPath.Platform/Attendance/Interfaces/Rest/AttendanceController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/ChildrenPath.Platform/Dashboard/Domain/Dashboard.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/ChildrenPath.Platform/Dashboard/Interfaces/Resources/DashboardController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/ChildrenPath.Platform/Dashboard/Interfaces/Resources/DashboardResponse.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/ChildrenPath.Platform/Drivers/Domain/Driver.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/ChildrenPath.Platform/Drivers/Interfaces/Resources/CreateDriverResource.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/ChildrenPath.Platform/Drivers/Interfaces/Rest/DriversController.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/ChildrenPath.Platform/Fleet/Domain/Fleet.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/ChildrenPath.Platform/Fleet/Domain/Vehicle.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/ChildrenPath.Platform/Fleet/Infrastructure/Repositories/VehicleRepository.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/ChildrenPath.Platform/Fleet/Interfaces/Resources/CreateFleetResource.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/ChildrenPath.Platform/Fleet/Interfaces/Resources/CreateVehicleResource.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/ChildrenPath.Platform/Fleet/Interfaces/Rest/FleetController.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/ChildrenPath.Platform/Fleet/Interfaces/Rest/FleetsController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/ChildrenPath.Platform/Iam/Domain/User.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/ChildrenPath.Platform/Profiles/Domain/Profile.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/ChildrenPath.Platform/Profiles/Interfaces/Resources/CreateProfileResource.cs" root0="FORCE_HIGHLIGHTING" />
@@ -84,6 +282,9 @@
     <setting file="file://$PROJECT_DIR$/ChildrenPath.Platform/Subscriptions/Domain/Subscription.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/ChildrenPath.Platform/Subscriptions/Interfaces/Resources/CreateSubscriptionResource.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/ChildrenPath.Platform/Subscriptions/Interfaces/Resources/SubscriptionsController.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/ChildrenPath.Platform/Tracking/Domain/Tracking.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/ChildrenPath.Platform/Tracking/Interfaces/Resources/CreateTrackingResource.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/ChildrenPath.Platform/Tracking/Interfaces/Rest/TrackingController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/ChildrenPath.Platform/obj/Debug/net10.0/ChildrenPath.Platform.AssemblyInfo.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="McpProjectServerCommands">
@@ -93,61 +294,61 @@
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="NextEditCompletionFeaturesState">
     <decayedCancelled>
-      <entry key="MS100" value="1.0000000000000007" />
-      <entry key="MS500" value="1.001006566124928" />
-      <entry key="S2" value="1.3306210309820645" />
-      <entry key="S5" value="2.218999657718978" />
-      <entry key="S10" value="2.955354787770152" />
-      <entry key="S30" value="3.9502965074477867" />
-      <entry key="S60" value="4.538464459854291" />
-      <entry key="M2" value="6.069510681812355" />
-      <entry key="M5" value="11.475962975841657" />
-      <entry key="M10" value="17.27443275651375" />
-      <entry key="M15" value="20.421371230869074" />
-      <entry key="M30" value="24.595683900199365" />
-      <entry key="H1" value="30.235474701733274" />
-      <entry key="H2" value="53.836767427043235" />
-      <entry key="H4" value="101.3829318955872" />
-      <entry key="D1" value="202.7865710721249" />
-      <entry key="W1" value="230.89222591026908" />
+      <entry key="MS100" value="1.757858283255199" />
+      <entry key="MS500" value="1.946057646725596" />
+      <entry key="S2" value="1.9862327044933592" />
+      <entry key="S5" value="1.9944701686732145" />
+      <entry key="S10" value="1.9972312513520696" />
+      <entry key="S30" value="1.9990762306970769" />
+      <entry key="S60" value="1.9995382320270783" />
+      <entry key="M2" value="2.000719428009991" />
+      <entry key="M5" value="2.159511820092378" />
+      <entry key="M10" value="3.2672383109736196" />
+      <entry key="M15" value="5.258961264256348" />
+      <entry key="M30" value="12.580338964239347" />
+      <entry key="H1" value="24.270634823746775" />
+      <entry key="H2" value="49.082167697585945" />
+      <entry key="H4" value="97.40094496186398" />
+      <entry key="D1" value="211.22010931392816" />
+      <entry key="W1" value="244.81499035709913" />
     </decayedCancelled>
     <decayedSelected>
-      <entry key="MS100" value="0.001121775737301792" />
-      <entry key="MS500" value="0.2570284566640166" />
-      <entry key="S2" value="0.7120250977985358" />
-      <entry key="S5" value="0.8729675911337629" />
-      <entry key="S10" value="0.9343273468930046" />
-      <entry key="S30" value="0.9778257899245305" />
-      <entry key="S60" value="1.003377104962056" />
-      <entry key="M2" value="1.115329100769742" />
-      <entry key="M5" value="1.4273504207335634" />
-      <entry key="M10" value="1.6543165456677824" />
-      <entry key="M15" value="1.7538034393085282" />
-      <entry key="M30" value="1.8707774755349003" />
-      <entry key="H1" value="2.0979547709681663" />
-      <entry key="H2" value="3.3618276328406527" />
-      <entry key="H4" value="6.06491544318435" />
-      <entry key="D1" value="12.019458133043125" />
-      <entry key="W1" value="13.694691917550356" />
+      <entry key="MS100" value="0.0" />
+      <entry key="MS500" value="0.0" />
+      <entry key="S2" value="0.0" />
+      <entry key="S5" value="4.713698397962661E-205" />
+      <entry key="S10" value="6.865637914981146E-103" />
+      <entry key="S30" value="8.821892500862911E-35" />
+      <entry key="S60" value="9.409968555098054E-18" />
+      <entry key="M2" value="3.2119741638748485E-9" />
+      <entry key="M5" value="5.526633151692051E-4" />
+      <entry key="M10" value="0.03731653933126296" />
+      <entry key="M15" value="0.15773443296923506" />
+      <entry key="M30" value="0.6812440265786759" />
+      <entry key="H1" value="1.5030970264297971" />
+      <entry key="H2" value="3.022302804214808" />
+      <entry key="H4" value="5.866896670315418" />
+      <entry key="D1" value="12.618787195182705" />
+      <entry key="W1" value="14.629138390553248" />
     </decayedSelected>
     <decayedShown>
-      <entry key="MS100" value="0.9330329936179168" />
-      <entry key="MS500" value="1.0049357272817276" />
-      <entry key="S2" value="1.6066510066557338" />
-      <entry key="S5" value="2.737196957003919" />
-      <entry key="S10" value="3.649076346486518" />
-      <entry key="S30" value="4.827569064773259" />
-      <entry key="S60" value="5.487695480186378" />
-      <entry key="M2" value="7.153565635924657" />
-      <entry key="M5" value="12.88417423117428" />
-      <entry key="M10" value="18.915182010210632" />
-      <entry key="M15" value="22.16461474419433" />
-      <entry key="M30" value="26.460159463544986" />
-      <entry key="H1" value="32.32980489804923" />
-      <entry key="H2" value="57.19616347854185" />
-      <entry key="H4" value="107.44606510190162" />
-      <entry key="D1" value="214.805538064341" />
-      <entry key="W1" value="244.58684008869128" />
+      <entry key="MS100" value="0.8212628905683329" />
+      <entry key="MS500" value="1.41479248042955" />
+      <entry key="S2" value="1.8117060739658188" />
+      <entry key="S5" value="1.9204933679434364" />
+      <entry key="S10" value="1.9595118353935332" />
+      <entry key="S30" value="1.9863370933571514" />
+      <entry key="S60" value="1.9931476820022236" />
+      <entry key="M2" value="1.9975074868705796" />
+      <entry key="M5" value="2.158102666776258" />
+      <entry key="M10" value="3.301816524576932" />
+      <entry key="M15" value="5.413263531834402" />
+      <entry key="M30" value="13.25740027922862" />
+      <entry key="H1" value="25.769988273740697" />
+      <entry key="H2" value="52.10155153129295" />
+      <entry key="H4" value="103.26566973271673" />
+      <entry key="D1" value="223.8382934370322" />
+      <entry key="W1" value="259.4440329000093" />
     </decayedShown>
   </component>
   <component name="ProblemsViewState">
@@ -179,31 +380,31 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    ".NET Launch Settings Profile.ChildrenPath.Platform: http.executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.MCP Project settings loaded": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.cidr.known.project.marker": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.readMode.enableVisualFormatting": "true",
-    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "cidr.known.project.marker": "true",
-    "codeWithMe.voiceChat.enabledByDefault": "false",
-    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
-    "copilot.chat.legacySessionMetadata.migrated": "true",
-    "git-widget-placeholder": "feature/creating-drivers-class",
-    "junie.onboarding.icon.badge.shown": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "RiderNuGetOptionsPageId",
-    "to.speed.mode.migration.done": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;.NET Launch Settings Profile.ChildrenPath.Platform: http.executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.readMode.enableVisualFormatting&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
+    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
+    &quot;copilot.chat.legacySessionMetadata.migrated&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;develop&quot;,
+    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;RiderNuGetOptionsPageId&quot;,
+    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected=".NET Launch Settings Profile.ChildrenPath.Platform: http">
     <configuration name="ChildrenPath.Platform: http" type="LaunchSettings" factoryName=".NET Launch Settings Profile">
       <option name="LAUNCH_PROFILE_PROJECT_FILE_PATH" value="$PROJECT_DIR$/ChildrenPath.Platform/ChildrenPath.Platform.csproj" />
@@ -334,7 +535,15 @@
       <option name="project" value="LOCAL" />
       <updated>1793906148913</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="feat(Drivers): creating class drivers">
+      <option name="closed" value="true" />
+      <created>1793906727488</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1793906727488</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -366,7 +575,8 @@
     <MESSAGE value="feat(PROFILES): creating class profile" />
     <MESSAGE value="feat(Subscriptions): creating class subcription" />
     <MESSAGE value="feat(Dashboard): creating class dasboard" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat(Dashboard): creating class dasboard" />
+    <MESSAGE value="feat(Drivers): creating class drivers" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat(Drivers): creating class drivers" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

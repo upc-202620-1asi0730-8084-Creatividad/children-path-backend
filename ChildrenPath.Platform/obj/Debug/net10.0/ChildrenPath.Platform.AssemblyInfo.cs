@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ChildrenPath.Platform")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+dc3350f55c4925e203475b353891d1bf34c35f7a")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+337ecaa954f30f765fb6673dd75687044f629e7f")]
 [assembly: System.Reflection.AssemblyProductAttribute("ChildrenPath.Platform")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ChildrenPath.Platform")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
