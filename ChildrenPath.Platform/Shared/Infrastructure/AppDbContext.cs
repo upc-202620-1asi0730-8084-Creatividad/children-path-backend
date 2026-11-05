@@ -1,10 +1,16 @@
-﻿using ChildrenPath.Platform.Fleet.Domain;
-using ChildrenPath.Platform.Students.Domain;
+﻿using ChildrenPath.Platform.Students.Domain;
 using ChildrenPath.Platform.Profiles.Domain;
 using ChildrenPath.Platform.Subscriptions.Domain;
 using ChildrenPath.Platform.Drivers.Domain;
 using ChildrenPath.Platform.Iam.Domain;
+using ChildrenPath.Platform.Fleet.Domain;
+using ChildrenPath.Platform.Assignments.Domain;
+using ChildrenPath.Platform.Tracking.Domain;
+using ChildrenPath.Platform.Attendance.Domain;
+using ChildrenPath.Platform.Alerts.Domain;
+using ChildrenPath.Platform.Analytics.Domain;
 using Microsoft.EntityFrameworkCore;
+using AttendanceEntity = ChildrenPath.Platform.Attendance.Domain.Attendance;
 
 namespace ChildrenPath.Platform.Shared.Infrastructure;
 
@@ -29,6 +35,28 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<Driver> Drivers { get; set; }
     public DbSet<DriverAvailability> DriverAvailabilities { get; set; }
     public DbSet<DriverAssignment> DriverAssignments { get; set; }
+
+    public DbSet<TransportFleet> Fleets { get; set; }
+
+    public DbSet<Assignment> Assignments { get; set; }
+    
+    public DbSet<TrackingSession> TrackingSessions { get; set; }
+    public DbSet<Location> Locations { get; set; }
+    public DbSet<ETA> ETAs { get; set; }
+    
+    public DbSet<AttendanceEntity> Attendances { get; set; } 
+    public DbSet<BoardingRecord> BoardingRecords { get; set; }
+    public DbSet<AbsenceRecord> AbsenceRecords { get; set; }
+    
+    public DbSet<Alert> Alerts { get; set; }
+    public DbSet<Notification> Notifications { get; set; }
+    public DbSet<DeliveryLog> DeliveryLogs { get; set; }
+    public DbSet<NotificationTemplate> NotificationTemplates { get; set; }
+    public DbSet<AlertRule> AlertRules { get; set; }
+    
+    public DbSet<Report> Reports { get; set; }
+    public DbSet<Metric> Metrics { get; set; }
+    public DbSet<KPI> Kpis { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -41,6 +69,15 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         modelBuilder.Entity<Vehicle>().HasMany(v => v.Documents).WithOne().HasForeignKey(d => d.VehicleId);
         modelBuilder.Entity<Vehicle>().HasMany(v => v.MaintenanceRecords).WithOne().HasForeignKey(m => m.VehicleId);
 
+        modelBuilder.Entity<TransportFleet>().HasKey(f => f.Id);
+        
+        modelBuilder.Entity<Vehicle>().HasKey(v => v.Id);
+        modelBuilder.Entity<Vehicle>().HasOne(v => v.Fleet).WithMany(f => f.Vehicles).HasForeignKey(v => v.FleetId).OnDelete(DeleteBehavior.SetNull);
+        // Composición: Vehicle -> Documents
+        modelBuilder.Entity<Vehicle>().HasMany(v => v.Documents).WithOne().HasForeignKey(d => d.VehicleId).OnDelete(DeleteBehavior.Cascade);
+        // Composición: Vehicle -> MaintenanceRecords
+        modelBuilder.Entity<Vehicle>().HasMany(v => v.MaintenanceRecords).WithOne().HasForeignKey(m => m.VehicleId).OnDelete(DeleteBehavior.Cascade);
+        
         // Students
         modelBuilder.Entity<Student>().HasKey(s => s.Id);
         modelBuilder.Entity<Student>().HasMany(s => s.Guardians).WithOne().HasForeignKey(g => g.StudentId);
@@ -69,6 +106,36 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         modelBuilder.Entity<Driver>().HasMany(d => d.Availabilities).WithOne().HasForeignKey(a => a.DriverId).OnDelete(DeleteBehavior.Cascade);
         // Composición: Driver -> Assignments
         modelBuilder.Entity<Driver>().HasMany(d => d.Assignments).WithOne().HasForeignKey(a => a.DriverId).OnDelete(DeleteBehavior.Cascade);
+        // Configuración de Assignments
+        modelBuilder.Entity<Assignment>().HasKey(a => a.Id);
+        
+        // Configuración de Tracking
+        modelBuilder.Entity<TrackingSession>().HasKey(t => t.Id);
+        
+        // Composición: TrackingSession -> Locations
+        modelBuilder.Entity<TrackingSession>().HasMany(t => t.Locations).WithOne().OnDelete(DeleteBehavior.Cascade);
+        // Composición: TrackingSession -> ETAs
+        modelBuilder.Entity<TrackingSession>().HasMany(t => t.ETAs).WithOne().OnDelete(DeleteBehavior.Cascade);
+        
+        modelBuilder.Entity<AttendanceEntity>().HasKey(a => a.Id);
+        modelBuilder.Entity<AttendanceEntity>().HasOne(a => a.BoardingRecord).WithOne().OnDelete(DeleteBehavior.Cascade);
+        modelBuilder.Entity<AttendanceEntity>().HasOne(a => a.AbsenceRecord).WithOne().OnDelete(DeleteBehavior.Cascade);
+        
+        // Configuración de Alerts
+        modelBuilder.Entity<Alert>().HasKey(a => a.Id);
+        // Composición: Alert -> Notifications
+        modelBuilder.Entity<Alert>().HasMany(a => a.Notifications).WithOne().HasForeignKey(n => n.AlertId).OnDelete(DeleteBehavior.Cascade);
+        // Composición: Notification -> DeliveryLogs
+        modelBuilder.Entity<Notification>().HasMany(n => n.DeliveryLogs).WithOne().OnDelete(DeleteBehavior.Cascade);
+        
+        // Configuración de Analytics
+        modelBuilder.Entity<Report>().HasKey(r => r.Id);
+        
+        // Composición: Report -> Metrics
+        modelBuilder.Entity<Report>().HasMany(r => r.Metrics).WithOne().HasForeignKey(m => m.ReportId).OnDelete(DeleteBehavior.Cascade);
+
+        // Composición: Report -> KPIs
+        modelBuilder.Entity<Report>().HasMany(r => r.Kpis).WithOne().HasForeignKey(k => k.ReportId).OnDelete(DeleteBehavior.Cascade);
     } 
 }
 

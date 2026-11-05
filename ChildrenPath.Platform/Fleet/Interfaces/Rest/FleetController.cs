@@ -10,8 +10,18 @@ public class FleetController : ControllerBase
 {
     private static readonly List<Vehicle> _mockVehicles = new()
     {
-        new Vehicle { Id = 1, PlateNumber = "KW-204", Brand = "Hyundai", Model = "H1 School Van", Capacity = 18, AssignedStudents = 16, DriverName = "Carlos Pérez", RouteName = "Miraflores", Status = VehicleStatus.Active },
-        new Vehicle { Id = 2, PlateNumber = "KW-076", Brand = "Mercedes", Model = "Sprinter", Capacity = 22, AssignedStudents = 20, DriverName = "Luis Torres", RouteName = "Surco", Status = VehicleStatus.InMaintenance }
+        new Vehicle 
+        { 
+            Id = 1, PlateNumber = "KW-204", Brand = "Hyundai", Model = "H1 School Van", Capacity = 18, 
+            AssignedStudents = 16, DriverName = "Carlos Pérez", RouteName = "Miraflores", Status = VehicleStatus.Active,
+            FleetId = 1, Documents = new List<VehicleDocument> { new VehicleDocument { Type = "SOAT", ExpiryDate = DateTime.UtcNow.AddMonths(6) } }
+        },
+        new Vehicle 
+        { 
+            Id = 2, PlateNumber = "KW-076", Brand = "Mercedes", Model = "Sprinter", Capacity = 22, 
+            AssignedStudents = 20, DriverName = "Luis Torres", RouteName = "Surco", Status = VehicleStatus.InMaintenance,
+            FleetId = null // Vehículo independiente
+        }
     };
 
     [HttpGet]
@@ -32,7 +42,8 @@ public class FleetController : ControllerBase
             DriverName = resource.DriverName,
             RouteName = resource.RouteName,
             AssignedStudents = resource.AssignedStudents,
-            Status = VehicleStatus.Active
+            Status = VehicleStatus.Active,
+            FleetId = resource.FleetId
         };
 
         _mockVehicles.Add(vehicle);

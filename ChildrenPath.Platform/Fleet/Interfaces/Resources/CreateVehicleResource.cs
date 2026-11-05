@@ -5,6 +5,7 @@ public record CreateVehicleResource(
     string Brand,
     string Model,
     int Capacity,
+    int? FleetId,
     string DriverName,
     string RouteName,
     int AssignedStudents
