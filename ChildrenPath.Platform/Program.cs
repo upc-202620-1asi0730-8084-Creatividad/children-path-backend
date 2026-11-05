@@ -3,6 +3,12 @@ using Scalar.AspNetCore;
 using ChildrenPath.Platform.Shared.Infrastructure;
 using ChildrenPath.Platform.Shared.Domain.Repositories;
 using ChildrenPath.Platform.Fleet.Infrastructure.Repositories;
+using ChildrenPath.Platform.Companies.Domain.Repositories;
+using ChildrenPath.Platform.Companies.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using ChildrenPath.Platform.Companies.Application.CommandServices;
+using ChildrenPath.Platform.Companies.Application.QueryServices;
+using ChildrenPath.Platform.Companies.Application.Internal.CommandServices;
+using ChildrenPath.Platform.Companies.Application.Internal.QueryServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -45,6 +51,15 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 // Fleet Bounded Context
 builder.Services.AddScoped<IVehicleRepository, VehicleRepository>();
+
+// Companies Bounded Context
+builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
+builder.Services.AddScoped<ISchoolContractRepository, SchoolContractRepository>();
+builder.Services.AddScoped<ICompanyMemberRepository, CompanyMemberRepository>();
+builder.Services.AddScoped<IComplianceItemRepository, ComplianceItemRepository>();
+builder.Services.AddScoped<ICompanyActivityRepository, CompanyActivityRepository>();
+builder.Services.AddScoped<ICompanyCommandService, CompanyCommandService>();
+builder.Services.AddScoped<ICompanyQueryService, CompanyQueryService>();
 
 // (Aquí irás agregando los repositorios de Students, Routes, etc.)
 
