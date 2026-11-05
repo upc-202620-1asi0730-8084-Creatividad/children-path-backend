@@ -69,6 +69,6 @@ public class DashboardController : ControllerBase
         Metrics: new List<object>(), Vehicles: new List<object>(), Alerts: new List<object>(), OperationItems: new List<object>(), Activities: new List<object>()
     );
 
-    private DashboardResponse BuildDriverDashboard() => BuildParentDashboard(); // Simplificado para el ejemplo
+    private DashboardResponse BuildDriverDashboard() => BuildParentDashboard();
     private DashboardResponse BuildAdminDashboard() => BuildCompanyDashboard();
 }
