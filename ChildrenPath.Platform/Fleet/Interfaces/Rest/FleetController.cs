@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ChildrenPath.Platform.Fleet.Domain;
+using ChildrenPath.Platform.Fleet.Interfaces.Resources;
 
 namespace ChildrenPath.Platform.Fleet.Interfaces.Rest;
 
@@ -9,13 +10,32 @@ public class FleetController : ControllerBase
 {
     private static readonly List<Vehicle> _mockVehicles = new()
     {
-        new Vehicle { Id = 1, Plate = "KW-204", Code = "KW-204", Brand = "Hyundai", Model = "H1 School Van", Year = 2022, Capacity = 18, AssignedStudents = 16, DriverName = "Carlos Pérez", RouteName = "Miraflores School Route", Status = "onRoute" },
-        new Vehicle { Id = 2, Plate = "KW-118", Code = "KW-118", Brand = "Toyota", Model = "Hiace", Year = 2021, Capacity = 15, AssignedStudents = 13, DriverName = "María Gómez", RouteName = "San Isidro Morning Route", Status = "available" }
+        new Vehicle { Id = 1, PlateNumber = "KW-204", Brand = "Hyundai", Model = "H1 School Van", Capacity = 18, AssignedStudents = 16, DriverName = "Carlos Pérez", RouteName = "Miraflores", Status = VehicleStatus.Active },
+        new Vehicle { Id = 2, PlateNumber = "KW-076", Brand = "Mercedes", Model = "Sprinter", Capacity = 22, AssignedStudents = 20, DriverName = "Luis Torres", RouteName = "Surco", Status = VehicleStatus.InMaintenance }
     };
 
     [HttpGet]
-    public IActionResult GetAll()
+    public IActionResult GetAll() => Ok(_mockVehicles);
+
+    [HttpPost]
+    public IActionResult Create([FromBody] CreateVehicleResource resource)
     {
-        return Ok(_mockVehicles);
+        var newId = _mockVehicles.Any() ? _mockVehicles.Max(v => v.Id) + 1 : 1;
+
+        var vehicle = new Vehicle
+        {
+            Id = newId,
+            PlateNumber = resource.PlateNumber,
+            Brand = resource.Brand,
+            Model = resource.Model,
+            Capacity = resource.Capacity,
+            DriverName = resource.DriverName,
+            RouteName = resource.RouteName,
+            AssignedStudents = resource.AssignedStudents,
+            Status = VehicleStatus.Active
+        };
+
+        _mockVehicles.Add(vehicle);
+        return CreatedAtAction(nameof(GetAll), new { id = vehicle.Id }, vehicle);
     }
 }
