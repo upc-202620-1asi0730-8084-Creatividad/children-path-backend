@@ -14,7 +14,16 @@
     <configurations />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8cf4aace-7fad-4774-85b0-73282254bbf7" name="Changes" comment="" />
+    <list default="true" id="8cf4aace-7fad-4774-85b0-73282254bbf7" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/ChildrenPath.Platform/Profiles/Domain/Profile.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ChildrenPath.Platform/Profiles/Interfaces/Resources/CreateProfileResource.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ChildrenPath.Platform/Profiles/Interfaces/Rest/ProfilesController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.ChildrenPath.Backend/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.ChildrenPath.Backend/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/Shared/Infrastructure/AppDbContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ChildrenPath.Platform/Shared/Infrastructure/AppDbContext.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/obj/Debug/net10.0/ChildrenPath.Platform.AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ChildrenPath.Platform/obj/Debug/net10.0/ChildrenPath.Platform.AssemblyInfo.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/obj/Debug/net10.0/ChildrenPath.Platform.AssemblyInfoInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/ChildrenPath.Platform/obj/Debug/net10.0/ChildrenPath.Platform.AssemblyInfoInputs.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/obj/rider.project.model.nuget.info" beforeDir="false" afterPath="$PROJECT_DIR$/ChildrenPath.Platform/obj/rider.project.model.nuget.info" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -58,6 +67,9 @@
     <setting file="file://$PROJECT_DIR$/ChildrenPath.Platform/Fleet/Interfaces/Resources/CreateVehicleResource.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/ChildrenPath.Platform/Fleet/Interfaces/Rest/FleetController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/ChildrenPath.Platform/Iam/Domain/User.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/ChildrenPath.Platform/Profiles/Domain/Profile.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/ChildrenPath.Platform/Profiles/Interfaces/Resources/CreateProfileResource.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/ChildrenPath.Platform/Profiles/Interfaces/Rest/ProfilesController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/ChildrenPath.Platform/Shared/Domain/Result.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/ChildrenPath.Platform/Shared/Infrastructure/AppDbContext.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/ChildrenPath.Platform/Shared/Infrastructure/DesignTimeDbContextFactory.cs" root0="FORCE_HIGHLIGHTING" />
@@ -75,61 +87,61 @@
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="NextEditCompletionFeaturesState">
     <decayedCancelled>
-      <entry key="MS100" value="1.0001175524247068" />
-      <entry key="MS500" value="1.2884597802794935" />
-      <entry key="S2" value="3.213691657232473" />
-      <entry key="S5" value="5.126063154042019" />
-      <entry key="S10" value="6.335582871968319" />
-      <entry key="S30" value="8.546544971260392" />
-      <entry key="S60" value="11.771301267676973" />
-      <entry key="M2" value="20.373768583703246" />
-      <entry key="M5" value="45.20340064954729" />
-      <entry key="M10" value="73.60954597792734" />
-      <entry key="M15" value="93.59363519067405" />
-      <entry key="M30" value="129.512682639373" />
-      <entry key="H1" value="159.8732793079389" />
-      <entry key="H2" value="180.41440887172126" />
-      <entry key="H4" value="192.4887379266143" />
-      <entry key="D1" value="203.639760949699" />
-      <entry key="W1" value="205.66004895248767" />
+      <entry key="MS100" value="1.0525585946933673" />
+      <entry key="MS500" value="1.8258755064673982" />
+      <entry key="S2" value="2.8339381417117586" />
+      <entry key="S5" value="3.395008788606289" />
+      <entry key="S10" value="3.6787560156947814" />
+      <entry key="S30" value="4.78638961232287" />
+      <entry key="S60" value="6.619254861851188" />
+      <entry key="M2" value="8.594550220779514" />
+      <entry key="M5" value="10.411445776455063" />
+      <entry key="M10" value="11.162200379441467" />
+      <entry key="M15" value="11.431339550275302" />
+      <entry key="M30" value="11.78010488350668" />
+      <entry key="H1" value="15.561453960907489" />
+      <entry key="H2" value="39.40093612996657" />
+      <entry key="H4" value="87.07935167267266" />
+      <entry key="D1" value="186.0745316522437" />
+      <entry key="W1" value="213.10263021378458" />
     </decayedCancelled>
     <decayedSelected>
-      <entry key="MS100" value="9.604581536364774E-282" />
-      <entry key="MS500" value="6.258866518571944E-57" />
-      <entry key="S2" value="8.894548803468117E-15" />
-      <entry key="S5" value="2.3968980921425986E-6" />
-      <entry key="S10" value="0.0015482578309557581" />
-      <entry key="S30" value="0.12087676583382041" />
-      <entry key="S60" value="0.4504668152139035" />
-      <entry key="M2" value="1.1758464158924973" />
-      <entry key="M5" value="2.6072981349707867" />
-      <entry key="M10" value="3.7274406106770934" />
-      <entry key="M15" value="4.543194622170253" />
-      <entry key="M30" value="6.420186916353236" />
-      <entry key="H1" value="8.414951757076128" />
-      <entry key="H2" value="9.93914600420098" />
-      <entry key="H4" value="10.891024678692988" />
-      <entry key="D1" value="11.803121531631612" />
-      <entry key="W1" value="11.971563277903936" />
+      <entry key="MS100" value="0.0" />
+      <entry key="MS500" value="0.0" />
+      <entry key="S2" value="0.0" />
+      <entry key="S5" value="0.0" />
+      <entry key="S10" value="0.0" />
+      <entry key="S30" value="8.31224584867946E-198" />
+      <entry key="S60" value="3.735515795724879E-99" />
+      <entry key="M2" value="1.07076578840576E-49" />
+      <entry key="M5" value="6.308531105897641E-20" />
+      <entry key="M10" value="5.798017341578768E-10" />
+      <entry key="M15" value="1.3140357871823517E-6" />
+      <entry key="M30" value="0.0034527934412498" />
+      <entry key="H1" value="0.195147545575412" />
+      <entry key="H2" value="1.5135779833135856" />
+      <entry key="H4" value="4.250075135662383" />
+      <entry key="D1" value="10.089853406659687" />
+      <entry key="W1" value="11.706324982193687" />
     </decayedSelected>
     <decayedShown>
-      <entry key="MS100" value="0.9266933866702445" />
-      <entry key="MS500" value="1.2678640270242156" />
-      <entry key="S2" value="3.200995402143208" />
-      <entry key="S5" value="5.118340178748048" />
-      <entry key="S10" value="6.331779392840223" />
-      <entry key="S30" value="8.650896183054893" />
-      <entry key="S60" value="12.193350585890526" />
-      <entry key="M2" value="21.508665153176878" />
-      <entry key="M5" value="47.76948825065764" />
-      <entry key="M10" value="77.30686730930034" />
-      <entry key="M15" value="98.11344468345884" />
-      <entry key="M30" value="135.91868590144927" />
-      <entry key="H1" value="168.28018003007003" />
-      <entry key="H2" value="190.34921439092776" />
-      <entry key="H4" value="203.3775007365752" />
-      <entry key="D1" value="215.442491467087" />
-      <entry key="W1" value="217.63155600869283" />
+      <entry key="MS100" value="0.9830834237305407" />
+      <entry key="MS500" value="1.7994640786412273" />
+      <entry key="S2" value="2.6328273706004577" />
+      <entry key="S5" value="3.13597585432207" />
+      <entry key="S10" value="3.483593161283927" />
+      <entry key="S30" value="4.689014295283664" />
+      <entry key="S60" value="6.554128454327265" />
+      <entry key="M2" value="8.553341562399257" />
+      <entry key="M5" value="10.391753812360305" />
+      <entry key="M10" value="11.15168617471859" />
+      <entry key="M15" value="11.424171186297572" />
+      <entry key="M30" value="11.779881985252148" />
+      <entry key="H1" value="15.754559353213812" />
+      <entry key="H2" value="40.9129199711602" />
+      <entry key="H4" value="91.32807620036111" />
+      <entry key="D1" value="196.16397262038166" />
+      <entry key="W1" value="224.80888904644334" />
     </decayedShown>
   </component>
   <component name="ProjectColorInfo">{
@@ -158,31 +170,31 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;.NET Launch Settings Profile.ChildrenPath.Platform: http.executor&quot;: &quot;Run&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.readMode.enableVisualFormatting&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
-    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
-    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
-    &quot;copilot.chat.legacySessionMetadata.migrated&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;feature/creating-fleet-crud&quot;,
-    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;RiderNuGetOptionsPageId&quot;,
-    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    ".NET Launch Settings Profile.ChildrenPath.Platform: http.executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.MCP Project settings loaded": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.readMode.enableVisualFormatting": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "cidr.known.project.marker": "true",
+    "codeWithMe.voiceChat.enabledByDefault": "false",
+    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
+    "copilot.chat.legacySessionMetadata.migrated": "true",
+    "git-widget-placeholder": "feature/advancing-profiles",
+    "junie.onboarding.icon.badge.shown": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "RiderNuGetOptionsPageId",
+    "to.speed.mode.migration.done": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected=".NET Launch Settings Profile.ChildrenPath.Platform: http">
     <configuration name="ChildrenPath.Platform: http" type="LaunchSettings" factoryName=".NET Launch Settings Profile">
       <option name="LAUNCH_PROFILE_PROJECT_FILE_PATH" value="$PROJECT_DIR$/ChildrenPath.Platform/ChildrenPath.Platform.csproj" />

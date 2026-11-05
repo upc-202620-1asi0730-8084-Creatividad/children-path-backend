@@ -1,5 +1,6 @@
 ﻿using ChildrenPath.Platform.Fleet.Domain;
 using ChildrenPath.Platform.Students.Domain;
+using ChildrenPath.Platform.Profiles.Domain;
 using ChildrenPath.Platform.Iam.Domain;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,6 +16,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<Guardian> Guardians { get; set; }
     public DbSet<PickupPoint> PickupPoints { get; set; }
     public DbSet<MedicalNote> MedicalNotes { get; set; }
+    
+    public DbSet<Profile> Profiles { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -33,5 +36,12 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         modelBuilder.Entity<Student>().HasMany(s => s.Guardians).WithOne().HasForeignKey(g => g.StudentId);
         modelBuilder.Entity<Student>().HasOne(s => s.PickupPoint).WithOne().HasForeignKey<PickupPoint>(p => p.StudentId);
         modelBuilder.Entity<Student>().HasMany(s => s.MedicalNotes).WithOne().HasForeignKey(m => m.StudentId);
+        
+        //Profiles
+        modelBuilder.Entity<Profile>().HasKey(p => p.Id);
+        modelBuilder.Entity<Profile>().HasOne(p => p.Preferences).WithOne().HasForeignKey<Preferences>(pref => pref.Id);
+        modelBuilder.Entity<Profile>().HasOne(p => p.ParentProfile).WithOne().HasForeignKey<ParentProfile>(pp => pp.Id);
+        modelBuilder.Entity<Profile>().HasOne(p => p.DriverProfile).WithOne().HasForeignKey<DriverProfile>(dp => dp.Id);
+        modelBuilder.Entity<Profile>().HasOne(p => p.CompanyProfile).WithOne().HasForeignKey<CompanyProfile>(cp => cp.Id);
     }
 }
