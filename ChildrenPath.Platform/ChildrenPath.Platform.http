@@ -1,6 +1,58 @@
 @ChildrenPath.Platform_HostAddress = http://localhost:5178
 
-GET {{ChildrenPath.Platform_HostAddress}}/weatherforecast/
+### Get Fleet
+GET {{ChildrenPath.Platform_HostAddress}}/api/v1/fleet
 Accept: application/json
+
+###
+
+### Get All Companies
+GET {{ChildrenPath.Platform_HostAddress}}/api/v1/companies
+Accept: application/json
+
+###
+
+### Get Company By ID
+GET {{ChildrenPath.Platform_HostAddress}}/api/v1/companies/1
+Accept: application/json
+
+###
+
+### Create Company
+POST {{ChildrenPath.Platform_HostAddress}}/api/v1/companies
+Content-Type: application/json
+
+{
+  "legalName": "Transportes Escolares del Perú S.A.C.",
+  "commercialName": "TransEscolar S.A.C.",
+  "ruc": "20601234567",
+  "status": "active",
+  "plan": "Enterprise Fleet",
+  "planLimitVehicles": 30,
+  "planLimitStudents": 1800,
+  "adminName": "Carlos Mendoza",
+  "adminEmail": "cmendoza@transescolar.pe",
+  "phone": "+51 987 654 321",
+  "address": "Av. Javier Prado Este 2450, San Borja, Lima",
+  "operatingDistricts": ["San Borja", "Surco", "La Molina", "Miraflores", "San Isidro"],
+  "verified": true,
+  "licenseExpiration": "2028-11-05T00:00:00Z"
+}
+
+###
+
+### Get Company Management Dashboard (Frontend View)
+GET {{ChildrenPath.Platform_HostAddress}}/api/v1/companyManagement
+Accept: application/json
+
+###
+
+### Update Compliance Item Status
+PATCH {{ChildrenPath.Platform_HostAddress}}/api/v1/companyManagement/compliance/2/status
+Content-Type: application/json
+
+{
+  "status": "completed"
+}
 
 ###
