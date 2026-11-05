@@ -15,7 +15,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8cf4aace-7fad-4774-85b0-73282254bbf7" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/Dashboard/Interfaces/Resources/DashboardController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ChildrenPath.Platform/Dashboard/Interfaces/Resources/DashboardController.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ChildrenPath.Platform/Drivers/Domain/Driver.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ChildrenPath.Platform/Drivers/Interfaces/Resources/CreateDriverResource.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ChildrenPath.Platform/Drivers/Interfaces/Rest/DriversController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.ChildrenPath.Backend/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.ChildrenPath.Backend/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/Shared/Infrastructure/AppDbContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ChildrenPath.Platform/Shared/Infrastructure/AppDbContext.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -58,6 +62,9 @@
     <setting file="file://$PROJECT_DIR$/ChildrenPath.Platform/Dashboard/Domain/Dashboard.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/ChildrenPath.Platform/Dashboard/Interfaces/Resources/DashboardController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/ChildrenPath.Platform/Dashboard/Interfaces/Resources/DashboardResponse.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/ChildrenPath.Platform/Drivers/Domain/Driver.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/ChildrenPath.Platform/Drivers/Interfaces/Resources/CreateDriverResource.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/ChildrenPath.Platform/Drivers/Interfaces/Rest/DriversController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/ChildrenPath.Platform/Fleet/Domain/Vehicle.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/ChildrenPath.Platform/Fleet/Infrastructure/Repositories/VehicleRepository.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/ChildrenPath.Platform/Fleet/Interfaces/Resources/CreateVehicleResource.cs" root0="FORCE_HIGHLIGHTING" />
@@ -86,62 +93,65 @@
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="NextEditCompletionFeaturesState">
     <decayedCancelled>
-      <entry key="MS100" value="1.0008560602747227" />
-      <entry key="MS500" value="1.2435071294245212" />
-      <entry key="S2" value="1.7877066887159212" />
-      <entry key="S5" value="3.0009866192383807" />
-      <entry key="S10" value="5.011963070487301" />
-      <entry key="S30" value="8.318019098253558" />
-      <entry key="S60" value="9.820692631095573" />
-      <entry key="M2" value="11.387711520709807" />
-      <entry key="M5" value="15.296814139944694" />
-      <entry key="M10" value="18.772677947709518" />
-      <entry key="M15" value="20.455421684270068" />
-      <entry key="M30" value="22.561302534295113" />
-      <entry key="H1" value="27.074145137844653" />
-      <entry key="H2" value="50.57881903352793" />
-      <entry key="H4" value="98.08392473116696" />
-      <entry key="D1" value="198.3635749719003" />
-      <entry key="W1" value="225.98624061403203" />
+      <entry key="MS100" value="1.0000000000000007" />
+      <entry key="MS500" value="1.001006566124928" />
+      <entry key="S2" value="1.3306210309820645" />
+      <entry key="S5" value="2.218999657718978" />
+      <entry key="S10" value="2.955354787770152" />
+      <entry key="S30" value="3.9502965074477867" />
+      <entry key="S60" value="4.538464459854291" />
+      <entry key="M2" value="6.069510681812355" />
+      <entry key="M5" value="11.475962975841657" />
+      <entry key="M10" value="17.27443275651375" />
+      <entry key="M15" value="20.421371230869074" />
+      <entry key="M30" value="24.595683900199365" />
+      <entry key="H1" value="30.235474701733274" />
+      <entry key="H2" value="53.836767427043235" />
+      <entry key="H4" value="101.3829318955872" />
+      <entry key="D1" value="202.7865710721249" />
+      <entry key="W1" value="230.89222591026908" />
     </decayedCancelled>
     <decayedSelected>
-      <entry key="MS100" value="2.21507086419076E-9" />
-      <entry key="MS500" value="0.018581361171917516" />
-      <entry key="S2" value="0.3692065364848748" />
-      <entry key="S5" value="0.6712862513901319" />
-      <entry key="S10" value="0.8193206035430404" />
-      <entry key="S30" value="0.9357315915399484" />
-      <entry key="S60" value="0.9673322032993363" />
-      <entry key="M2" value="0.9835304790901684" />
-      <entry key="M5" value="0.9933793532186164" />
-      <entry key="M10" value="0.9966841796113379" />
-      <entry key="M15" value="0.997789142002984" />
-      <entry key="M30" value="1.0017709267290835" />
-      <entry key="H1" value="1.1775941011491258" />
-      <entry key="H2" value="2.445872537913507" />
-      <entry key="H4" value="5.154189492877736" />
-      <entry key="D1" value="11.05158509241132" />
-      <entry key="W1" value="12.699972446829824" />
+      <entry key="MS100" value="0.001121775737301792" />
+      <entry key="MS500" value="0.2570284566640166" />
+      <entry key="S2" value="0.7120250977985358" />
+      <entry key="S5" value="0.8729675911337629" />
+      <entry key="S10" value="0.9343273468930046" />
+      <entry key="S30" value="0.9778257899245305" />
+      <entry key="S60" value="1.003377104962056" />
+      <entry key="M2" value="1.115329100769742" />
+      <entry key="M5" value="1.4273504207335634" />
+      <entry key="M10" value="1.6543165456677824" />
+      <entry key="M15" value="1.7538034393085282" />
+      <entry key="M30" value="1.8707774755349003" />
+      <entry key="H1" value="2.0979547709681663" />
+      <entry key="H2" value="3.3618276328406527" />
+      <entry key="H4" value="6.06491544318435" />
+      <entry key="D1" value="12.019458133043125" />
+      <entry key="W1" value="13.694691917550356" />
     </decayedSelected>
     <decayedShown>
-      <entry key="MS100" value="0.9403382647603762" />
-      <entry key="MS500" value="1.2309204867507755" />
-      <entry key="S2" value="1.9940293215056277" />
-      <entry key="S5" value="3.4920435887131447" />
-      <entry key="S10" value="5.669998295151303" />
-      <entry key="S30" value="9.16413008166941" />
-      <entry key="S60" value="10.735902438004086" />
-      <entry key="M2" value="12.34057236432161" />
-      <entry key="M5" value="16.271847974322654" />
-      <entry key="M10" value="19.757303613708423" />
-      <entry key="M15" value="21.44422679113583" />
-      <entry key="M30" value="23.557996431799594" />
-      <entry key="H1" value="28.248865154084285" />
-      <entry key="H2" value="53.02266279975896" />
-      <entry key="H4" value="103.23654103582443" />
-      <entry key="D1" value="209.41470699569743" />
-      <entry key="W1" value="238.68614091894608" />
+      <entry key="MS100" value="0.9330329936179168" />
+      <entry key="MS500" value="1.0049357272817276" />
+      <entry key="S2" value="1.6066510066557338" />
+      <entry key="S5" value="2.737196957003919" />
+      <entry key="S10" value="3.649076346486518" />
+      <entry key="S30" value="4.827569064773259" />
+      <entry key="S60" value="5.487695480186378" />
+      <entry key="M2" value="7.153565635924657" />
+      <entry key="M5" value="12.88417423117428" />
+      <entry key="M10" value="18.915182010210632" />
+      <entry key="M15" value="22.16461474419433" />
+      <entry key="M30" value="26.460159463544986" />
+      <entry key="H1" value="32.32980489804923" />
+      <entry key="H2" value="57.19616347854185" />
+      <entry key="H4" value="107.44606510190162" />
+      <entry key="D1" value="214.805538064341" />
+      <entry key="W1" value="244.58684008869128" />
     </decayedShown>
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 7,
@@ -183,7 +193,7 @@
     "codeWithMe.voiceChat.enabledByDefault": "false",
     "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
     "copilot.chat.legacySessionMetadata.migrated": "true",
-    "git-widget-placeholder": "feature/creating-dashboard",
+    "git-widget-placeholder": "feature/creating-drivers-class",
     "junie.onboarding.icon.badge.shown": "true",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -316,7 +326,15 @@
       <option name="project" value="LOCAL" />
       <updated>1793905785994</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="feat(Dashboard): creating class dasboard">
+      <option name="closed" value="true" />
+      <created>1793906148913</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1793906148913</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -347,7 +365,8 @@
     <MESSAGE value="refactor: change builder with neccesary changes for the new fixings" />
     <MESSAGE value="feat(PROFILES): creating class profile" />
     <MESSAGE value="feat(Subscriptions): creating class subcription" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat(Subscriptions): creating class subcription" />
+    <MESSAGE value="feat(Dashboard): creating class dasboard" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat(Dashboard): creating class dasboard" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
