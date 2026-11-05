@@ -1,4 +1,5 @@
 ﻿using ChildrenPath.Platform.Fleet.Domain;
+using ChildrenPath.Platform.Students.Domain;
 using ChildrenPath.Platform.Iam.Domain;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,15 +7,31 @@ namespace ChildrenPath.Platform.Shared.Infrastructure;
 
 public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
 {
-    public DbSet<User> Users { get; set; }
     public DbSet<Vehicle> Vehicles { get; set; }
+    public DbSet<VehicleDocument> VehicleDocuments { get; set; }
+    public DbSet<MaintenanceRecord> MaintenanceRecords { get; set; }
+
+    public DbSet<Student> Students { get; set; }
+    public DbSet<Guardian> Guardians { get; set; }
+    public DbSet<PickupPoint> PickupPoints { get; set; }
+    public DbSet<MedicalNote> MedicalNotes { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-
+        
+        // Configuración User
         modelBuilder.Entity<User>().HasKey(u => u.Id);
-        modelBuilder.Entity<Vehicle>().Property(v => v.Plate).IsRequired().HasMaxLength(20);
 
+        // Fleet
+        modelBuilder.Entity<Vehicle>().HasKey(v => v.Id);
+        modelBuilder.Entity<Vehicle>().HasMany(v => v.Documents).WithOne().HasForeignKey(d => d.VehicleId);
+        modelBuilder.Entity<Vehicle>().HasMany(v => v.MaintenanceRecords).WithOne().HasForeignKey(m => m.VehicleId);
+
+        // Students
+        modelBuilder.Entity<Student>().HasKey(s => s.Id);
+        modelBuilder.Entity<Student>().HasMany(s => s.Guardians).WithOne().HasForeignKey(g => g.StudentId);
+        modelBuilder.Entity<Student>().HasOne(s => s.PickupPoint).WithOne().HasForeignKey<PickupPoint>(p => p.StudentId);
+        modelBuilder.Entity<Student>().HasMany(s => s.MedicalNotes).WithOne().HasForeignKey(m => m.StudentId);
     }
 }
