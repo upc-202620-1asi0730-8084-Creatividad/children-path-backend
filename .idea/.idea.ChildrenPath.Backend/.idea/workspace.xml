@@ -15,10 +15,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8cf4aace-7fad-4774-85b0-73282254bbf7" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/ChildrenPath.Platform/Subscriptions/Domain/Subscription.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ChildrenPath.Platform/Subscriptions/Interfaces/Resources/CreateSubscriptionResource.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.ChildrenPath.Backend/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.ChildrenPath.Backend/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/Shared/Infrastructure/AppDbContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ChildrenPath.Platform/Shared/Infrastructure/AppDbContext.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/Dashboard/Interfaces/Resources/DashboardController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ChildrenPath.Platform/Dashboard/Interfaces/Resources/DashboardController.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -58,6 +55,9 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/ChildrenPath.Platform/Dashboard/Domain/Dashboard.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/ChildrenPath.Platform/Dashboard/Interfaces/Resources/DashboardController.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/ChildrenPath.Platform/Dashboard/Interfaces/Resources/DashboardResponse.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/ChildrenPath.Platform/Fleet/Domain/Vehicle.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/ChildrenPath.Platform/Fleet/Infrastructure/Repositories/VehicleRepository.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/ChildrenPath.Platform/Fleet/Interfaces/Resources/CreateVehicleResource.cs" root0="FORCE_HIGHLIGHTING" />
@@ -76,6 +76,7 @@
     <setting file="file://$PROJECT_DIR$/ChildrenPath.Platform/Students/Interfaces/Rest/StudentsController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/ChildrenPath.Platform/Subscriptions/Domain/Subscription.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/ChildrenPath.Platform/Subscriptions/Interfaces/Resources/CreateSubscriptionResource.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/ChildrenPath.Platform/Subscriptions/Interfaces/Resources/SubscriptionsController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/ChildrenPath.Platform/obj/Debug/net10.0/ChildrenPath.Platform.AssemblyInfo.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="McpProjectServerCommands">
@@ -85,61 +86,61 @@
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="NextEditCompletionFeaturesState">
     <decayedCancelled>
-      <entry key="MS100" value="1.0" />
-      <entry key="MS500" value="1.000000001931794" />
-      <entry key="S2" value="1.0161626578246639" />
-      <entry key="S5" value="1.4298232145180099" />
-      <entry key="S10" value="2.3089572646132708" />
-      <entry key="S30" value="4.391690446593589" />
-      <entry key="S60" value="6.572026631996408" />
-      <entry key="M2" value="8.885426605691695" />
-      <entry key="M5" value="11.058931663044776" />
-      <entry key="M10" value="11.97160648654837" />
-      <entry key="M15" value="12.30084011003073" />
-      <entry key="M30" value="12.712671415573421" />
-      <entry key="H1" value="16.516850416997702" />
-      <entry key="H2" value="40.34442847604415" />
-      <entry key="H4" value="88.01688595636766" />
-      <entry key="D1" value="187.05227847297044" />
-      <entry key="W1" value="214.09898923488126" />
+      <entry key="MS100" value="1.0008560602747227" />
+      <entry key="MS500" value="1.2435071294245212" />
+      <entry key="S2" value="1.7877066887159212" />
+      <entry key="S5" value="3.0009866192383807" />
+      <entry key="S10" value="5.011963070487301" />
+      <entry key="S30" value="8.318019098253558" />
+      <entry key="S60" value="9.820692631095573" />
+      <entry key="M2" value="11.387711520709807" />
+      <entry key="M5" value="15.296814139944694" />
+      <entry key="M10" value="18.772677947709518" />
+      <entry key="M15" value="20.455421684270068" />
+      <entry key="M30" value="22.561302534295113" />
+      <entry key="H1" value="27.074145137844653" />
+      <entry key="H2" value="50.57881903352793" />
+      <entry key="H4" value="98.08392473116696" />
+      <entry key="D1" value="198.3635749719003" />
+      <entry key="W1" value="225.98624061403203" />
     </decayedCancelled>
     <decayedSelected>
-      <entry key="MS100" value="0.0" />
-      <entry key="MS500" value="0.0" />
-      <entry key="S2" value="0.0" />
-      <entry key="S5" value="0.0" />
-      <entry key="S10" value="0.0" />
-      <entry key="S30" value="5.8901525195775464E-198" />
-      <entry key="S60" value="3.144522145231492E-99" />
-      <entry key="M2" value="9.824184883980366E-50" />
-      <entry key="M5" value="6.094934810295177E-20" />
-      <entry key="M10" value="5.69901654795133E-10" />
-      <entry key="M15" value="1.2990348387865443E-6" />
-      <entry key="M30" value="0.003433028435920631" />
-      <entry key="H1" value="0.19458819732043361" />
-      <entry key="H2" value="1.5114072546643078" />
-      <entry key="H4" value="4.24702637631129" />
-      <entry key="D1" value="10.088646732566755" />
-      <entry key="W1" value="11.706124973013823" />
+      <entry key="MS100" value="2.21507086419076E-9" />
+      <entry key="MS500" value="0.018581361171917516" />
+      <entry key="S2" value="0.3692065364848748" />
+      <entry key="S5" value="0.6712862513901319" />
+      <entry key="S10" value="0.8193206035430404" />
+      <entry key="S30" value="0.9357315915399484" />
+      <entry key="S60" value="0.9673322032993363" />
+      <entry key="M2" value="0.9835304790901684" />
+      <entry key="M5" value="0.9933793532186164" />
+      <entry key="M10" value="0.9966841796113379" />
+      <entry key="M15" value="0.997789142002984" />
+      <entry key="M30" value="1.0017709267290835" />
+      <entry key="H1" value="1.1775941011491258" />
+      <entry key="H2" value="2.445872537913507" />
+      <entry key="H4" value="5.154189492877736" />
+      <entry key="D1" value="11.05158509241132" />
+      <entry key="W1" value="12.699972446829824" />
     </decayedSelected>
     <decayedShown>
-      <entry key="MS100" value="0.9265880618903709" />
-      <entry key="MS500" value="0.9848664447994011" />
-      <entry key="S2" value="1.0112106209440075" />
-      <entry key="S5" value="1.3955047311001691" />
-      <entry key="S10" value="2.238753185514003" />
-      <entry key="S30" value="4.322435061070282" />
-      <entry key="S60" value="6.517076764336742" />
-      <entry key="M2" value="8.84755447623484" />
-      <entry key="M5" value="11.03988102079391" />
-      <entry key="M10" value="11.961259103614374" />
-      <entry key="M15" value="12.293745107874122" />
-      <entry key="M30" value="12.712445557376514" />
-      <entry key="H1" value="16.709400196492474" />
-      <entry key="H2" value="41.85424281588555" />
-      <entry key="H4" value="92.26256216406617" />
-      <entry key="D1" value="197.14051272809223" />
-      <entry key="W1" value="225.80504804688354" />
+      <entry key="MS100" value="0.9403382647603762" />
+      <entry key="MS500" value="1.2309204867507755" />
+      <entry key="S2" value="1.9940293215056277" />
+      <entry key="S5" value="3.4920435887131447" />
+      <entry key="S10" value="5.669998295151303" />
+      <entry key="S30" value="9.16413008166941" />
+      <entry key="S60" value="10.735902438004086" />
+      <entry key="M2" value="12.34057236432161" />
+      <entry key="M5" value="16.271847974322654" />
+      <entry key="M10" value="19.757303613708423" />
+      <entry key="M15" value="21.44422679113583" />
+      <entry key="M30" value="23.557996431799594" />
+      <entry key="H1" value="28.248865154084285" />
+      <entry key="H2" value="53.02266279975896" />
+      <entry key="H4" value="103.23654103582443" />
+      <entry key="D1" value="209.41470699569743" />
+      <entry key="W1" value="238.68614091894608" />
     </decayedShown>
   </component>
   <component name="ProjectColorInfo">{
@@ -182,7 +183,7 @@
     "codeWithMe.voiceChat.enabledByDefault": "false",
     "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
     "copilot.chat.legacySessionMetadata.migrated": "true",
-    "git-widget-placeholder": "feature/creating-subscription",
+    "git-widget-placeholder": "feature/creating-dashboard",
     "junie.onboarding.icon.badge.shown": "true",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -307,7 +308,15 @@
       <option name="project" value="LOCAL" />
       <updated>1793905326060</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="feat(Subscriptions): creating class subcription">
+      <option name="closed" value="true" />
+      <created>1793905785994</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1793905785994</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -337,7 +346,8 @@
     <MESSAGE value="fix(student): fixing some errors about the student class" />
     <MESSAGE value="refactor: change builder with neccesary changes for the new fixings" />
     <MESSAGE value="feat(PROFILES): creating class profile" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat(PROFILES): creating class profile" />
+    <MESSAGE value="feat(Subscriptions): creating class subcription" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat(Subscriptions): creating class subcription" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
