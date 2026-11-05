@@ -2,6 +2,7 @@
 using ChildrenPath.Platform.Students.Domain;
 using ChildrenPath.Platform.Profiles.Domain;
 using ChildrenPath.Platform.Subscriptions.Domain;
+using ChildrenPath.Platform.Drivers.Domain;
 using ChildrenPath.Platform.Iam.Domain;
 using Microsoft.EntityFrameworkCore;
 
@@ -24,6 +25,10 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<Subscription> Subscriptions { get; set; }
     public DbSet<Invoice> Invoices { get; set; }
     public DbSet<Payment> Payments { get; set; }
+    
+    public DbSet<Driver> Drivers { get; set; }
+    public DbSet<DriverAvailability> DriverAvailabilities { get; set; }
+    public DbSet<DriverAssignment> DriverAssignments { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -57,5 +62,13 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         modelBuilder.Entity<Subscription>().HasMany(s => s.Invoices).WithOne().HasForeignKey(i => i.SubscriptionId).OnDelete(DeleteBehavior.Cascade);
         // Composición: Factura -> Pagos
         modelBuilder.Entity<Invoice>().HasMany(i => i.Payments).WithOne().HasForeignKey(p => p.InvoiceId).OnDelete(DeleteBehavior.Cascade);
-    }
+        
+        // Configuración de Drivers
+        modelBuilder.Entity<Driver>().HasKey(d => d.Id);
+        // Composición: Driver -> Availabilities
+        modelBuilder.Entity<Driver>().HasMany(d => d.Availabilities).WithOne().HasForeignKey(a => a.DriverId).OnDelete(DeleteBehavior.Cascade);
+        // Composición: Driver -> Assignments
+        modelBuilder.Entity<Driver>().HasMany(d => d.Assignments).WithOne().HasForeignKey(a => a.DriverId).OnDelete(DeleteBehavior.Cascade);
+    } 
 }
+
