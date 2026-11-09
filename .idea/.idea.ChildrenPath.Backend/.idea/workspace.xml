@@ -15,7 +15,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9a58bc30-ece4-43a5-972f-53be388edf52" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/ChildrenPath.Platform/Trips/Infrastructure/Repositories/TripRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.ChildrenPath.Backend/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.ChildrenPath.Backend/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/Shared/Infrastructure/AppDbContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ChildrenPath.Platform/Shared/Infrastructure/AppDbContext.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/Trips/Infrastructure/Repositories/TripRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ChildrenPath.Platform/Trips/Infrastructure/Repositories/TripRepository.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

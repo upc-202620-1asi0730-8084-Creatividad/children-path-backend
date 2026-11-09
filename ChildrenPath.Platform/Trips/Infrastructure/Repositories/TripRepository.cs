@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using ChildrenPath.Platform.Shared.Domain.Repositories;
 using ChildrenPath.Platform.Shared.Infrastructure;
 using ChildrenPath.Platform.Trips.Domain;

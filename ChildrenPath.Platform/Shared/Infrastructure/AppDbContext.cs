@@ -9,6 +9,7 @@ using ChildrenPath.Platform.Tracking.Domain;
 using ChildrenPath.Platform.Attendance.Domain;
 using ChildrenPath.Platform.Alerts.Domain;
 using ChildrenPath.Platform.Analytics.Domain;
+using ChildrenPath.Platform.Trips.Domain;
 using Microsoft.EntityFrameworkCore;
 using AttendanceEntity = ChildrenPath.Platform.Attendance.Domain.Attendance;
 
@@ -39,6 +40,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<TransportFleet> Fleets { get; set; }
 
     public DbSet<Assignment> Assignments { get; set; }
+    
+    public DbSet<Trip> Trips { get; set; }
     
     public DbSet<TrackingSession> TrackingSessions { get; set; }
     public DbSet<Location> Locations { get; set; }
@@ -136,6 +139,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 
         // Composición: Report -> KPIs
         modelBuilder.Entity<Report>().HasMany(r => r.Kpis).WithOne().HasForeignKey(k => k.ReportId).OnDelete(DeleteBehavior.Cascade);
+        
+        modelBuilder.Entity<Trip>().HasKey(t => t.Id);
     } 
 }
 
