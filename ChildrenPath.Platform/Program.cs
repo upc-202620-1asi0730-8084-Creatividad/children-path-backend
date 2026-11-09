@@ -4,6 +4,7 @@ using ChildrenPath.Platform.Shared.Infrastructure;
 using ChildrenPath.Platform.Shared.Domain.Repositories;
 using ChildrenPath.Platform.Fleet.Infrastructure.Repositories;
 using ChildrenPath.Platform.Students.Infrastructure.Repositories;
+using ChildrenPath.Platform.Trips.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -49,6 +50,9 @@ builder.Services.AddScoped<IVehicleRepository, VehicleRepository>();
 
 // Students Bounded Context
 builder.Services.AddScoped<IStudentRepository, StudentRepository>();
+
+// Trips Bounded Context
+builder.Services.AddScoped<ITripRepository, TripRepository>();
 
 // (Compañeros, aquí iran agregando los repositorios de Students, Routes, etc.)
 
