@@ -3,6 +3,7 @@ using Scalar.AspNetCore;
 using ChildrenPath.Platform.Shared.Infrastructure;
 using ChildrenPath.Platform.Shared.Domain.Repositories;
 using ChildrenPath.Platform.Fleet.Infrastructure.Repositories;
+using ChildrenPath.Platform.Students.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -46,7 +47,10 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 // Fleet Bounded Context
 builder.Services.AddScoped<IVehicleRepository, VehicleRepository>();
 
-// (Aquí irás agregando los repositorios de Students, Routes, etc.)
+// Students Bounded Context
+builder.Services.AddScoped<IStudentRepository, StudentRepository>();
+
+// (Compañeros, aquí iran agregando los repositorios de Students, Routes, etc.)
 
 // ==========================================
 // 2. CONSTRUCCIÓN DE LA APP
