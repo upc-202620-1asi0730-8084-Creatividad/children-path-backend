@@ -15,33 +15,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9a58bc30-ece4-43a5-972f-53be388edf52" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/.idea.ChildrenPath.Backend/.idea/.name" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/.idea.ChildrenPath.Backend/.idea/indexLayout.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/.idea.ChildrenPath.Backend/.idea/projectSettingsUpdater.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/.idea.ChildrenPath.Backend/.idea/shelf/Uncommitted_changes_before_Checkout_at_09_11_2026_14_46_[Changes]/shelved.patch" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/.idea.ChildrenPath.Backend/.idea/shelf/Uncommitted_changes_before_Checkout_at_09_11_2026_14_46__Changes_.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/.idea.ChildrenPath.Backend/.idea/shelf/Uncommitted_changes_before_Update_at_09_11_2026_14_51_[Changes]/shelved.patch" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/.idea.ChildrenPath.Backend/.idea/shelf/Uncommitted_changes_before_Update_at_09_11_2026_14_51_[Changes]1/shelved.patch" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/.idea.ChildrenPath.Backend/.idea/shelf/Uncommitted_changes_before_Update_at_09_11_2026_14_51__Changes_.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/.idea.ChildrenPath.Backend/.idea/shelf/Uncommitted_changes_before_Update_at_09_11_2026_14_51__Changes_1.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/.idea.ChildrenPath.Backend/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/.idea.ChildrenPath.Backend/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ChildrenPath.Platform/obj/ChildrenPath.Platform.csproj.nuget.dgspec.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ChildrenPath.Platform/obj/ChildrenPath.Platform.csproj.nuget.g.props" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ChildrenPath.Platform/obj/ChildrenPath.Platform.csproj.nuget.g.targets" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ChildrenPath.Platform/obj/Debug/net10.0/.NETCoreApp,Version=v10.0.AssemblyAttributes.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ChildrenPath.Platform/obj/Debug/net10.0/ChildrenPath.Platform.AssemblyInfo.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ChildrenPath.Platform/obj/Debug/net10.0/ChildrenPath.Platform.AssemblyInfoInputs.cache" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ChildrenPath.Platform/obj/Debug/net10.0/ChildrenPath.Platform.GeneratedMSBuildEditorConfig.editorconfig" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ChildrenPath.Platform/obj/Debug/net10.0/ChildrenPath.Platform.GlobalUsings.g.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ChildrenPath.Platform/obj/Debug/net10.0/ChildrenPath.Platform.assets.cache" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ChildrenPath.Platform/obj/Debug/net10.0/ChildrenPath.Platform.csproj.AssemblyReference.cache" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ChildrenPath.Platform/obj/project.assets.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ChildrenPath.Platform/obj/project.nuget.cache" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ChildrenPath.Platform/obj/project.packagespec.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ChildrenPath.Platform/obj/rider.project.model.nuget.info" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ChildrenPath.Platform/obj/rider.project.restore.info" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ChildrenPath.Platform/Trips/Domain/Trip.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ChildrenPath.Platform/Trips/Domain/Trip.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ChildrenPath.Platform/Trips/Infrastructure/Repositories/TripRepository.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -58,7 +32,7 @@
   </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/ChildrenPath.Platform/Trips/Domain/Model/Aggregates/Trip.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="mock://diff.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/ChildrenPath.Platform/Trips/Infrastructure/Repositories/TripRepository.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProjectColorInfo">{
@@ -66,6 +40,9 @@
   &quot;fromUser&quot;: false
 }</component>
   <component name="ProjectId" id="3LNqWPXOK9JatVRq8l2Asgwfd8r" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
