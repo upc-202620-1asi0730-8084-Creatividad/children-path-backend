@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 using ChildrenPath.Platform.Shared.Infrastructure;
@@ -5,6 +6,10 @@ using ChildrenPath.Platform.Shared.Domain.Repositories;
 using ChildrenPath.Platform.Fleet.Infrastructure.Repositories;
 using ChildrenPath.Platform.Students.Infrastructure.Repositories;
 using ChildrenPath.Platform.Trips.Infrastructure.Repositories;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
 
