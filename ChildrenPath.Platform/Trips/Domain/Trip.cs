@@ -1,4 +1,4 @@
-﻿namespace ChildrenPath.Platform.Trips.Domain.Model.Aggregates;
+﻿namespace ChildrenPath.Platform.Trips.Domain;
 
 public class Trip
 {
@@ -12,8 +12,9 @@ public class Trip
     public string Shift { get; set; } = "morning";
     public string Status { get; set; } = "scheduled";
     public int Capacity { get; set; } = 18;
+    public int Students { get; set; } = 0;
     public string StartTime { get; set; } = string.Empty;
     public string EstimatedEndTime { get; set; } = string.Empty;
 
-    public Trip() {}
+    public void Complete() => Status = "completed";
 }
