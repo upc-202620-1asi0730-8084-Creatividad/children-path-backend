@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 using ChildrenPath.Platform.Shared.Infrastructure;
 using ChildrenPath.Platform.Shared.Domain.Repositories;
+
+// Repositorios
 using ChildrenPath.Platform.Fleet.Infrastructure.Repositories;
 using ChildrenPath.Platform.Companies.Domain.Repositories;
 using ChildrenPath.Platform.Companies.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
@@ -11,11 +13,13 @@ using ChildrenPath.Platform.Companies.Application.QueryServices;
 using ChildrenPath.Platform.Companies.Application.Internal.CommandServices;
 using ChildrenPath.Platform.Companies.Application.Internal.QueryServices;
 using ChildrenPath.Platform.Students.Infrastructure.Repositories;
-using ChildrenPath.Platform.Trips.Infrastructure.Repositories;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
+
+using ChildrenPath.Platform.Alerts.Domain.Repositories;
+using ChildrenPath.Platform.Alerts.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using ChildrenPath.Platform.Alerts.Application.CommandServices;
+using ChildrenPath.Platform.Alerts.Application.QueryServices;
+using ChildrenPath.Platform.Alerts.Application.Internal.CommandServices;
+using ChildrenPath.Platform.Alerts.Application.Internal.QueryServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -72,6 +76,13 @@ builder.Services.AddScoped<ICompanyQueryService, CompanyQueryService>();
 // Students Bounded Context
 builder.Services.AddScoped<IStudentRepository, StudentRepository>();
 
+// Repositorios
+builder.Services.AddScoped<IAlertRepository, AlertRepository>();
+// builder.Services.AddScoped<INotificationTemplateRepository, NotificationTemplateRepository>();
+
+// Servicios de Aplicación (Commands & Queries)
+builder.Services.AddScoped<IAlertCommandService, AlertCommandService>();
+builder.Services.AddScoped<IAlertQueryService, AlertQueryService>();
 // Trips Bounded Context
 builder.Services.AddScoped<ITripRepository, TripRepository>();
 
