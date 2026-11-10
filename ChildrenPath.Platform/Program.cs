@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 using ChildrenPath.Platform.Shared.Infrastructure;
@@ -9,6 +10,12 @@ using ChildrenPath.Platform.Companies.Application.CommandServices;
 using ChildrenPath.Platform.Companies.Application.QueryServices;
 using ChildrenPath.Platform.Companies.Application.Internal.CommandServices;
 using ChildrenPath.Platform.Companies.Application.Internal.QueryServices;
+using ChildrenPath.Platform.Students.Infrastructure.Repositories;
+using ChildrenPath.Platform.Trips.Infrastructure.Repositories;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -62,6 +69,13 @@ builder.Services.AddScoped<ICompanyCommandService, CompanyCommandService>();
 builder.Services.AddScoped<ICompanyQueryService, CompanyQueryService>();
 
 // (Aquí irás agregando los repositorios de Students, Routes, etc.)
+// Students Bounded Context
+builder.Services.AddScoped<IStudentRepository, StudentRepository>();
+
+// Trips Bounded Context
+builder.Services.AddScoped<ITripRepository, TripRepository>();
+
+// (Compañeros, aquí iran agregando los repositorios de Students, Routes, etc.)
 
 // ==========================================
 // 2. CONSTRUCCIÓN DE LA APP
