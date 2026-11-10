@@ -1,127 +1,79 @@
-using Microsoft.AspNetCore.Mvc;
-using ChildrenPath.Platform.Alerts.Domain;
+using ChildrenPath.Platform.Alerts.Application.CommandServices;
+using ChildrenPath.Platform.Alerts.Application.QueryServices;
+using ChildrenPath.Platform.Alerts.Domain.Model.Commands;
+using ChildrenPath.Platform.Alerts.Domain.Model.Queries;
 using ChildrenPath.Platform.Alerts.Interfaces.Resources;
+using ChildrenPath.Platform.Alerts.Interfaces.Transform;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ChildrenPath.Platform.Alerts.Interfaces.Rest;
 
 [ApiController]
 [Route("api/v1/[controller]")]
-public class AlertsController : ControllerBase
+public class AlertsController(
+    IAlertQueryService alertQueryService,
+    IAlertCommandService alertCommandService) 
+    : ControllerBase
 {
-    private static readonly List<Alert> _mockAlerts = new()
+    [HttpGet("{id:int}")]
+    [EndpointSummary("Get an alert by id")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AlertResource))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetAlertById([FromRoute] int id, CancellationToken cancellationToken)
     {
-        new Alert 
-        { 
-            Id = 1, TripId = 101, Type = AlertType.Delay, Priority = AlertPriority.High, 
-            Message = "Vehicle KW-118 is 8 minutes behind schedule on San Isidro Morning Route.",
-            Status = AlertStatus.Active, CreatedAt = DateTime.UtcNow.AddMinutes(-15),
-            Notifications = new List<Notification>
-            {
-                new Notification { Id = 1, Channel = NotificationChannel.Push, Recipient = "Parent_123", Status = NotificationStatus.Delivered }
-            }
-        },
-        new Alert 
-        { 
-            Id = 2, TripId = 102, Type = AlertType.Emergency, Priority = AlertPriority.Critical, 
-            Message = "An incident report from KW-204 requires company admin review.",
-            Status = AlertStatus.Active, CreatedAt = DateTime.UtcNow.AddHours(-1),
-            Notifications = new List<Notification>()
-        }
-    };
+        var query = new GetAlertByIdQuery(id);
+        var alert = await alertQueryService.Handle(query, cancellationToken);
 
-    [HttpGet]
-    public IActionResult GetDashboard()
+        if (alert is null) return NotFound();
+
+        var resource = AlertResourceFromEntityAssembler.ToResourceFromEntity(alert);
+        return Ok(resource);
+    }
+
+    [HttpGet("trip/{tripId:int}")]
+    [EndpointSummary("Get alerts by trip id")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<AlertResource>))]
+    public async Task<IActionResult> GetAlertsByTripId([FromRoute] int tripId, CancellationToken cancellationToken)
     {
-        // Mapeo al formato que espera el frontend (notifications.store.js)
-        var items = _mockAlerts.Select(a => new
-        {
-            id = $"al-{a.Id:D3}",
-            category = a.Type == AlertType.Delay || a.Type == AlertType.Emergency ? "alert" : "notification",
-            type = a.Type.ToString().ToLower(),
-            priority = a.Priority.ToString().ToLower(),
-            status = "new", // Para el frontend
-            title = a.Type == AlertType.Delay ? "Route delay detected" : "Minor incident follow-up",
-            message = a.Message,
-            time = a.CreatedAt.ToString("h:mm tt"),
-            date = "Today",
-            sourceBc = "Trip Management",
-            recipientRole = "Company Admin",
-            routeName = a.Type == AlertType.Delay ? "San Isidro Morning Route" : "Miraflores School Route",
-            vehiclePlate = a.Type == AlertType.Delay ? "KW-118" : "KW-204",
-            actionLabel = "Review alert"
-        });
-
-        var response = new
-        {
-            summary = new
-            {
-                total = items.Count(),
-                unread = items.Count(),
-                criticalAlerts = _mockAlerts.Count(a => a.Priority == AlertPriority.Critical),
-                deliveryRate = 98.4,
-                acknowledged = 0
-            },
-            items = items,
-            activities = new[]
-            {
-                new { id = "act-001", time = "7:45 AM", title = "Delay alert generated", description = "KW-118 was marked as delayed.", status = "active" }
-            }
-        };
-
-        return Ok(response);
+        var query = new GetAlertsByTripIdQuery(tripId);
+        var alerts = await alertQueryService.Handle(query, cancellationToken);
+        
+        var resources = alerts.Select(AlertResourceFromEntityAssembler.ToResourceFromEntity);
+        return Ok(resources);
     }
 
     [HttpPost]
-    public IActionResult CreateAlert([FromBody] CreateAlertResource resource)
+    [EndpointSummary("Create a new alert")]
+    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(AlertResource))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> CreateAlert([FromBody] CreateAlertResource resource, CancellationToken cancellationToken)
     {
-        var newId = _mockAlerts.Any() ? _mockAlerts.Max(a => a.Id) + 1 : 1;
+        var command = CreateAlertCommandFromResourceAssembler.ToCommandFromResource(resource);
+        var result = await alertCommandService.Handle(command, cancellationToken);
 
-        // Parseo de Enums
-        if (!Enum.TryParse<AlertType>(resource.Type, true, out var alertType))
-            alertType = AlertType.Delay;
-        if (!Enum.TryParse<AlertPriority>(resource.Priority, true, out var priority))
-            priority = AlertPriority.Medium;
-        if (!Enum.TryParse<NotificationChannel>(resource.Channel, true, out var channel))
-            channel = NotificationChannel.Push;
-
-        var alert = new Alert
-        {
-            Id = newId,
-            TripId = resource.TripId,
-            Type = alertType,
-            Priority = priority,
-            Message = resource.Message,
-            Status = AlertStatus.Active,
-            CreatedAt = DateTime.UtcNow
-        };
-
-        // Creamos la notificación asociada (Composición)
-        var notification = new Notification
-        {
-            Id = newId,
-            Channel = channel,
-            Recipient = resource.Recipient,
-            Status = NotificationStatus.Sent
-        };
-        
-        // Simulamos el envío y registramos el log
-        notification.Send();
-        notification.DeliveryLogs.Add(new DeliveryLog { Response = "200 OK - Message dispatched", LoggedAt = DateTime.UtcNow });
-        
-        alert.Notifications.Add(notification);
-
-        _mockAlerts.Add(alert);
-        return CreatedAtAction(nameof(GetDashboard), new { id = alert.Id }, alert);
+        return AlertActionResultAssembler.ToActionResult(
+            this,
+            result,
+            createdAlert => CreatedAtAction(
+                nameof(GetAlertById), 
+                new { id = createdAlert.Id }, 
+                AlertResourceFromEntityAssembler.ToResourceFromEntity(createdAlert))
+        );
     }
 
-    // Endpoint para resolver una alerta
     [HttpPatch("{id:int}/resolve")]
-    public IActionResult Resolve(int id)
+    [EndpointSummary("Resolve an alert")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AlertResource))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> ResolveAlert([FromRoute] int id, CancellationToken cancellationToken)
     {
-        var alert = _mockAlerts.FirstOrDefault(a => a.Id == id);
-        if (alert == null) return NotFound();
+        var command = new ResolveAlertCommand(id);
+        var result = await alertCommandService.Handle(command, cancellationToken);
 
-        alert.Resolve();
-        return Ok(alert);
+        return AlertActionResultAssembler.ToActionResult(
+            this,
+            result,
+            resolvedAlert => Ok(AlertResourceFromEntityAssembler.ToResourceFromEntity(resolvedAlert))
+        );
     }
 }

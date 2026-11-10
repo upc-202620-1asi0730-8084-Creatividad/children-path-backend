@@ -7,7 +7,9 @@ using ChildrenPath.Platform.Fleet.Domain;
 using ChildrenPath.Platform.Assignments.Domain;
 using ChildrenPath.Platform.Tracking.Domain;
 using ChildrenPath.Platform.Attendance.Domain;
-using ChildrenPath.Platform.Alerts.Domain;
+using ChildrenPath.Platform.Alerts.Domain.Model.Aggregate;
+using ChildrenPath.Platform.Alerts.Domain.Model.Entities;
+using ChildrenPath.Platform.Alerts.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 using ChildrenPath.Platform.Analytics.Domain;
 using Microsoft.EntityFrameworkCore;
 using AttendanceEntity = ChildrenPath.Platform.Attendance.Domain.Attendance;
@@ -48,15 +50,17 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<BoardingRecord> BoardingRecords { get; set; }
     public DbSet<AbsenceRecord> AbsenceRecords { get; set; }
     
+    public DbSet<Report> Reports { get; set; }
+    public DbSet<Metric> Metrics { get; set; }
+    public DbSet<KPI> Kpis { get; set; }
+    
+    // Alerts DbSets
     public DbSet<Alert> Alerts { get; set; }
     public DbSet<Notification> Notifications { get; set; }
     public DbSet<DeliveryLog> DeliveryLogs { get; set; }
     public DbSet<NotificationTemplate> NotificationTemplates { get; set; }
     public DbSet<AlertRule> AlertRules { get; set; }
     
-    public DbSet<Report> Reports { get; set; }
-    public DbSet<Metric> Metrics { get; set; }
-    public DbSet<KPI> Kpis { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -122,11 +126,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         modelBuilder.Entity<AttendanceEntity>().HasOne(a => a.AbsenceRecord).WithOne().OnDelete(DeleteBehavior.Cascade);
         
         // Configuración de Alerts
-        modelBuilder.Entity<Alert>().HasKey(a => a.Id);
-        // Composición: Alert -> Notifications
-        modelBuilder.Entity<Alert>().HasMany(a => a.Notifications).WithOne().HasForeignKey(n => n.AlertId).OnDelete(DeleteBehavior.Cascade);
-        // Composición: Notification -> DeliveryLogs
-        modelBuilder.Entity<Notification>().HasMany(n => n.DeliveryLogs).WithOne().OnDelete(DeleteBehavior.Cascade);
+        modelBuilder.ApplyAlertsConfiguration();
         
         // Configuración de Analytics
         modelBuilder.Entity<Report>().HasKey(r => r.Id);

@@ -2,8 +2,18 @@ using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 using ChildrenPath.Platform.Shared.Infrastructure;
 using ChildrenPath.Platform.Shared.Domain.Repositories;
+
+// Repositorios
 using ChildrenPath.Platform.Fleet.Infrastructure.Repositories;
 using ChildrenPath.Platform.Students.Infrastructure.Repositories;
+
+// 👇 NUEVOS USINGS PARA ALERTS 👇
+using ChildrenPath.Platform.Alerts.Domain.Repositories;
+using ChildrenPath.Platform.Alerts.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using ChildrenPath.Platform.Alerts.Application.CommandServices;
+using ChildrenPath.Platform.Alerts.Application.QueryServices;
+using ChildrenPath.Platform.Alerts.Application.Internal.CommandServices;
+using ChildrenPath.Platform.Alerts.Application.Internal.QueryServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -50,7 +60,13 @@ builder.Services.AddScoped<IVehicleRepository, VehicleRepository>();
 // Students Bounded Context
 builder.Services.AddScoped<IStudentRepository, StudentRepository>();
 
-// (Compañeros, aquí iran agregando los repositorios de Students, Routes, etc.)
+// Repositorios
+builder.Services.AddScoped<IAlertRepository, AlertRepository>();
+// builder.Services.AddScoped<INotificationTemplateRepository, NotificationTemplateRepository>();
+
+// Servicios de Aplicación (Commands & Queries)
+builder.Services.AddScoped<IAlertCommandService, AlertCommandService>();
+builder.Services.AddScoped<IAlertQueryService, AlertQueryService>();
 
 // ==========================================
 // 2. CONSTRUCCIÓN DE LA APP
