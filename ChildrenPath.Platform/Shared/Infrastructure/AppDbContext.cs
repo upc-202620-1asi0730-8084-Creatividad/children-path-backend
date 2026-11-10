@@ -1,3 +1,6 @@
+using ChildrenPath.Platform.Companies.Domain.Model.Aggregates;
+using ChildrenPath.Platform.Companies.Domain.Model.Entities;
+using ChildrenPath.Platform.Fleet.Domain;
 ﻿using ChildrenPath.Platform.Students.Domain;
 using ChildrenPath.Platform.Profiles.Domain;
 using ChildrenPath.Platform.Subscriptions.Domain;
@@ -20,6 +23,12 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<Vehicle> Vehicles { get; set; }
     public DbSet<VehicleDocument> VehicleDocuments { get; set; }
     public DbSet<MaintenanceRecord> MaintenanceRecords { get; set; }
+
+    public DbSet<Company> Companies { get; set; }
+    public DbSet<SchoolContract> SchoolContracts { get; set; }
+    public DbSet<CompanyMember> CompanyMembers { get; set; }
+    public DbSet<ComplianceItem> ComplianceItems { get; set; }
+    public DbSet<CompanyActivity> CompanyActivities { get; set; }
 
     public DbSet<Student> Students { get; set; }
     public DbSet<Guardian> Guardians { get; set; }
@@ -67,6 +76,24 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         // Configuración User
         modelBuilder.Entity<User>().HasKey(u => u.Id);
 
+        modelBuilder.Entity<Company>().HasKey(c => c.Id);
+        modelBuilder.Entity<Company>().Property(c => c.LegalName).IsRequired().HasMaxLength(150);
+        modelBuilder.Entity<Company>().Property(c => c.CommercialName).IsRequired().HasMaxLength(150);
+        modelBuilder.Entity<Company>().Property(c => c.Ruc).IsRequired().HasMaxLength(20);
+
+        modelBuilder.Entity<SchoolContract>().HasKey(sc => sc.Id);
+        modelBuilder.Entity<SchoolContract>().Property(sc => sc.SchoolName).IsRequired().HasMaxLength(150);
+
+        modelBuilder.Entity<CompanyMember>().HasKey(cm => cm.Id);
+        modelBuilder.Entity<CompanyMember>().Property(cm => cm.Name).IsRequired().HasMaxLength(100);
+        modelBuilder.Entity<CompanyMember>().Property(cm => cm.Email).IsRequired().HasMaxLength(100);
+
+        modelBuilder.Entity<ComplianceItem>().HasKey(ci => ci.Id);
+        modelBuilder.Entity<ComplianceItem>().Property(ci => ci.Title).IsRequired().HasMaxLength(150);
+
+        modelBuilder.Entity<CompanyActivity>().HasKey(ca => ca.Id);
+        modelBuilder.Entity<CompanyActivity>().Property(ca => ca.Title).IsRequired().HasMaxLength(150);
+    }
         // Fleet
         modelBuilder.Entity<Vehicle>().HasKey(v => v.Id);
         modelBuilder.Entity<Vehicle>().HasMany(v => v.Documents).WithOne().HasForeignKey(d => d.VehicleId);
