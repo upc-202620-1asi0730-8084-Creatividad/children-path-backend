@@ -1,6 +1,7 @@
 ﻿using ChildrenPath.Platform.Shared.Domain.Repositories;
+using ChildrenPath.Platform.Shared.Infrastructure;
 
-namespace ChildrenPath.Platform.Shared.Infrastructure;
+namespace ChildrenPath.Platform.Infrastructure;
 
 public class UnitOfWork(AppDbContext context) : IUnitOfWork
 {

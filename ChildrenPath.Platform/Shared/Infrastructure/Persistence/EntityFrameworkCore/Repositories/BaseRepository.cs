@@ -1,15 +1,13 @@
 using ChildrenPath.Platform.Shared.Domain.Repositories;
+using ChildrenPath.Platform.Shared.Infrastructure; 
 using Microsoft.EntityFrameworkCore;
 
 namespace ChildrenPath.Platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 
-/// <summary>
-///     Base repository for all repositories in the platform.
-/// </summary>
-public class BaseRepository<TEntity>(DbContext context) : IBaseRepository<TEntity> 
+public class BaseRepository<TEntity>(AppDbContext context) : IBaseRepository<TEntity> 
     where TEntity : class
 {
-    protected readonly DbContext Context = context;
+    protected readonly AppDbContext Context = context; 
 
     public async Task AddAsync(TEntity entity, CancellationToken cancellationToken = default)
     {

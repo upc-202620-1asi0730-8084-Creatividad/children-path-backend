@@ -20,6 +20,8 @@ using ChildrenPath.Platform.Alerts.Application.CommandServices;
 using ChildrenPath.Platform.Alerts.Application.QueryServices;
 using ChildrenPath.Platform.Alerts.Application.Internal.CommandServices;
 using ChildrenPath.Platform.Alerts.Application.Internal.QueryServices;
+using ChildrenPath.Platform.Infrastructure;
+using ChildrenPath.Platform.Trips.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 

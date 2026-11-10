@@ -1,12 +1,11 @@
 using ChildrenPath.Platform.Companies.Domain.Model.Aggregates;
 using ChildrenPath.Platform.Companies.Domain.Model.Entities;
 using ChildrenPath.Platform.Fleet.Domain;
-﻿using ChildrenPath.Platform.Students.Domain;
+using ChildrenPath.Platform.Students.Domain;
 using ChildrenPath.Platform.Profiles.Domain;
 using ChildrenPath.Platform.Subscriptions.Domain;
 using ChildrenPath.Platform.Drivers.Domain;
 using ChildrenPath.Platform.Iam.Domain;
-using ChildrenPath.Platform.Fleet.Domain;
 using ChildrenPath.Platform.Assignments.Domain;
 using ChildrenPath.Platform.Tracking.Domain;
 using ChildrenPath.Platform.Attendance.Domain;
@@ -80,6 +79,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         // Configuración User
         modelBuilder.Entity<User>().HasKey(u => u.Id);
 
+        // Configuración Companies
         modelBuilder.Entity<Company>().HasKey(c => c.Id);
         modelBuilder.Entity<Company>().Property(c => c.LegalName).IsRequired().HasMaxLength(150);
         modelBuilder.Entity<Company>().Property(c => c.CommercialName).IsRequired().HasMaxLength(150);
@@ -97,7 +97,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 
         modelBuilder.Entity<CompanyActivity>().HasKey(ca => ca.Id);
         modelBuilder.Entity<CompanyActivity>().Property(ca => ca.Title).IsRequired().HasMaxLength(150);
-    }
+        
         // Fleet
         modelBuilder.Entity<Vehicle>().HasKey(v => v.Id);
         modelBuilder.Entity<Vehicle>().HasMany(v => v.Documents).WithOne().HasForeignKey(d => d.VehicleId);
@@ -118,7 +118,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         modelBuilder.Entity<Student>().HasOne(s => s.PickupPoint).WithOne().HasForeignKey<PickupPoint>(p => p.StudentId);
         modelBuilder.Entity<Student>().HasMany(s => s.MedicalNotes).WithOne().HasForeignKey(m => m.StudentId);
         
-        //Profiles
+        // Profiles
         modelBuilder.Entity<Profile>().HasKey(p => p.Id);
         modelBuilder.Entity<Profile>().HasOne(p => p.Preferences).WithOne().HasForeignKey<Preferences>(pref => pref.Id);
         modelBuilder.Entity<Profile>().HasOne(p => p.ParentProfile).WithOne().HasForeignKey<ParentProfile>(pp => pp.Id);
@@ -140,6 +140,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         modelBuilder.Entity<Driver>().HasMany(d => d.Availabilities).WithOne().HasForeignKey(a => a.DriverId).OnDelete(DeleteBehavior.Cascade);
         // Composición: Driver -> Assignments
         modelBuilder.Entity<Driver>().HasMany(d => d.Assignments).WithOne().HasForeignKey(a => a.DriverId).OnDelete(DeleteBehavior.Cascade);
+        
         // Configuración de Assignments
         modelBuilder.Entity<Assignment>().HasKey(a => a.Id);
         
@@ -168,6 +169,6 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         modelBuilder.Entity<Report>().HasMany(r => r.Kpis).WithOne().HasForeignKey(k => k.ReportId).OnDelete(DeleteBehavior.Cascade);
         
         modelBuilder.Entity<Trip>().HasKey(t => t.Id);
-    } 
+        
+    }
 }
-

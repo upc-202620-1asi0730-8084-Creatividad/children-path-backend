@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "Av1Rum5+P90=",
+  "dgSpecHash": "DP8UPYz5ceU=",
   "success": true,
-  "projectFilePath": "D:\\UPC\\2026-02\\Aplicaciones Web - Virtual\\childen-path-backend\\ChildrenPath.Backend\\ChildrenPath.Platform\\ChildrenPath.Platform.csproj",
+  "projectFilePath": "D:\\UPC\\2026-01\\Aplicaciones Web - Presencial\\children-path-backend\\ChildrenPath.Platform\\ChildrenPath.Platform.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\luis_\\.nuget\\packages\\bcrypt.net-next\\4.2.0\\bcrypt.net-next.4.2.0.nupkg.sha512",
     "C:\\Users\\luis_\\.nuget\\packages\\bouncycastle.cryptography\\2.6.2\\bouncycastle.cryptography.2.6.2.nupkg.sha512",

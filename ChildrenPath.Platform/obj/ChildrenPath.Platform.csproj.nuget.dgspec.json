@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\UPC\\2026-02\\Aplicaciones Web - Virtual\\childen-path-backend\\ChildrenPath.Backend\\ChildrenPath.Platform\\ChildrenPath.Platform.csproj": {}
+    "D:\\UPC\\2026-01\\Aplicaciones Web - Presencial\\children-path-backend\\ChildrenPath.Platform\\ChildrenPath.Platform.csproj": {}
   },
   "projects": {
-    "D:\\UPC\\2026-02\\Aplicaciones Web - Virtual\\childen-path-backend\\ChildrenPath.Backend\\ChildrenPath.Platform\\ChildrenPath.Platform.csproj": {
+    "D:\\UPC\\2026-01\\Aplicaciones Web - Presencial\\children-path-backend\\ChildrenPath.Platform\\ChildrenPath.Platform.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\UPC\\2026-02\\Aplicaciones Web - Virtual\\childen-path-backend\\ChildrenPath.Backend\\ChildrenPath.Platform\\ChildrenPath.Platform.csproj",
+        "projectUniqueName": "D:\\UPC\\2026-01\\Aplicaciones Web - Presencial\\children-path-backend\\ChildrenPath.Platform\\ChildrenPath.Platform.csproj",
         "projectName": "ChildrenPath.Platform",
-        "projectPath": "D:\\UPC\\2026-02\\Aplicaciones Web - Virtual\\childen-path-backend\\ChildrenPath.Backend\\ChildrenPath.Platform\\ChildrenPath.Platform.csproj",
+        "projectPath": "D:\\UPC\\2026-01\\Aplicaciones Web - Presencial\\children-path-backend\\ChildrenPath.Platform\\ChildrenPath.Platform.csproj",
         "packagesPath": "C:\\Users\\luis_\\.nuget\\packages\\",
-        "outputPath": "D:\\UPC\\2026-02\\Aplicaciones Web - Virtual\\childen-path-backend\\ChildrenPath.Backend\\ChildrenPath.Platform\\obj\\",
+        "outputPath": "D:\\UPC\\2026-01\\Aplicaciones Web - Presencial\\children-path-backend\\ChildrenPath.Platform\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\luis_\\AppData\\Roaming\\NuGet\\NuGet.Config"
