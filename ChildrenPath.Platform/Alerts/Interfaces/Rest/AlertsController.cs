@@ -12,7 +12,7 @@ namespace ChildrenPath.Platform.Alerts.Interfaces.Rest;
 [Route("api/v1/[controller]")]
 public class AlertsController(
     IAlertQueryService alertQueryService,
-    IAlertCommandService alertCommandService) 
+    IAlertCommandService alertCommandService)
     : ControllerBase
 {
     [HttpGet("{id:int}")]
@@ -37,7 +37,7 @@ public class AlertsController(
     {
         var query = new GetAlertsByTripIdQuery(tripId);
         var alerts = await alertQueryService.Handle(query, cancellationToken);
-        
+
         var resources = alerts.Select(AlertResourceFromEntityAssembler.ToResourceFromEntity);
         return Ok(resources);
     }
@@ -46,7 +46,8 @@ public class AlertsController(
     [EndpointSummary("Create a new alert")]
     [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(AlertResource))]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> CreateAlert([FromBody] CreateAlertResource resource, CancellationToken cancellationToken)
+    public async Task<IActionResult> CreateAlert([FromBody] CreateAlertResource resource,
+        CancellationToken cancellationToken)
     {
         var command = CreateAlertCommandFromResourceAssembler.ToCommandFromResource(resource);
         var result = await alertCommandService.Handle(command, cancellationToken);
@@ -55,8 +56,8 @@ public class AlertsController(
             this,
             result,
             createdAlert => CreatedAtAction(
-                nameof(GetAlertById), 
-                new { id = createdAlert.Id }, 
+                nameof(GetAlertById),
+                new { id = createdAlert.Id },
                 AlertResourceFromEntityAssembler.ToResourceFromEntity(createdAlert))
         );
     }
@@ -76,16 +77,33 @@ public class AlertsController(
             resolvedAlert => Ok(AlertResourceFromEntityAssembler.ToResourceFromEntity(resolvedAlert))
         );
     }
-    
+
     [HttpGet("/api/v1/alertNotificationCenter")]
     [EndpointSummary("Get Dashboard for Notifications Frontend")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AlertDashboardResource))]
     public async Task<IActionResult> GetDashboard(CancellationToken cancellationToken)
     {
         var alerts = await alertQueryService.Handle(new GetAllActiveAlertsQuery(), cancellationToken);
-        
+
         var resource = AlertDashboardAssembler.ToDashboardResource(alerts);
-        
+
         return Ok(resource);
     }
+    
+    [HttpPatch("{id:int}/read")]
+    [EndpointSummary("Mark an alert as read")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AlertResource))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> MarkAlertAsRead([FromRoute] int id, CancellationToken cancellationToken)
+    {
+        var command = new MarkAlertAsReadCommand(id);
+        var result = await alertCommandService.Handle(command, cancellationToken);
+
+        return AlertActionResultAssembler.ToActionResult(
+            this,
+            result,
+            updatedAlert => Ok(AlertResourceFromEntityAssembler.ToResourceFromEntity(updatedAlert))
+        );
+    }
+
 }

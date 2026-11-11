@@ -31,9 +31,9 @@ public class AlertCommandService(IAlertRepository alertRepository, IUnitOfWork u
         {
             return AlertErrors.DatabaseError.ToFailure<Alert>();
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return Result<Alert>.Failure($"Error Real en POST: {ex.Message} | Detalle: {ex.InnerException?.Message}");
+            return AlertErrors.InternalServerError.ToFailure<Alert>();
         }
     }
 
@@ -63,9 +63,9 @@ public class AlertCommandService(IAlertRepository alertRepository, IUnitOfWork u
         {
             return AlertErrors.DatabaseError.ToFailure<Alert>();
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return Result<Alert>.Failure($"Error Real: {ex.Message} | Detalle: {ex.InnerException?.Message}");
+            return AlertErrors.InternalServerError.ToFailure<Alert>();
         }
     }
 
@@ -86,5 +86,28 @@ public class AlertCommandService(IAlertRepository alertRepository, IUnitOfWork u
         catch (OperationCanceledException) { return AlertErrors.OperationCancelled.ToFailure<Alert>(); }
         catch (DbUpdateException) { return AlertErrors.DatabaseError.ToFailure<Alert>(); }
         catch (Exception) { return AlertErrors.InternalServerError.ToFailure<Alert>(); }
+    }
+    
+    public async Task<Result<Alert>> Handle(MarkAlertAsReadCommand command, CancellationToken cancellationToken)
+    {
+        var alert = await alertRepository.FindByIdAsync(command.AlertId, cancellationToken);
+        if (alert is null)
+            return AlertErrors.AlertNotFound.ToFailure<Alert>();
+
+        if (alert.IsRead)
+            return Result<Alert>.Success(alert); // Si ya está leída, no hacemos nada, devolvemos éxito
+
+        alert.MarkAsRead();
+
+        try
+        {
+            alertRepository.Update(alert);
+            await unitOfWork.CompleteAsync(cancellationToken);
+            return Result<Alert>.Success(alert);
+        }
+        catch (Exception)
+        {
+            return AlertErrors.InternalServerError.ToFailure<Alert>();
+        }
     }
 }
