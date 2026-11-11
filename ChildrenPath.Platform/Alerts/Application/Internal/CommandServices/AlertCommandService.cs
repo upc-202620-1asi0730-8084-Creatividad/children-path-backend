@@ -31,9 +31,9 @@ public class AlertCommandService(IAlertRepository alertRepository, IUnitOfWork u
         {
             return AlertErrors.DatabaseError.ToFailure<Alert>();
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-            return AlertErrors.InternalServerError.ToFailure<Alert>();
+            return Result<Alert>.Failure($"Error Real en POST: {ex.Message} | Detalle: {ex.InnerException?.Message}");
         }
     }
 
@@ -63,9 +63,9 @@ public class AlertCommandService(IAlertRepository alertRepository, IUnitOfWork u
         {
             return AlertErrors.DatabaseError.ToFailure<Alert>();
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-            return AlertErrors.InternalServerError.ToFailure<Alert>();
+            return Result<Alert>.Failure($"Error Real: {ex.Message} | Detalle: {ex.InnerException?.Message}");
         }
     }
 

@@ -43,7 +43,7 @@ public static class ModelBuilderExtensions
         builder.Entity<Notification>()
             .HasMany(n => n.DeliveryLogs)
             .WithOne()
-            .HasForeignKey("NotificationId") // FK en sombra (Shadow Property)
+            .HasForeignKey(d=> d.NotificationId)
             .OnDelete(DeleteBehavior.Cascade);
 
         // ==========================================

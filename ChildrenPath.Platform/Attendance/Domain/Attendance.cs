@@ -7,6 +7,8 @@ public enum AttendanceStatus { Boarded, DroppedOff, Absent, Late }
 public class BoardingRecord
 {
     public int Id { get; set; }
+    
+    public int AttendanceId { get; set; } 
     public DateTime BoardedAt { get; set; } = DateTime.UtcNow;
     public string Location { get; set; } = string.Empty;
 
@@ -20,6 +22,8 @@ public class BoardingRecord
 public class AbsenceRecord
 {
     public int Id { get; set; }
+    
+    public int AttendanceId { get; set; } 
     public string Reason { get; set; } = string.Empty;
     public bool Justified { get; set; }
 
