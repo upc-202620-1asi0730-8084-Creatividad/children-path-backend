@@ -12,4 +12,5 @@ public interface IAlertCommandService
     Task<Result<Alert>> Handle(CreateAlertCommand command, CancellationToken cancellationToken);
     Task<Result<Alert>> Handle(ResolveAlertCommand command, CancellationToken cancellationToken);
     Task<Result<Alert>> Handle(CancelAlertCommand command, CancellationToken cancellationToken);
+    Task<Result<Alert>> Handle(MarkAlertAsReadCommand command, CancellationToken cancellationToken);
 }

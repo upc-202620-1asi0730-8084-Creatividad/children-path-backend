@@ -20,4 +20,11 @@ public partial class Alert
     public void Cancel() => Status = AlertStatus.Cancelled;
 
     public void AddNotification(Notification notification) => Notifications.Add(notification);
+    
+    public bool IsRead { get; private set; } = false;
+
+    public void MarkAsRead()
+    {
+        IsRead = true;
+    }
 }
