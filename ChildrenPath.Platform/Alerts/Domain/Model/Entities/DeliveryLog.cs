@@ -14,6 +14,8 @@ public class DeliveryLog
     }
 
     public int Id { get; set; }
+    
+    public int NotificationId { get; set; } 
     public string Response { get; set; } = string.Empty;
     public DateTime LoggedAt { get; set; } = DateTime.UtcNow;
 }

@@ -54,8 +54,12 @@ builder.Services.AddCors(options =>
 });
 
 // Configurar Base de Datos (MySQL)
+// builder.Services.AddDbContext<AppDbContext>(options =>
+//    options.UseMySQL(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// AHORA (Temporal para desarrollo):
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseMySQL(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseInMemoryDatabase("ChildrenPathDb_Dev")); 
 
 // --- INYECCIÓN DE DEPENDENCIAS (BOUNDED CONTEXTS) ---
 
@@ -109,7 +113,7 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 app.UseCors("AllowVueApp");
 app.UseAuthorization();
 app.MapControllers();

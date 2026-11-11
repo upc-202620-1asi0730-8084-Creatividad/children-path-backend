@@ -71,7 +71,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<DeliveryLog> DeliveryLogs { get; set; }
     public DbSet<NotificationTemplate> NotificationTemplates { get; set; }
     public DbSet<AlertRule> AlertRules { get; set; }
-    
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -153,8 +153,20 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         modelBuilder.Entity<TrackingSession>().HasMany(t => t.ETAs).WithOne().OnDelete(DeleteBehavior.Cascade);
         
         modelBuilder.Entity<AttendanceEntity>().HasKey(a => a.Id);
-        modelBuilder.Entity<AttendanceEntity>().HasOne(a => a.BoardingRecord).WithOne().OnDelete(DeleteBehavior.Cascade);
-        modelBuilder.Entity<AttendanceEntity>().HasOne(a => a.AbsenceRecord).WithOne().OnDelete(DeleteBehavior.Cascade);
+        
+        // Configuración para BoardingRecord (Agregamos el HasForeignKey)
+        modelBuilder.Entity<AttendanceEntity>()
+            .HasOne(a => a.BoardingRecord)
+            .WithOne()
+            .HasForeignKey<BoardingRecord>(br => br.AttendanceId) 
+            .OnDelete(DeleteBehavior.Cascade);
+            
+        // Configuración para AbsenceRecord (Ya la tenías bien)
+        modelBuilder.Entity<AttendanceEntity>()
+            .HasOne(a => a.AbsenceRecord)
+            .WithOne()
+            .HasForeignKey<AbsenceRecord>(ar => ar.AttendanceId)
+            .OnDelete(DeleteBehavior.Cascade);
         
         // Configuración de Alerts
         modelBuilder.ApplyAlertsConfiguration();
