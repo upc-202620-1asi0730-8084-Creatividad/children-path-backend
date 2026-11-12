@@ -23,6 +23,7 @@
 
     <ItemGroup>
       <Folder Include="Companies\Interfaces\" />
+      <Folder Include="Trips\Interfaces\Rest\" />
     </ItemGroup>
 
 </Project>
