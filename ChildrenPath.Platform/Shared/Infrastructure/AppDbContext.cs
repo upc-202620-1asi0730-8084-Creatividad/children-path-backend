@@ -13,6 +13,9 @@ using ChildrenPath.Platform.Alerts.Domain.Model.Aggregate;
 using ChildrenPath.Platform.Alerts.Domain.Model.Entities;
 using ChildrenPath.Platform.Alerts.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 using ChildrenPath.Platform.Analytics.Domain;
+using ChildrenPath.Platform.Analytics.Domain.Model.Aggregate;
+using ChildrenPath.Platform.Analytics.Domain.Model.Entities;
+using ChildrenPath.Platform.Analytics.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 using ChildrenPath.Platform.Trips.Domain;
 using Microsoft.EntityFrameworkCore;
 using AttendanceEntity = ChildrenPath.Platform.Attendance.Domain.Attendance;
@@ -168,8 +171,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             .HasForeignKey<AbsenceRecord>(ar => ar.AttendanceId)
             .OnDelete(DeleteBehavior.Cascade);
         
-        // Configuración de Alerts
         modelBuilder.ApplyAlertsConfiguration();
+        modelBuilder.ApplyAnalyticsConfiguration(); 
         
         // Configuración de Analytics
         modelBuilder.Entity<Report>().HasKey(r => r.Id);
@@ -181,6 +184,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         modelBuilder.Entity<Report>().HasMany(r => r.Kpis).WithOne().HasForeignKey(k => k.ReportId).OnDelete(DeleteBehavior.Cascade);
         
         modelBuilder.Entity<Trip>().HasKey(t => t.Id);
+        
         
     }
 }
