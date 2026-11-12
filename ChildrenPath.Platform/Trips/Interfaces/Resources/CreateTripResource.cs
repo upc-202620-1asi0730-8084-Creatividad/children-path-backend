@@ -12,3 +12,12 @@ public record CreateTripResource(
     string EstimatedEndTime,
     int Capacity
 );
+
+
+
+public record AddRouteStopResource(
+    string Name,
+    string Address,
+    int Order,
+    string ScheduledTime
+);
