@@ -16,7 +16,9 @@ using ChildrenPath.Platform.Analytics.Domain;
 using ChildrenPath.Platform.Analytics.Domain.Model.Aggregate;
 using ChildrenPath.Platform.Analytics.Domain.Model.Entities;
 using ChildrenPath.Platform.Analytics.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
-using ChildrenPath.Platform.Trips.Domain;
+using ChildrenPath.Platform.Trips.Domain.Model.Aggregate;
+using ChildrenPath.Platform.Trips.Domain.Model.Entities;
+using ChildrenPath.Platform.Trips.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 using Microsoft.EntityFrameworkCore;
 using AttendanceEntity = ChildrenPath.Platform.Attendance.Domain.Attendance;
 
@@ -55,6 +57,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<Assignment> Assignments { get; set; }
     
     public DbSet<Trip> Trips { get; set; }
+    public DbSet<RouteStop> RouteStops { get; set; }
+    public DbSet<TripIncidentLog> TripIncidentLogs { get; set; }
     
     public DbSet<TrackingSession> TrackingSessions { get; set; }
     public DbSet<Location> Locations { get; set; }
@@ -164,7 +168,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             .HasForeignKey<BoardingRecord>(br => br.AttendanceId) 
             .OnDelete(DeleteBehavior.Cascade);
             
-        // Configuración para AbsenceRecord (Ya la tenías bien)
+        // Configuración para AbsenceRecord 
         modelBuilder.Entity<AttendanceEntity>()
             .HasOne(a => a.AbsenceRecord)
             .WithOne()
@@ -183,7 +187,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         // Composición: Report -> KPIs
         modelBuilder.Entity<Report>().HasMany(r => r.Kpis).WithOne().HasForeignKey(k => k.ReportId).OnDelete(DeleteBehavior.Cascade);
         
-        modelBuilder.Entity<Trip>().HasKey(t => t.Id);
+        modelBuilder.ApplyTripsConfiguration();
         
         
     }
