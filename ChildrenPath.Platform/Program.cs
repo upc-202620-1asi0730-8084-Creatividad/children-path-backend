@@ -21,7 +21,12 @@ using ChildrenPath.Platform.Alerts.Application.QueryServices;
 using ChildrenPath.Platform.Alerts.Application.Internal.CommandServices;
 using ChildrenPath.Platform.Alerts.Application.Internal.QueryServices;
 using ChildrenPath.Platform.Infrastructure;
-using ChildrenPath.Platform.Trips.Infrastructure.Repositories;
+using ChildrenPath.Platform.Trips.Domain.Repositories;
+using ChildrenPath.Platform.Trips.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using ChildrenPath.Platform.Trips.Application.CommandServices;
+using ChildrenPath.Platform.Trips.Application.QueryServices;
+using ChildrenPath.Platform.Trips.Application.Internal.CommandServices;
+using ChildrenPath.Platform.Trips.Application.Internal.QueryServices;
 
 using ChildrenPath.Platform.Analytics.Domain.Repositories;
 using ChildrenPath.Platform.Analytics.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
@@ -98,6 +103,9 @@ builder.Services.AddScoped<IAlertCommandService, AlertCommandService>();
 builder.Services.AddScoped<IAlertQueryService, AlertQueryService>();
 // Trips Bounded Context
 builder.Services.AddScoped<ITripRepository, TripRepository>();
+
+builder.Services.AddScoped<ITripCommandService, TripCommandService>();
+builder.Services.AddScoped<ITripQueryService, TripQueryService>();
 
 // Analytics Bounded Context
 builder.Services.AddScoped<IReportRepository, ReportRepository>();
