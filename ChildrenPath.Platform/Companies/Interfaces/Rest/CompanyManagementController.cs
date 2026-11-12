@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace ChildrenPath.Platform.Companies.Interfaces.Rest;
 
 [ApiController]
-[Route("api/v1/companyManagement")]
+[Route("api/v1/[controller]")]
 [Produces(MediaTypeNames.Application.Json)]
 [Tags("Company Management")]
 public class CompanyManagementController(

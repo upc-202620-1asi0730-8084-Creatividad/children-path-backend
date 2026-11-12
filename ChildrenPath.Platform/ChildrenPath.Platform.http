@@ -42,13 +42,13 @@ Content-Type: application/json
 ###
 
 ### Get Company Management Dashboard (Frontend View)
-GET {{ChildrenPath.Platform_HostAddress}}/api/v1/companyManagement
+GET {{ChildrenPath.Platform_HostAddress}}/api/v1/company-management
 Accept: application/json
 
 ###
 
 ### Update Compliance Item Status
-PATCH {{ChildrenPath.Platform_HostAddress}}/api/v1/companyManagement/compliance/2/status
+PATCH {{ChildrenPath.Platform_HostAddress}}/api/v1/company-management/compliance/2/status
 Content-Type: application/json
 
 {
