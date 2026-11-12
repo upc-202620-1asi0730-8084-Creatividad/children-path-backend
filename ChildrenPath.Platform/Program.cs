@@ -23,6 +23,13 @@ using ChildrenPath.Platform.Alerts.Application.Internal.QueryServices;
 using ChildrenPath.Platform.Infrastructure;
 using ChildrenPath.Platform.Trips.Infrastructure.Repositories;
 
+using ChildrenPath.Platform.Analytics.Domain.Repositories;
+using ChildrenPath.Platform.Analytics.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using ChildrenPath.Platform.Analytics.Application.CommandServices;
+using ChildrenPath.Platform.Analytics.Application.QueryServices;
+using ChildrenPath.Platform.Analytics.Application.Internal.CommandServices;
+using ChildrenPath.Platform.Analytics.Application.Internal.QueryServices;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // ==========================================
@@ -91,6 +98,11 @@ builder.Services.AddScoped<IAlertCommandService, AlertCommandService>();
 builder.Services.AddScoped<IAlertQueryService, AlertQueryService>();
 // Trips Bounded Context
 builder.Services.AddScoped<ITripRepository, TripRepository>();
+
+// Analytics Bounded Context
+builder.Services.AddScoped<IReportRepository, ReportRepository>();
+builder.Services.AddScoped<IReportCommandService, ReportCommandService>();
+builder.Services.AddScoped<IReportQueryService, ReportQueryService>();
 
 // (Compañeros, aquí iran agregando los repositorios de Students, Routes, etc.)
 
