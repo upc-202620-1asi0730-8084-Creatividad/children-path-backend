@@ -5,7 +5,8 @@ using ChildrenPath.Platform.Shared.Infrastructure;
 using ChildrenPath.Platform.Shared.Domain.Repositories;
 
 // Repositorios
-using ChildrenPath.Platform.Fleet.Infrastructure.Repositories;
+using ChildrenPath.Platform.Fleet.Domain.Repositories;
+using ChildrenPath.Platform.Fleet.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 using ChildrenPath.Platform.Companies.Domain.Repositories;
 using ChildrenPath.Platform.Companies.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 using ChildrenPath.Platform.Companies.Application.CommandServices;
