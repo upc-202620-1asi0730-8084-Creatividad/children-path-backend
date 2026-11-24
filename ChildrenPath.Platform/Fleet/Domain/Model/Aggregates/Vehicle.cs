@@ -1,4 +1,5 @@
 using ChildrenPath.Platform.Fleet.Domain.Model.Commands;
+using ChildrenPath.Platform.Fleet.Domain.Model.Entities;
 
 namespace ChildrenPath.Platform.Fleet.Domain.Model.Aggregates;
 
@@ -23,6 +24,10 @@ public class Vehicle
     public int AvailabilityScore { get; set; } = 100;
     public bool DocumentsValid { get; set; } = true;
     public int? FleetId { get; set; }
+
+    public TransportFleet? Fleet { get; set; }
+    public ICollection<VehicleDocument> Documents { get; set; } = new List<VehicleDocument>();
+    public ICollection<MaintenanceRecord> MaintenanceRecords { get; set; } = new List<MaintenanceRecord>();
 
     public Vehicle()
     {
