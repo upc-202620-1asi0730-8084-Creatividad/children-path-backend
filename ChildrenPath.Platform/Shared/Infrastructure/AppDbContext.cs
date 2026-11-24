@@ -8,7 +8,7 @@ using ChildrenPath.Platform.Drivers.Domain;
 using ChildrenPath.Platform.Iam.Domain;
 using ChildrenPath.Platform.Assignments.Domain;
 using ChildrenPath.Platform.Tracking.Domain;
-using ChildrenPath.Platform.Attendance.Domain;
+
 using ChildrenPath.Platform.Alerts.Domain.Model.Aggregate;
 using ChildrenPath.Platform.Alerts.Domain.Model.Entities;
 using ChildrenPath.Platform.Alerts.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
@@ -20,7 +20,9 @@ using ChildrenPath.Platform.Trips.Domain.Model.Aggregate;
 using ChildrenPath.Platform.Trips.Domain.Model.Entities;
 using ChildrenPath.Platform.Trips.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 using Microsoft.EntityFrameworkCore;
-using AttendanceEntity = ChildrenPath.Platform.Attendance.Domain.Attendance;
+using ChildrenPath.Platform.Attendance.Domain.Model.Entities;
+using ChildrenPath.Platform.Attendance.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
+using AttendanceEntity = ChildrenPath.Platform.Attendance.Domain.Model.Aggregate.Attendance;
 
 namespace ChildrenPath.Platform.Shared.Infrastructure;
 
@@ -159,21 +161,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         // Composición: TrackingSession -> ETAs
         modelBuilder.Entity<TrackingSession>().HasMany(t => t.ETAs).WithOne().OnDelete(DeleteBehavior.Cascade);
         
-        modelBuilder.Entity<AttendanceEntity>().HasKey(a => a.Id);
-        
-        // Configuración para BoardingRecord (Agregamos el HasForeignKey)
-        modelBuilder.Entity<AttendanceEntity>()
-            .HasOne(a => a.BoardingRecord)
-            .WithOne()
-            .HasForeignKey<BoardingRecord>(br => br.AttendanceId) 
-            .OnDelete(DeleteBehavior.Cascade);
-            
-        // Configuración para AbsenceRecord 
-        modelBuilder.Entity<AttendanceEntity>()
-            .HasOne(a => a.AbsenceRecord)
-            .WithOne()
-            .HasForeignKey<AbsenceRecord>(ar => ar.AttendanceId)
-            .OnDelete(DeleteBehavior.Cascade);
+        modelBuilder.ApplyAttendanceConfiguration();
         
         modelBuilder.ApplyAlertsConfiguration();
         modelBuilder.ApplyAnalyticsConfiguration(); 

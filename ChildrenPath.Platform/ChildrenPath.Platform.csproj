@@ -22,6 +22,8 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Attendance\Interfaces\Resources\" />
+      <Folder Include="Attendance\Interfaces\Rest\" />
       <Folder Include="Companies\Interfaces\" />
       <Folder Include="Trips\Interfaces\Rest\" />
     </ItemGroup>
