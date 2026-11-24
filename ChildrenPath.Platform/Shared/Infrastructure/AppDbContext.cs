@@ -2,6 +2,7 @@ using ChildrenPath.Platform.Companies.Domain.Model.Aggregates;
 using ChildrenPath.Platform.Companies.Domain.Model.Entities;
 using ChildrenPath.Platform.Fleet.Domain.Model.Aggregates;
 using ChildrenPath.Platform.Fleet.Domain.Model.Entities;
+using ChildrenPath.Platform.Fleet.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 using ChildrenPath.Platform.Students.Domain;
 using ChildrenPath.Platform.Profiles.Domain;
 using ChildrenPath.Platform.Subscriptions.Domain;
@@ -110,24 +111,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         modelBuilder.Entity<CompanyActivity>().Property(ca => ca.Title).IsRequired().HasMaxLength(150);
         
         // Fleet
-        modelBuilder.Entity<Vehicle>().HasKey(v => v.Id);
-        modelBuilder.Entity<Vehicle>().Property(v => v.Plate).IsRequired().HasMaxLength(20);
-        modelBuilder.Entity<Vehicle>().Property(v => v.Code).IsRequired().HasMaxLength(50);
-        modelBuilder.Entity<Vehicle>().Property(v => v.Brand).IsRequired().HasMaxLength(100);
-        modelBuilder.Entity<Vehicle>().Property(v => v.Model).IsRequired().HasMaxLength(100);
-
-        modelBuilder.Entity<TransportFleet>().HasKey(f => f.Id);
-        modelBuilder.Entity<TransportFleet>().Property(f => f.Name).IsRequired().HasMaxLength(150);
-        modelBuilder.Entity<TransportFleet>().HasMany(f => f.Vehicles).WithOne().HasForeignKey(v => v.FleetId).OnDelete(DeleteBehavior.SetNull);
-
-        modelBuilder.Entity<MaintenanceAlert>().HasKey(a => a.Id);
-        modelBuilder.Entity<MaintenanceAlert>().Property(a => a.Title).IsRequired().HasMaxLength(150);
-
-        modelBuilder.Entity<VehicleDocument>().HasKey(d => d.Id);
-        modelBuilder.Entity<VehicleDocument>().Property(d => d.DocumentType).IsRequired().HasMaxLength(100);
-
-        modelBuilder.Entity<MaintenanceRecord>().HasKey(m => m.Id);
-        modelBuilder.Entity<MaintenanceRecord>().Property(m => m.Description).IsRequired().HasMaxLength(250);
+        modelBuilder.ApplyFleetConfiguration();
         
         // Students
         modelBuilder.Entity<Student>().HasKey(s => s.Id);
