@@ -1,11 +1,26 @@
 namespace ChildrenPath.Platform.Shared.Domain.Model;
 
-/// <summary>
-///     Represents a structured application/domain error.
-/// </summary>
-/// <param name="Code">A unique, machine-readable error code.</param>
-/// <param name="Message">A human-readable error message.</param>
-public record Error(string Code, string Message)
+public enum EErrorType
+{
+    Failure = 0,
+    Validation = 1,
+    NotFound = 2,
+    Conflict = 3,
+    Unauthorized = 4,
+    Forbidden = 5,
+    Unexpected = 6
+}
+
+public record Error(string Code, string Message, EErrorType Type = EErrorType.Failure)
 {
     public static readonly Error None = new(string.Empty, string.Empty);
+    public static readonly Error NullValue = new("Error.NullValue", "The specified result value is null.");
+
+    public static Error NotFound(string code, string message)     => new(code, message, EErrorType.NotFound);
+    public static Error Conflict(string code, string message)     => new(code, message, EErrorType.Conflict);
+    public static Error Validation(string code, string message)   => new(code, message, EErrorType.Validation);
+    public static Error Failure(string code, string message)      => new(code, message, EErrorType.Failure);
+    public static Error Unauthorized(string code, string message) => new(code, message, EErrorType.Unauthorized);
+    public static Error Forbidden(string code, string message)    => new(code, message, EErrorType.Forbidden);
+    public static Error Unexpected(string code, string message)   => new(code, message, EErrorType.Unexpected);
 }
