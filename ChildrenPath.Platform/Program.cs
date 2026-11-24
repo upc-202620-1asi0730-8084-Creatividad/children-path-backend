@@ -5,7 +5,12 @@ using ChildrenPath.Platform.Shared.Infrastructure;
 using ChildrenPath.Platform.Shared.Domain.Repositories;
 
 // Repositorios
-using ChildrenPath.Platform.Fleet.Infrastructure.Repositories;
+using ChildrenPath.Platform.Fleet.Domain.Repositories;
+using ChildrenPath.Platform.Fleet.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using ChildrenPath.Platform.Fleet.Application.CommandServices;
+using ChildrenPath.Platform.Fleet.Application.QueryServices;
+using ChildrenPath.Platform.Fleet.Application.Internal.CommandServices;
+using ChildrenPath.Platform.Fleet.Application.Internal.QueryServices;
 using ChildrenPath.Platform.Companies.Domain.Repositories;
 using ChildrenPath.Platform.Companies.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 using ChildrenPath.Platform.Companies.Application.CommandServices;
@@ -87,6 +92,14 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 // Fleet Bounded Context
 builder.Services.AddScoped<IVehicleRepository, VehicleRepository>();
+builder.Services.AddScoped<IFleetRepository, FleetRepository>();
+builder.Services.AddScoped<IMaintenanceAlertRepository, MaintenanceAlertRepository>();
+builder.Services.AddScoped<IMaintenanceRecordRepository, MaintenanceRecordRepository>();
+builder.Services.AddScoped<IVehicleDocumentRepository, VehicleDocumentRepository>();
+builder.Services.AddScoped<IVehicleCommandService, VehicleCommandService>();
+builder.Services.AddScoped<IVehicleQueryService, VehicleQueryService>();
+builder.Services.AddScoped<IFleetCommandService, FleetCommandService>();
+builder.Services.AddScoped<IFleetQueryService, FleetQueryService>();
 
 // Companies Bounded Context
 builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();

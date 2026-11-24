@@ -1,6 +1,8 @@
 using ChildrenPath.Platform.Companies.Domain.Model.Aggregates;
 using ChildrenPath.Platform.Companies.Domain.Model.Entities;
-using ChildrenPath.Platform.Fleet.Domain;
+using ChildrenPath.Platform.Fleet.Domain.Model.Aggregates;
+using ChildrenPath.Platform.Fleet.Domain.Model.Entities;
+using ChildrenPath.Platform.Fleet.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 using ChildrenPath.Platform.Students.Domain;
 using ChildrenPath.Platform.Profiles.Domain;
 using ChildrenPath.Platform.Subscriptions.Domain;
@@ -31,6 +33,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<Vehicle> Vehicles { get; set; }
     public DbSet<VehicleDocument> VehicleDocuments { get; set; }
     public DbSet<MaintenanceRecord> MaintenanceRecords { get; set; }
+    public DbSet<MaintenanceAlert> MaintenanceAlerts { get; set; }
 
     public DbSet<Company> Companies { get; set; }
     public DbSet<SchoolContract> SchoolContracts { get; set; }
@@ -108,18 +111,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         modelBuilder.Entity<CompanyActivity>().Property(ca => ca.Title).IsRequired().HasMaxLength(150);
         
         // Fleet
-        modelBuilder.Entity<Vehicle>().HasKey(v => v.Id);
-        modelBuilder.Entity<Vehicle>().HasMany(v => v.Documents).WithOne().HasForeignKey(d => d.VehicleId);
-        modelBuilder.Entity<Vehicle>().HasMany(v => v.MaintenanceRecords).WithOne().HasForeignKey(m => m.VehicleId);
-
-        modelBuilder.Entity<TransportFleet>().HasKey(f => f.Id);
-        
-        modelBuilder.Entity<Vehicle>().HasKey(v => v.Id);
-        modelBuilder.Entity<Vehicle>().HasOne(v => v.Fleet).WithMany(f => f.Vehicles).HasForeignKey(v => v.FleetId).OnDelete(DeleteBehavior.SetNull);
-        // Composición: Vehicle -> Documents
-        modelBuilder.Entity<Vehicle>().HasMany(v => v.Documents).WithOne().HasForeignKey(d => d.VehicleId).OnDelete(DeleteBehavior.Cascade);
-        // Composición: Vehicle -> MaintenanceRecords
-        modelBuilder.Entity<Vehicle>().HasMany(v => v.MaintenanceRecords).WithOne().HasForeignKey(m => m.VehicleId).OnDelete(DeleteBehavior.Cascade);
+        modelBuilder.ApplyFleetConfiguration();
         
         // Students
         modelBuilder.Entity<Student>().HasKey(s => s.Id);
