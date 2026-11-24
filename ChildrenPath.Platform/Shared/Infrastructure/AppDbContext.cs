@@ -1,6 +1,7 @@
 using ChildrenPath.Platform.Companies.Domain.Model.Aggregates;
 using ChildrenPath.Platform.Companies.Domain.Model.Entities;
-using ChildrenPath.Platform.Fleet.Domain;
+using ChildrenPath.Platform.Fleet.Domain.Model.Aggregates;
+using ChildrenPath.Platform.Fleet.Domain.Model.Entities;
 using ChildrenPath.Platform.Students.Domain;
 using ChildrenPath.Platform.Profiles.Domain;
 using ChildrenPath.Platform.Subscriptions.Domain;
@@ -31,6 +32,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<Vehicle> Vehicles { get; set; }
     public DbSet<VehicleDocument> VehicleDocuments { get; set; }
     public DbSet<MaintenanceRecord> MaintenanceRecords { get; set; }
+    public DbSet<MaintenanceAlert> MaintenanceAlerts { get; set; }
 
     public DbSet<Company> Companies { get; set; }
     public DbSet<SchoolContract> SchoolContracts { get; set; }
@@ -109,17 +111,23 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         
         // Fleet
         modelBuilder.Entity<Vehicle>().HasKey(v => v.Id);
-        modelBuilder.Entity<Vehicle>().HasMany(v => v.Documents).WithOne().HasForeignKey(d => d.VehicleId);
-        modelBuilder.Entity<Vehicle>().HasMany(v => v.MaintenanceRecords).WithOne().HasForeignKey(m => m.VehicleId);
+        modelBuilder.Entity<Vehicle>().Property(v => v.Plate).IsRequired().HasMaxLength(20);
+        modelBuilder.Entity<Vehicle>().Property(v => v.Code).IsRequired().HasMaxLength(50);
+        modelBuilder.Entity<Vehicle>().Property(v => v.Brand).IsRequired().HasMaxLength(100);
+        modelBuilder.Entity<Vehicle>().Property(v => v.Model).IsRequired().HasMaxLength(100);
 
         modelBuilder.Entity<TransportFleet>().HasKey(f => f.Id);
-        
-        modelBuilder.Entity<Vehicle>().HasKey(v => v.Id);
-        modelBuilder.Entity<Vehicle>().HasOne(v => v.Fleet).WithMany(f => f.Vehicles).HasForeignKey(v => v.FleetId).OnDelete(DeleteBehavior.SetNull);
-        // Composición: Vehicle -> Documents
-        modelBuilder.Entity<Vehicle>().HasMany(v => v.Documents).WithOne().HasForeignKey(d => d.VehicleId).OnDelete(DeleteBehavior.Cascade);
-        // Composición: Vehicle -> MaintenanceRecords
-        modelBuilder.Entity<Vehicle>().HasMany(v => v.MaintenanceRecords).WithOne().HasForeignKey(m => m.VehicleId).OnDelete(DeleteBehavior.Cascade);
+        modelBuilder.Entity<TransportFleet>().Property(f => f.Name).IsRequired().HasMaxLength(150);
+        modelBuilder.Entity<TransportFleet>().HasMany(f => f.Vehicles).WithOne().HasForeignKey(v => v.FleetId).OnDelete(DeleteBehavior.SetNull);
+
+        modelBuilder.Entity<MaintenanceAlert>().HasKey(a => a.Id);
+        modelBuilder.Entity<MaintenanceAlert>().Property(a => a.Title).IsRequired().HasMaxLength(150);
+
+        modelBuilder.Entity<VehicleDocument>().HasKey(d => d.Id);
+        modelBuilder.Entity<VehicleDocument>().Property(d => d.DocumentType).IsRequired().HasMaxLength(100);
+
+        modelBuilder.Entity<MaintenanceRecord>().HasKey(m => m.Id);
+        modelBuilder.Entity<MaintenanceRecord>().Property(m => m.Description).IsRequired().HasMaxLength(250);
         
         // Students
         modelBuilder.Entity<Student>().HasKey(s => s.Id);
