@@ -35,6 +35,13 @@ using ChildrenPath.Platform.Analytics.Application.QueryServices;
 using ChildrenPath.Platform.Analytics.Application.Internal.CommandServices;
 using ChildrenPath.Platform.Analytics.Application.Internal.QueryServices;
 
+using ChildrenPath.Platform.Attendance.Domain.Repositories;
+using ChildrenPath.Platform.Attendance.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using ChildrenPath.Platform.Attendance.Application.CommandServices;
+using ChildrenPath.Platform.Attendance.Application.QueryServices;
+using ChildrenPath.Platform.Attendance.Application.Internal.CommandServices;
+using ChildrenPath.Platform.Attendance.Application.Internal.QueryServices;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // ==========================================
@@ -111,6 +118,12 @@ builder.Services.AddScoped<ITripQueryService, TripQueryService>();
 builder.Services.AddScoped<IReportRepository, ReportRepository>();
 builder.Services.AddScoped<IReportCommandService, ReportCommandService>();
 builder.Services.AddScoped<IReportQueryService, ReportQueryService>();
+
+// Attendance Bounded Context
+builder.Services.AddScoped<IAttendanceRepository, AttendanceRepository>();
+builder.Services.AddScoped<IAttendanceCommandService, AttendanceCommandService>();
+builder.Services.AddScoped<IAttendanceQueryService, AttendanceQueryService>();
+
 
 // (Compañeros, aquí iran agregando los repositorios de Students, Routes, etc.)
 
