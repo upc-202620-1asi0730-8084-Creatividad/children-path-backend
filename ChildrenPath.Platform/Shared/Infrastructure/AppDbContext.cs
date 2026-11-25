@@ -24,6 +24,7 @@ using ChildrenPath.Platform.Trips.Infrastructure.Persistence.EntityFrameworkCore
 using Microsoft.EntityFrameworkCore;
 using ChildrenPath.Platform.Attendance.Domain.Model.Entities;
 using ChildrenPath.Platform.Attendance.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
+using ChildrenPath.Platform.Iam.Domain.Model.Aggregates;
 using AttendanceEntity = ChildrenPath.Platform.Attendance.Domain.Model.Aggregate.Attendance;
 
 namespace ChildrenPath.Platform.Shared.Infrastructure;
