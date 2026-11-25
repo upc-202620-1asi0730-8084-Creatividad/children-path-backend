@@ -5,6 +5,7 @@ using ChildrenPath.Platform.Analytics.Domain.Model.Commands;
 using ChildrenPath.Platform.Analytics.Domain.Model.Queries;
 using ChildrenPath.Platform.Analytics.Interfaces.Resources;
 using ChildrenPath.Platform.Analytics.Interfaces.Transform;
+using ChildrenPath.Platform.Shared.Interfaces.Rest.Transform;
 
 namespace ChildrenPath.Platform.Analytics.Interfaces.Rest;
 
@@ -55,7 +56,6 @@ public class AnalyticsController(
                 new { label = "Tue", onTimeRate = 91, attendanceRate = 95, delayMinutes = 8 }
             },
             
-            // 👇 AQUÍ USAMOS LOS DATOS REALES DE LA BD 👇
             reports = reportResources,
             
             activities = new[]
@@ -74,11 +74,11 @@ public class AnalyticsController(
         var command = CreateReportCommandFromResourceAssembler.ToCommandFromResource(resource);
         var result = await reportCommandService.Handle(command, cancellationToken);
 
-        if (result.IsFailure)
-            return BadRequest(result.Message);
-
-        var reportResource = ReportResourceFromEntityAssembler.ToResourceFromEntity(result.Value!);
-        return CreatedAtAction(nameof(GetDashboard), new { id = reportResource.Id }, reportResource);
+        return ResultActionResultAssembler.ToActionResult(this, result, report =>
+        {
+            var reportResource = ReportResourceFromEntityAssembler.ToResourceFromEntity(report);
+            return CreatedAtAction(nameof(GetDashboard), new { id = reportResource.Id }, reportResource);
+        });
     }
 
     [HttpGet("reports/{id:int}/export")]
@@ -87,8 +87,8 @@ public class AnalyticsController(
         var command = new ExportReportCommand(id, format);
         var result = await reportCommandService.Handle(command, cancellationToken);
 
-        if (result.IsFailure) return NotFound(result.Message);
-
-        return Ok(new { message = result.Value });
+        return ResultActionResultAssembler.ToActionResult(this, result, exportMessage => 
+            Ok(new { message = exportMessage })
+        );
     }
 }

@@ -1,6 +1,5 @@
+using Cortex.Mediator.Notifications;
+
 namespace ChildrenPath.Platform.Shared.Domain.Model.Events;
 
-/// <summary>
-///     Marker interface for domain events.
-/// </summary>
-public interface IEvent;
+public interface IEvent : INotification;

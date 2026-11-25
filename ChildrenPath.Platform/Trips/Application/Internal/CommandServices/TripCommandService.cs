@@ -32,28 +32,19 @@ public class TripCommandService(ITripRepository tripRepository, IUnitOfWork unit
             await unitOfWork.CompleteAsync(cancellationToken);
             return Result<Trip>.Success(trip);
         }
-        catch (OperationCanceledException)
-        {
-            return TripErrors.OperationCancelled.ToFailure<Trip>();
-        }
-        catch (DbUpdateException)
-        {
-            return TripErrors.DatabaseError.ToFailure<Trip>();
-        }
-        catch (Exception)
-        {
-            return TripErrors.InternalServerError.ToFailure<Trip>();
-        }
+        catch (OperationCanceledException) { return Result<Trip>.Failure(TripErrors.OperationCancelled); }
+        catch (DbUpdateException)          { return Result<Trip>.Failure(TripErrors.DatabaseError); }
+        catch (Exception)                  { return Result<Trip>.Failure(TripErrors.InternalServerError); }
     }
 
     public async Task<Result<Trip>> Handle(StartTripCommand command, CancellationToken cancellationToken)
     {
         var trip = await tripRepository.FindByIdAsync(command.TripId, cancellationToken);
         if (trip is null)
-            return TripErrors.TripNotFound.ToFailure<Trip>();
+            return Result<Trip>.Failure(TripErrors.TripNotFound);
 
         if (trip.Status == TripStatus.Completed)
-            return TripErrors.TripAlreadyCompleted.ToFailure<Trip>();
+            return Result<Trip>.Failure(TripErrors.TripAlreadyCompleted);
         trip.Start();
 
         try
@@ -62,19 +53,19 @@ public class TripCommandService(ITripRepository tripRepository, IUnitOfWork unit
             await unitOfWork.CompleteAsync(cancellationToken);
             return Result<Trip>.Success(trip);
         }
-        catch (OperationCanceledException) { return TripErrors.OperationCancelled.ToFailure<Trip>(); }
-        catch (DbUpdateException) { return TripErrors.DatabaseError.ToFailure<Trip>(); }
-        catch (Exception) { return TripErrors.InternalServerError.ToFailure<Trip>(); }
+        catch (OperationCanceledException) { return Result<Trip>.Failure(TripErrors.OperationCancelled); }
+        catch (DbUpdateException)          { return Result<Trip>.Failure(TripErrors.DatabaseError); }
+        catch (Exception)                  { return Result<Trip>.Failure(TripErrors.InternalServerError); }
     }
     
     public async Task<Result<Trip>> Handle(CompleteTripCommand command, CancellationToken cancellationToken)
     {
         var trip = await tripRepository.FindByIdAsync(command.TripId, cancellationToken);
         if (trip is null)
-            return TripErrors.TripNotFound.ToFailure<Trip>();
+            return Result<Trip>.Failure(TripErrors.TripNotFound);
 
         if (trip.Status == TripStatus.Completed)
-            return TripErrors.TripAlreadyCompleted.ToFailure<Trip>();
+            return Result<Trip>.Failure(TripErrors.TripAlreadyCompleted);
         trip.Complete();
 
         try
@@ -83,9 +74,9 @@ public class TripCommandService(ITripRepository tripRepository, IUnitOfWork unit
             await unitOfWork.CompleteAsync(cancellationToken);
             return Result<Trip>.Success(trip);
         }
-        catch (OperationCanceledException) { return TripErrors.OperationCancelled.ToFailure<Trip>(); }
-        catch (DbUpdateException) { return TripErrors.DatabaseError.ToFailure<Trip>(); }
-        catch (Exception) { return TripErrors.InternalServerError.ToFailure<Trip>(); }
+        catch (OperationCanceledException) { return Result<Trip>.Failure(TripErrors.OperationCancelled); }
+        catch (DbUpdateException)          { return Result<Trip>.Failure(TripErrors.DatabaseError); }
+        catch (Exception)                  { return Result<Trip>.Failure(TripErrors.InternalServerError); }
     }
     
     
@@ -93,10 +84,10 @@ public class TripCommandService(ITripRepository tripRepository, IUnitOfWork unit
     {
         var trip = await tripRepository.FindByIdAsync(command.TripId, cancellationToken);
         if (trip is null)
-            return TripErrors.TripNotFound.ToFailure<Trip>();
+            return Result<Trip>.Failure(TripErrors.TripNotFound);
 
         if (trip.Status == TripStatus.Cancelled)
-            return TripErrors.TripAlreadyCancelled.ToFailure<Trip>();
+            return Result<Trip>.Failure(TripErrors.TripAlreadyCancelled);
         trip.Cancel();
 
         try
@@ -105,16 +96,16 @@ public class TripCommandService(ITripRepository tripRepository, IUnitOfWork unit
             await unitOfWork.CompleteAsync(cancellationToken);
             return Result<Trip>.Success(trip);
         }
-        catch (OperationCanceledException) { return TripErrors.OperationCancelled.ToFailure<Trip>(); }
-        catch (DbUpdateException) { return TripErrors.DatabaseError.ToFailure<Trip>(); }
-        catch (Exception) { return TripErrors.InternalServerError.ToFailure<Trip>(); }
+        catch (OperationCanceledException) { return Result<Trip>.Failure(TripErrors.OperationCancelled); }
+        catch (DbUpdateException)          { return Result<Trip>.Failure(TripErrors.DatabaseError); }
+        catch (Exception) { return Result<Trip>.Failure(TripErrors.InternalServerError); }
     }
 
     public async Task<Result<Trip>> Handle(MarkTripAsDelayedCommand command, CancellationToken cancellationToken)
     {
         var trip = await tripRepository.FindByIdAsync(command.TripId, cancellationToken);
         if (trip is null)
-            return TripErrors.TripNotFound.ToFailure<Trip>();
+            return Result<Trip>.Failure(TripErrors.TripNotFound);
         trip.MarkDelayed();
 
         try
@@ -123,9 +114,9 @@ public class TripCommandService(ITripRepository tripRepository, IUnitOfWork unit
             await unitOfWork.CompleteAsync(cancellationToken);
             return Result<Trip>.Success(trip);
         }
-        catch (OperationCanceledException) { return TripErrors.OperationCancelled.ToFailure<Trip>(); }
-        catch (DbUpdateException) { return TripErrors.DatabaseError.ToFailure<Trip>(); }
-        catch (Exception) { return TripErrors.InternalServerError.ToFailure<Trip>(); }
+        catch (OperationCanceledException) { return Result<Trip>.Failure(TripErrors.OperationCancelled); }
+        catch (DbUpdateException)          { return Result<Trip>.Failure(TripErrors.DatabaseError); }
+        catch (Exception) { return Result<Trip>.Failure(TripErrors.InternalServerError); }
     }
     
     
@@ -133,7 +124,7 @@ public class TripCommandService(ITripRepository tripRepository, IUnitOfWork unit
     {
         var trip = await tripRepository.FindByIdAsync(command.TripId, cancellationToken);
         if (trip is null)
-            return TripErrors.TripNotFound.ToFailure<Trip>();
+            return Result<Trip>.Failure(TripErrors.TripNotFound);
 
         var stop = new RouteStop(command.Name, command.Address, command.Order, command.ScheduledTime);
         trip.AddStop(stop);
@@ -144,8 +135,8 @@ public class TripCommandService(ITripRepository tripRepository, IUnitOfWork unit
             await unitOfWork.CompleteAsync(cancellationToken);
             return Result<Trip>.Success(trip);
         }
-        catch (OperationCanceledException) { return TripErrors.OperationCancelled.ToFailure<Trip>(); }
-        catch (DbUpdateException) { return TripErrors.DatabaseError.ToFailure<Trip>(); }
-        catch (Exception) { return TripErrors.InternalServerError.ToFailure<Trip>(); }
+        catch (OperationCanceledException) { return Result<Trip>.Failure(TripErrors.OperationCancelled); }
+        catch (DbUpdateException)          { return Result<Trip>.Failure(TripErrors.DatabaseError); }
+        catch (Exception) { return Result<Trip>.Failure(TripErrors.InternalServerError); }
     }
 } 

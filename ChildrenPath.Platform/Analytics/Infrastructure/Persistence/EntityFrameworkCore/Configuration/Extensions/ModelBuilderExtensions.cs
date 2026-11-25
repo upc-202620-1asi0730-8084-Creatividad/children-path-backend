@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ChildrenPath.Platform.Analytics.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 
-public static class ModelBuilderExtensions
+public static class sModelBuilderExtensions
 {
     public static void ApplyAnalyticsConfiguration(this ModelBuilder builder)
     {
