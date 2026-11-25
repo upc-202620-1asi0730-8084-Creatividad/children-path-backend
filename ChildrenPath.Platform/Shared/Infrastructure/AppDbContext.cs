@@ -9,7 +9,9 @@ using ChildrenPath.Platform.Subscriptions.Domain;
 using ChildrenPath.Platform.Drivers.Domain;
 using ChildrenPath.Platform.Iam.Domain;
 using ChildrenPath.Platform.Assignments.Domain;
-using ChildrenPath.Platform.Tracking.Domain;
+using ChildrenPath.Platform.Tracking.Domain.Model.Aggregate;
+using ChildrenPath.Platform.Tracking.Domain.Model.Entities;
+using ChildrenPath.Platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration.ValueConverters;
 
 using ChildrenPath.Platform.Alerts.Domain.Model.Aggregate;
 using ChildrenPath.Platform.Alerts.Domain.Model.Entities;
@@ -25,6 +27,8 @@ using Microsoft.EntityFrameworkCore;
 using ChildrenPath.Platform.Attendance.Domain.Model.Entities;
 using ChildrenPath.Platform.Attendance.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 using ChildrenPath.Platform.Iam.Domain.Model.Aggregates;
+using ChildrenPath.Platform.Iam.Domain.Model.ValueObjects;
+using ChildrenPath.Platform.Tracking.Domain.Model.ValueObjects;
 using AttendanceEntity = ChildrenPath.Platform.Attendance.Domain.Model.Aggregate.Attendance;
 
 namespace ChildrenPath.Platform.Shared.Infrastructure;
@@ -90,8 +94,13 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         base.OnModelCreating(modelBuilder);
         
         // Configuración User
-        modelBuilder.Entity<User>().HasKey(u => u.Id);
-
+        // Configuración User
+        modelBuilder.Entity<User>().Property(u => u.Id)
+            .HasConversion(new StronglyTypedIdConverter<UserId, int>(
+                id => id.Value,
+                value => new UserId(value)))
+            .ValueGeneratedOnAdd();
+        
         // Configuración Companies
         modelBuilder.Entity<Company>().HasKey(c => c.Id);
         modelBuilder.Entity<Company>().Property(c => c.LegalName).IsRequired().HasMaxLength(150);
@@ -149,11 +158,35 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         // Configuración de Tracking
         modelBuilder.Entity<TrackingSession>().HasKey(t => t.Id);
         
+        // Convertimos el Value Object TrackingSessionId a int para la base de datos
+        modelBuilder.Entity<TrackingSession>().Property(t => t.Id)
+            .HasConversion(new StronglyTypedIdConverter<TrackingSessionId, int>(
+                id => id.Value, 
+                value => new TrackingSessionId(value)))
+            .ValueGeneratedOnAdd();
+
         // Composición: TrackingSession -> Locations
-        modelBuilder.Entity<TrackingSession>().HasMany(t => t.Locations).WithOne().OnDelete(DeleteBehavior.Cascade);
+        // Usamos PropertyAccessMode.Field para que EF Core modifique la lista privada _locations
+        modelBuilder.Entity<TrackingSession>()
+            .HasMany(t => t.Locations)
+            .WithOne()
+            .HasForeignKey("TrackingSessionId") // Crea la FK oculta automáticamente
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<TrackingSession>()
+            .Navigation(t => t.Locations)
+            .UsePropertyAccessMode(PropertyAccessMode.Field);
+
         // Composición: TrackingSession -> ETAs
-        modelBuilder.Entity<TrackingSession>().HasMany(t => t.ETAs).WithOne().OnDelete(DeleteBehavior.Cascade);
-        
+        modelBuilder.Entity<TrackingSession>()
+            .HasMany(t => t.ETAs)
+            .WithOne()
+            .HasForeignKey("TrackingSessionId")
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<TrackingSession>()
+            .Navigation(t => t.ETAs)
+            .UsePropertyAccessMode(PropertyAccessMode.Field);        
         modelBuilder.ApplyAttendanceConfiguration();
         
         modelBuilder.ApplyAlertsConfiguration();
