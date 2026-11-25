@@ -11,27 +11,25 @@ public static class TripActionResultAssembler
         Func<T, IActionResult> successAction)
     {
         if (result.IsSuccess)
-        {
             return successAction(result.Value!);
-        }
 
-        var code = result.Message.Split(':')[0];
+        var code = result.Error.Code;
 
         var statusCode = code switch
         {
-            "Trips.TripNotFound" => StatusCodes.Status404NotFound,
+            "Trips.TripNotFound"         => StatusCodes.Status404NotFound,
             "Trips.TripAlreadyCompleted" => StatusCodes.Status409Conflict,
             "Trips.TripAlreadyCancelled" => StatusCodes.Status409Conflict,
-            "Trips.OperationCancelled" => StatusCodes.Status409Conflict,
-            "Trips.DatabaseError" => StatusCodes.Status500InternalServerError,
-            "Trips.InternalServerError" => StatusCodes.Status500InternalServerError,
-            _ => StatusCodes.Status400BadRequest
+            "Trips.OperationCancelled"   => StatusCodes.Status409Conflict,
+            "Trips.DatabaseError"        => StatusCodes.Status500InternalServerError,
+            "Trips.InternalServerError"  => StatusCodes.Status500InternalServerError,
+            _                            => StatusCodes.Status400BadRequest
         };
 
         return controller.Problem(
             statusCode: statusCode,
             title: code,
-            detail: result.Message
+            detail: result.Error.Message
         );
     }
 }

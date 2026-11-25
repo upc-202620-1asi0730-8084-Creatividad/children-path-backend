@@ -15,7 +15,7 @@ public static class AlertActionResultAssembler
             return successAction(result.Value!);
         }
 
-        var code = result.Message.Split(':')[0];
+        var code = result.Error.Code; // <-- Ya extraemos el código directo
         
         var statusCode = code switch
         {
@@ -30,7 +30,7 @@ public static class AlertActionResultAssembler
         return controller.Problem(
             statusCode: statusCode,
             title: code,
-            detail: result.Message
+            detail: result.Error.Message // <-- Usamos el mensaje del Error
         );
     }
 }

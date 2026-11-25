@@ -10,16 +10,10 @@ using AttendanceEntity = ChildrenPath.Platform.Attendance.Domain.Model.Aggregate
 
 namespace ChildrenPath.Platform.Attendance.Application.Internal.CommandServices;
 
-/// <summary>
-///     Default implementation of <see cref="IAttendanceCommandService" />.
-/// </summary>
-/// <param name="attendanceRepository">The repository used to persist attendance records.</param>
-/// <param name="unitOfWork">The unit of work used to commit persistence changes.</param>
 public class AttendanceCommandService(
     IAttendanceRepository attendanceRepository,
     IUnitOfWork unitOfWork) : IAttendanceCommandService
 {
-    /// <inheritdoc />
     public async Task<Result<AttendanceEntity>> Handle(
         CreateAttendanceCommand command,
         CancellationToken cancellationToken)
@@ -30,7 +24,7 @@ public class AttendanceCommandService(
             cancellationToken);
 
         if (exists)
-            return AttendanceErrors.AttendanceAlreadyExists.ToFailure<AttendanceEntity>();
+            return Result<AttendanceEntity>.Failure(AttendanceErrors.AttendanceAlreadyExists);
 
         var attendance = new AttendanceEntity(command.StudentId, command.TripId);
 
@@ -43,31 +37,20 @@ public class AttendanceCommandService(
         {
             await attendanceRepository.AddAsync(attendance, cancellationToken);
             await unitOfWork.CompleteAsync(cancellationToken);
-
             return Result<AttendanceEntity>.Success(attendance);
         }
-        catch (OperationCanceledException)
-        {
-            return AttendanceErrors.OperationCancelled.ToFailure<AttendanceEntity>();
-        }
-        catch (DbUpdateException)
-        {
-            return AttendanceErrors.DatabaseError.ToFailure<AttendanceEntity>();
-        }
-        catch (Exception)
-        {
-            return AttendanceErrors.InternalServerError.ToFailure<AttendanceEntity>();
-        }
+        catch (OperationCanceledException) { return Result<AttendanceEntity>.Failure(AttendanceErrors.OperationCancelled); }
+        catch (DbUpdateException)          { return Result<AttendanceEntity>.Failure(AttendanceErrors.DatabaseError); }
+        catch (Exception)                  { return Result<AttendanceEntity>.Failure(AttendanceErrors.InternalServerError); }
     }
 
-    /// <inheritdoc />
     public async Task<Result<AttendanceEntity>> Handle(
         UpdateAttendanceStatusCommand command,
         CancellationToken cancellationToken)
     {
         var attendance = await attendanceRepository.FindByIdAsync(command.AttendanceId, cancellationToken);
         if (attendance is null)
-            return AttendanceErrors.AttendanceNotFound.ToFailure<AttendanceEntity>();
+            return Result<AttendanceEntity>.Failure(AttendanceErrors.AttendanceNotFound);
 
         switch (command.Status)
         {
@@ -93,38 +76,27 @@ public class AttendanceCommandService(
                 attendance.MarkPendingConfirmation();
                 break;
             default:
-                return AttendanceErrors.InvalidStatus.ToFailure<AttendanceEntity>();
+                return Result<AttendanceEntity>.Failure(AttendanceErrors.InvalidStatus);
         }
 
         try
         {
             attendanceRepository.Update(attendance);
             await unitOfWork.CompleteAsync(cancellationToken);
-
             return Result<AttendanceEntity>.Success(attendance);
         }
-        catch (OperationCanceledException)
-        {
-            return AttendanceErrors.OperationCancelled.ToFailure<AttendanceEntity>();
-        }
-        catch (DbUpdateException)
-        {
-            return AttendanceErrors.DatabaseError.ToFailure<AttendanceEntity>();
-        }
-        catch (Exception)
-        {
-            return AttendanceErrors.InternalServerError.ToFailure<AttendanceEntity>();
-        }
+        catch (OperationCanceledException) { return Result<AttendanceEntity>.Failure(AttendanceErrors.OperationCancelled); }
+        catch (DbUpdateException)          { return Result<AttendanceEntity>.Failure(AttendanceErrors.DatabaseError); }
+        catch (Exception)                  { return Result<AttendanceEntity>.Failure(AttendanceErrors.InternalServerError); }
     }
 
-    /// <inheritdoc />
     public async Task<Result<AttendanceEntity>> Handle(
         MarkDropOffCommand command,
         CancellationToken cancellationToken)
     {
         var attendance = await attendanceRepository.FindByIdAsync(command.AttendanceId, cancellationToken);
         if (attendance is null)
-            return AttendanceErrors.AttendanceNotFound.ToFailure<AttendanceEntity>();
+            return Result<AttendanceEntity>.Failure(AttendanceErrors.AttendanceNotFound);
 
         attendance.MarkDropOff();
 
@@ -132,20 +104,10 @@ public class AttendanceCommandService(
         {
             attendanceRepository.Update(attendance);
             await unitOfWork.CompleteAsync(cancellationToken);
-
             return Result<AttendanceEntity>.Success(attendance);
         }
-        catch (OperationCanceledException)
-        {
-            return AttendanceErrors.OperationCancelled.ToFailure<AttendanceEntity>();
-        }
-        catch (DbUpdateException)
-        {
-            return AttendanceErrors.DatabaseError.ToFailure<AttendanceEntity>();
-        }
-        catch (Exception)
-        {
-            return AttendanceErrors.InternalServerError.ToFailure<AttendanceEntity>();
-        }
+        catch (OperationCanceledException) { return Result<AttendanceEntity>.Failure(AttendanceErrors.OperationCancelled); }
+        catch (DbUpdateException)          { return Result<AttendanceEntity>.Failure(AttendanceErrors.DatabaseError); }
+        catch (Exception)                  { return Result<AttendanceEntity>.Failure(AttendanceErrors.InternalServerError); }
     }
 }

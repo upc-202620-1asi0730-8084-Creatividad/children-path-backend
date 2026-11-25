@@ -1,6 +1,7 @@
+using ChildrenPath.Platform.Shared.Domain.Model.Events;
+using Cortex.Mediator.Notifications;
+
 namespace ChildrenPath.Platform.Shared.Application.Internal.EventHandlers;
 
-public interface IEventHandler<in TEvent>
-{
-    Task Handle(TEvent domainEvent, CancellationToken cancellationToken);
-}
+public interface IEventHandler<in TEvent> : INotificationHandler<TEvent>
+    where TEvent : IEvent;

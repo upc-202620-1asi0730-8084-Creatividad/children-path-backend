@@ -25,7 +25,7 @@ using ChildrenPath.Platform.Alerts.Application.CommandServices;
 using ChildrenPath.Platform.Alerts.Application.QueryServices;
 using ChildrenPath.Platform.Alerts.Application.Internal.CommandServices;
 using ChildrenPath.Platform.Alerts.Application.Internal.QueryServices;
-using ChildrenPath.Platform.Infrastructure;
+using ChildrenPath.Platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 using ChildrenPath.Platform.Trips.Domain.Repositories;
 using ChildrenPath.Platform.Trips.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 using ChildrenPath.Platform.Trips.Application.CommandServices;

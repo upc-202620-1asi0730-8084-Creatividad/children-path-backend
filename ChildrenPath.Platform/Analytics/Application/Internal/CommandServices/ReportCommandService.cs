@@ -5,6 +5,7 @@ using ChildrenPath.Platform.Analytics.Domain.Model.Entities;
 using ChildrenPath.Platform.Analytics.Domain.Model.Errors;
 using ChildrenPath.Platform.Analytics.Domain.Repositories;
 using ChildrenPath.Platform.Shared.Domain;
+using ChildrenPath.Platform.Shared.Domain.Model;
 using ChildrenPath.Platform.Shared.Domain.Repositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -32,16 +33,16 @@ public class ReportCommandService(
         }
         catch (OperationCanceledException)
         {
-            return AnalyticsErrors.OperationCancelled.ToFailure<Report>();
+            return Result<Report>.Failure(AnalyticsErrors.OperationCancelled);
         }
         catch (DbUpdateException)
         {
-            return AnalyticsErrors.DatabaseError.ToFailure<Report>();
+            return Result<Report>.Failure(AnalyticsErrors.DatabaseError);
         }
         catch (Exception ex)
         {
-            // Retornamos el error real temporalmente para debug
-            return Result<Report>.Failure($"Error Real: {ex.Message} | Detalle: {ex.InnerException?.Message}");
+            // Retornamos el error real temporalmente para debug (ahora envuelto en un Error)
+            return Result<Report>.Failure(new Error("Analytics.DebugError", $"Error Real: {ex.Message} | Detalle: {ex.InnerException?.Message}"));
         }
     }
 
@@ -50,7 +51,7 @@ public class ReportCommandService(
         var report = await reportRepository.FindByIdAsync(command.ReportId, cancellationToken);
         
         if (report is null)
-            return AnalyticsErrors.ReportNotFound.ToFailure<string>();
+            return Result<string>.Failure(AnalyticsErrors.ReportNotFound);
 
         try
         {
@@ -60,7 +61,7 @@ public class ReportCommandService(
         }
         catch (Exception)
         {
-            return AnalyticsErrors.InternalServerError.ToFailure<string>();
+            return Result<string>.Failure(AnalyticsErrors.InternalServerError);
         }
     }
 }

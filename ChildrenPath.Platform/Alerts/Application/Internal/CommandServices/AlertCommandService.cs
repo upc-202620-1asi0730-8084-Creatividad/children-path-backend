@@ -25,15 +25,15 @@ public class AlertCommandService(IAlertRepository alertRepository, IUnitOfWork u
         }
         catch (OperationCanceledException)
         {
-            return AlertErrors.OperationCancelled.ToFailure<Alert>();
+            return Result<Alert>.Failure(AlertErrors.OperationCancelled);
         }
         catch (DbUpdateException)
         {
-            return AlertErrors.DatabaseError.ToFailure<Alert>();
+            return Result<Alert>.Failure(AlertErrors.DatabaseError);
         }
         catch (Exception)
         {
-            return AlertErrors.InternalServerError.ToFailure<Alert>();
+            return Result<Alert>.Failure(AlertErrors.InternalServerError);
         }
     }
 
@@ -41,10 +41,10 @@ public class AlertCommandService(IAlertRepository alertRepository, IUnitOfWork u
     {
         var alert = await alertRepository.FindByIdAsync(command.AlertId, cancellationToken);
         if (alert is null)
-            return AlertErrors.AlertNotFound.ToFailure<Alert>();
+            return Result<Alert>.Failure(AlertErrors.AlertNotFound);
 
         if (alert.Status == AlertStatus.Resolved)
-            return AlertErrors.AlertAlreadyResolved.ToFailure<Alert>();
+            return Result<Alert>.Failure(AlertErrors.AlertAlreadyResolved);
 
         alert.Resolve();
 
@@ -57,15 +57,15 @@ public class AlertCommandService(IAlertRepository alertRepository, IUnitOfWork u
         }
         catch (OperationCanceledException)
         {
-            return AlertErrors.OperationCancelled.ToFailure<Alert>();
+            return Result<Alert>.Failure(AlertErrors.OperationCancelled);
         }
         catch (DbUpdateException)
         {
-            return AlertErrors.DatabaseError.ToFailure<Alert>();
+            return Result<Alert>.Failure(AlertErrors.DatabaseError);
         }
         catch (Exception)
         {
-            return AlertErrors.InternalServerError.ToFailure<Alert>();
+            return Result<Alert>.Failure(AlertErrors.InternalServerError);
         }
     }
 
@@ -73,7 +73,7 @@ public class AlertCommandService(IAlertRepository alertRepository, IUnitOfWork u
     {
         var alert = await alertRepository.FindByIdAsync(command.AlertId, cancellationToken);
         if (alert is null)
-            return AlertErrors.AlertNotFound.ToFailure<Alert>();
+            return Result<Alert>.Failure(AlertErrors.AlertNotFound);
 
         alert.Cancel();
 
@@ -83,16 +83,16 @@ public class AlertCommandService(IAlertRepository alertRepository, IUnitOfWork u
             await unitOfWork.CompleteAsync(cancellationToken);
             return Result<Alert>.Success(alert);
         }
-        catch (OperationCanceledException) { return AlertErrors.OperationCancelled.ToFailure<Alert>(); }
-        catch (DbUpdateException) { return AlertErrors.DatabaseError.ToFailure<Alert>(); }
-        catch (Exception) { return AlertErrors.InternalServerError.ToFailure<Alert>(); }
+        catch (OperationCanceledException) { return Result<Alert>.Failure(AlertErrors.OperationCancelled); }
+        catch (DbUpdateException)          { return Result<Alert>.Failure(AlertErrors.DatabaseError); }
+        catch (Exception)                  { return Result<Alert>.Failure(AlertErrors.InternalServerError); }
     }
     
     public async Task<Result<Alert>> Handle(MarkAlertAsReadCommand command, CancellationToken cancellationToken)
     {
         var alert = await alertRepository.FindByIdAsync(command.AlertId, cancellationToken);
         if (alert is null)
-            return AlertErrors.AlertNotFound.ToFailure<Alert>();
+            return Result<Alert>.Failure(AlertErrors.AlertNotFound);
 
         if (alert.IsRead)
             return Result<Alert>.Success(alert); // Si ya está leída, no hacemos nada, devolvemos éxito
@@ -105,9 +105,9 @@ public class AlertCommandService(IAlertRepository alertRepository, IUnitOfWork u
             await unitOfWork.CompleteAsync(cancellationToken);
             return Result<Alert>.Success(alert);
         }
-        catch (Exception)
+        catch (Exception) // Nota: Aquí te faltaron los catch específicos, te recomiendo agregarlos como en los otros métodos
         {
-            return AlertErrors.InternalServerError.ToFailure<Alert>();
+            return Result<Alert>.Failure(AlertErrors.InternalServerError);
         }
     }
 }

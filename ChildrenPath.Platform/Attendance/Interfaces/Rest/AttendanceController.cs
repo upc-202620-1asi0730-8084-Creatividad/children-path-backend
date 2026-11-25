@@ -4,6 +4,7 @@ using ChildrenPath.Platform.Attendance.Domain.Model.Commands;
 using ChildrenPath.Platform.Attendance.Domain.Model.Queries;
 using ChildrenPath.Platform.Attendance.Interfaces.Resources;
 using ChildrenPath.Platform.Attendance.Interfaces.Transform;
+using ChildrenPath.Platform.Shared.Interfaces.Rest.Transform;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ChildrenPath.Platform.Attendance.Interfaces.Rest;
