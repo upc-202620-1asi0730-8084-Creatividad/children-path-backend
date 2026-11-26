@@ -131,3 +131,76 @@ Content-Type: application/json
 
 ### Delete Student
 DELETE {{ChildrenPath.Platform_HostAddress}}/api/v1/students/1
+
+###
+
+### Get all Drivers
+GET {{ChildrenPath.Platform_HostAddress}}/api/v1/drivers
+Accept: application/json
+
+###
+
+### Get Driver Summary (frontend-compatible route)
+GET {{ChildrenPath.Platform_HostAddress}}/api/v1/driverSummary
+Accept: application/json
+
+###
+
+### Get Driver Reviews
+GET {{ChildrenPath.Platform_HostAddress}}/api/v1/driverReviews
+Accept: application/json
+
+###
+
+### Get Driver Shifts / Recent Activity
+GET {{ChildrenPath.Platform_HostAddress}}/api/v1/driverShifts?limit=20
+Accept: application/json
+
+###
+
+### Create Driver
+POST {{ChildrenPath.Platform_HostAddress}}/api/v1/drivers
+Content-Type: application/json
+
+{
+  "fullName": "Elena Castillo",
+  "phone": "+51 987 654 320",
+  "email": "elena.castillo@example.com",
+  "licenseNumber": "AIIb-458722",
+  "licenseClass": "A-IIb",
+  "licenseExpiresAt": "2027-04-15T00:00:00Z",
+  "assignedVehicle": "KW-204",
+  "assignedRoute": "Miraflores School Route",
+  "status": "available",
+  "safetyScore": 96,
+  "punctualityScore": 92,
+  "documentsValid": true,
+  "yearsOfExperience": 8
+}
+
+###
+
+### Update Driver
+PUT {{ChildrenPath.Platform_HostAddress}}/api/v1/drivers/1
+Content-Type: application/json
+
+{
+  "fullName": "Elena Castillo",
+  "phone": "+51 987 654 320",
+  "email": "elena.castillo@example.com",
+  "licenseNumber": "AIIb-458722",
+  "licenseClass": "A-IIb",
+  "licenseExpiresAt": "2027-04-15T00:00:00Z",
+  "assignedVehicle": "KW-204",
+  "assignedRoute": "Miraflores School Route",
+  "status": "onRoute",
+  "safetyScore": 96,
+  "punctualityScore": 92,
+  "documentsValid": true,
+  "yearsOfExperience": 8
+}
+
+###
+
+### Delete Driver
+DELETE {{ChildrenPath.Platform_HostAddress}}/api/v1/drivers/1
