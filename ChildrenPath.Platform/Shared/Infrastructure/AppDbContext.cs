@@ -3,8 +3,9 @@ using ChildrenPath.Platform.Companies.Domain.Model.Entities;
 using ChildrenPath.Platform.Fleet.Domain.Model.Aggregates;
 using ChildrenPath.Platform.Fleet.Domain.Model.Entities;
 using ChildrenPath.Platform.Fleet.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
-using ChildrenPath.Platform.Students.Domain;
+using ChildrenPath.Platform.Students.Domain.Model.Aggregates;
 using ChildrenPath.Platform.Students.Domain.Model.Entities;
+using ChildrenPath.Platform.Students.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 using ChildrenPath.Platform.Profiles.Domain;
 using ChildrenPath.Platform.Subscriptions.Domain;
 using ChildrenPath.Platform.Drivers.Domain;
@@ -117,38 +118,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         modelBuilder.ApplyFleetConfiguration();
         
         // Students
-        modelBuilder.Entity<Student>().HasKey(s => s.Id);
-        modelBuilder.Entity<Student>().Property(s => s.Code).IsRequired().HasMaxLength(20);
-        modelBuilder.Entity<Student>().HasIndex(s => s.Code).IsUnique();
-        modelBuilder.Entity<Student>().Property(s => s.FirstName).IsRequired().HasMaxLength(100);
-        modelBuilder.Entity<Student>().Property(s => s.LastName).IsRequired().HasMaxLength(100);
-        modelBuilder.Entity<Student>().Property(s => s.Grade).IsRequired().HasMaxLength(50);
-        modelBuilder.Entity<Student>().Property(s => s.SchoolName).IsRequired().HasMaxLength(150);
-        modelBuilder.Entity<Student>().Property(s => s.Status).IsRequired().HasMaxLength(20);
-        modelBuilder.Entity<Student>().Property(s => s.AuthorizationStatus).IsRequired().HasMaxLength(20);
-        modelBuilder.Entity<Student>().Property(s => s.LastAttendanceStatus).IsRequired().HasMaxLength(30);
-        modelBuilder.Entity<Student>().Property(s => s.RouteName).HasMaxLength(150);
-        modelBuilder.Entity<Student>().Property(s => s.RouteCode).HasMaxLength(30);
-        modelBuilder.Entity<Student>().Property(s => s.AssignedVehicle).HasMaxLength(30);
-        modelBuilder.Entity<Student>().Property(s => s.AssignedDriver).HasMaxLength(100);
-        modelBuilder.Entity<Student>().Property(s => s.DropOffPoint).HasMaxLength(250);
-        modelBuilder.Entity<Student>().Property(s => s.PickupWindow).HasMaxLength(50);
-        modelBuilder.Entity<Student>().Property(s => s.EmergencyContact).HasMaxLength(50);
-        modelBuilder.Entity<Student>().Property(s => s.Notes).HasMaxLength(500);
-        modelBuilder.Entity<Student>().HasMany(s => s.Guardians).WithOne().HasForeignKey(g => g.StudentId).OnDelete(DeleteBehavior.Cascade);
-        modelBuilder.Entity<Guardian>().Property(g => g.FullName).IsRequired().HasMaxLength(100);
-        modelBuilder.Entity<Guardian>().Property(g => g.Phone).IsRequired().HasMaxLength(50);
-        modelBuilder.Entity<Guardian>().Property(g => g.Email).HasMaxLength(150);
-        modelBuilder.Entity<Guardian>().Property(g => g.Relationship).HasMaxLength(40);
-        modelBuilder.Entity<Student>().HasOne(s => s.PickupPoint).WithOne().HasForeignKey<PickupPoint>(p => p.StudentId).OnDelete(DeleteBehavior.Cascade);
-        modelBuilder.Entity<PickupPoint>().Property(p => p.Address).IsRequired().HasMaxLength(250);
-        modelBuilder.Entity<Student>().HasMany(s => s.MedicalNotes).WithOne().HasForeignKey(m => m.StudentId).OnDelete(DeleteBehavior.Cascade);
-        modelBuilder.Entity<StudentActivity>().HasKey(activity => activity.Id);
-        modelBuilder.Entity<StudentActivity>().Property(activity => activity.StudentCode).IsRequired().HasMaxLength(20);
-        modelBuilder.Entity<StudentActivity>().Property(activity => activity.StudentName).IsRequired().HasMaxLength(200);
-        modelBuilder.Entity<StudentActivity>().Property(activity => activity.Title).IsRequired().HasMaxLength(150);
-        modelBuilder.Entity<StudentActivity>().Property(activity => activity.Description).IsRequired().HasMaxLength(500);
-        modelBuilder.Entity<StudentActivity>().HasIndex(activity => activity.OccurredAt);
+        modelBuilder.ApplyStudentsConfiguration();
         
         // Profiles
         modelBuilder.Entity<Profile>().HasKey(p => p.Id);
