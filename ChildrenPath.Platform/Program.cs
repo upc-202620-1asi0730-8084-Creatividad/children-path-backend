@@ -17,7 +17,12 @@ using ChildrenPath.Platform.Companies.Application.CommandServices;
 using ChildrenPath.Platform.Companies.Application.QueryServices;
 using ChildrenPath.Platform.Companies.Application.Internal.CommandServices;
 using ChildrenPath.Platform.Companies.Application.Internal.QueryServices;
-using ChildrenPath.Platform.Students.Infrastructure.Repositories;
+using ChildrenPath.Platform.Students.Domain.Repositories;
+using ChildrenPath.Platform.Students.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using ChildrenPath.Platform.Students.Application.CommandServices;
+using ChildrenPath.Platform.Students.Application.QueryServices;
+using ChildrenPath.Platform.Students.Application.Internal.CommandServices;
+using ChildrenPath.Platform.Students.Application.Internal.QueryServices;
 
 using ChildrenPath.Platform.Alerts.Domain.Repositories;
 using ChildrenPath.Platform.Alerts.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
@@ -117,9 +122,11 @@ builder.Services.AddScoped<ICompanyActivityRepository, CompanyActivityRepository
 builder.Services.AddScoped<ICompanyCommandService, CompanyCommandService>();
 builder.Services.AddScoped<ICompanyQueryService, CompanyQueryService>();
 
-// (Aquí irás agregando los repositorios de Students, Routes, etc.)
 // Students Bounded Context
 builder.Services.AddScoped<IStudentRepository, StudentRepository>();
+builder.Services.AddScoped<IStudentActivityRepository, StudentActivityRepository>();
+builder.Services.AddScoped<IStudentCommandService, StudentCommandService>();
+builder.Services.AddScoped<IStudentQueryService, StudentQueryService>();
 
 // Repositorios
 builder.Services.AddScoped<IAlertRepository, AlertRepository>();
@@ -149,8 +156,6 @@ builder.Services.AddScoped<IAssignmentRepository, AssignmentRepository>();
 builder.Services.AddScoped<IAssignmentCommandService, AssignmentCommandService>();
 builder.Services.AddScoped<IAssignmentQueryService, AssignmentQueryService>();
 
-
-// (Compañeros, aquí iran agregando los repositorios de Students, Routes, etc.)
 
 // ==========================================
 // 2. CONSTRUCCIÓN DE LA APP
