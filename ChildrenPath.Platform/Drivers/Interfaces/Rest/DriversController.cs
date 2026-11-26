@@ -1,65 +1,95 @@
-using Microsoft.AspNetCore.Mvc;
-using ChildrenPath.Platform.Drivers.Domain;
+using System.Net.Mime;
+using ChildrenPath.Platform.Drivers.Application.CommandServices;
+using ChildrenPath.Platform.Drivers.Application.QueryServices;
+using ChildrenPath.Platform.Drivers.Domain.Model.Commands;
+using ChildrenPath.Platform.Drivers.Domain.Model.Queries;
 using ChildrenPath.Platform.Drivers.Interfaces.Resources;
+using ChildrenPath.Platform.Drivers.Interfaces.Transform;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ChildrenPath.Platform.Drivers.Interfaces.Rest;
 
 [ApiController]
-[Route("api/v1/[controller]")]
-public class DriversController : ControllerBase
+[Route("api/v1/drivers")]
+[Produces(MediaTypeNames.Application.Json)]
+[Tags("Drivers")]
+public class DriversController(
+    IDriverCommandService commandService,
+    IDriverQueryService queryService) : ControllerBase
 {
-    private static readonly List<Driver> _mockDrivers = new()
-    {
-        new Driver 
-        { 
-            Id = 1, Code = "DRV-001", FullName = "Carlos Pérez", Phone = "+51 987 221 104", Email = "carlos.perez@childrenpath.pe",
-            LicenseNumber = "AIIb-458721", LicenseExpiry = new DateTime(2027, 4, 15), Status = DriverStatus.OnRoute,
-            SafetyScore = 96, PunctualityScore = 92,
-            Availabilities = new List<DriverAvailability> 
-            { 
-                new DriverAvailability { DayOfWeek = "Monday", StartTime = new TimeSpan(6, 0, 0), EndTime = new TimeSpan(14, 0, 0) } 
-            },
-            Assignments = new List<DriverAssignment> 
-            { 
-                new DriverAssignment { VehicleId = 1, RouteId = 1, AssignedAt = DateTime.UtcNow } 
-            }
-        },
-        new Driver 
-        { 
-            Id = 2, Code = "DRV-002", FullName = "María Gómez", Phone = "+51 955 420 771", Email = "maria.gomez@childrenpath.pe",
-            LicenseNumber = "AIIb-884213", LicenseExpiry = new DateTime(2026, 12, 2), Status = DriverStatus.Available,
-            SafetyScore = 94, PunctualityScore = 89,
-            Availabilities = new List<DriverAvailability>(),
-            Assignments = new List<DriverAssignment>()
-        }
-    };
-
     [HttpGet]
-    public IActionResult GetAll() => Ok(_mockDrivers);
+    [EndpointSummary("Get all drivers")]
+    [ProducesResponseType(typeof(IEnumerable<DriverResource>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
+    {
+        var drivers = await queryService.Handle(new GetAllDriversQuery(), cancellationToken);
+        return Ok(drivers.Select(DriverResourceFromEntityAssembler.ToResourceFromEntity));
+    }
+
+    [HttpGet("{id:int}")]
+    [EndpointSummary("Get a driver by ID")]
+    [ProducesResponseType(typeof(DriverResource), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetById(int id, CancellationToken cancellationToken)
+    {
+        var driver = await queryService.Handle(new GetDriverByIdQuery(id), cancellationToken);
+        return driver == null
+            ? NotFound(new { message = $"Driver with id {id} not found." })
+            : Ok(DriverResourceFromEntityAssembler.ToResourceFromEntity(driver));
+    }
 
     [HttpPost]
-    public IActionResult Create([FromBody] CreateDriverResource resource)
+    [EndpointSummary("Register a driver")]
+    [ProducesResponseType(typeof(DriverResource), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> Create(
+        [FromBody] CreateDriverResource resource,
+        CancellationToken cancellationToken)
     {
-        var newId = _mockDrivers.Any() ? _mockDrivers.Max(d => d.Id) + 1 : 1;
-
-        if (!Enum.TryParse<DriverStatus>(resource.Status, true, out var status))
-            status = DriverStatus.Available;
-
-        var driver = new Driver
+        try
         {
-            Id = newId,
-            Code = $"DRV-{newId:D3}",
-            FullName = resource.FullName,
-            Phone = resource.Phone,
-            Email = resource.Email,
-            LicenseNumber = resource.LicenseNumber,
-            LicenseExpiry = resource.LicenseExpiry,
-            Status = status,
-            SafetyScore = resource.SafetyScore,
-            PunctualityScore = resource.PunctualityScore
-        };
+            var command = CreateDriverCommandFromResourceAssembler.ToCommandFromResource(resource);
+            var driver = await commandService.Handle(command, cancellationToken);
+            var driverResource = DriverResourceFromEntityAssembler.ToResourceFromEntity(driver);
+            return CreatedAtAction(nameof(GetById), new { id = driver.Id }, driverResource);
+        }
+        catch (InvalidOperationException exception)
+        {
+            return BadRequest(new { message = exception.Message });
+        }
+    }
 
-        _mockDrivers.Add(driver);
-        return CreatedAtAction(nameof(GetAll), new { id = driver.Id }, driver);
+    [HttpPut("{id:int}")]
+    [EndpointSummary("Update a driver")]
+    [ProducesResponseType(typeof(DriverResource), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> Update(
+        int id,
+        [FromBody] UpdateDriverResource resource,
+        CancellationToken cancellationToken)
+    {
+        try
+        {
+            var command = UpdateDriverCommandFromResourceAssembler.ToCommandFromResource(id, resource);
+            var driver = await commandService.Handle(command, cancellationToken);
+            return driver == null
+                ? NotFound(new { message = $"Driver with id {id} not found." })
+                : Ok(DriverResourceFromEntityAssembler.ToResourceFromEntity(driver));
+        }
+        catch (InvalidOperationException exception)
+        {
+            return BadRequest(new { message = exception.Message });
+        }
+    }
+
+    [HttpDelete("{id:int}")]
+    [EndpointSummary("Delete a driver")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken)
+    {
+        var deleted = await commandService.Handle(new DeleteDriverCommand(id), cancellationToken);
+        return deleted ? NoContent() : NotFound(new { message = $"Driver with id {id} not found." });
     }
 }
