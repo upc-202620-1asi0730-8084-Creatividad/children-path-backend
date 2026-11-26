@@ -56,3 +56,78 @@ Content-Type: application/json
 }
 
 ###
+
+### Get all Students (kebab-case route)
+GET {{ChildrenPath.Platform_HostAddress}}/api/v1/student-records
+Accept: application/json
+
+###
+
+### Get all Students (frontend-compatible route)
+GET {{ChildrenPath.Platform_HostAddress}}/api/v1/studentRecords
+Accept: application/json
+
+###
+
+### Get Student Summary
+GET {{ChildrenPath.Platform_HostAddress}}/api/v1/student-summary
+Accept: application/json
+
+###
+
+### Get Student Reviews
+GET {{ChildrenPath.Platform_HostAddress}}/api/v1/student-reviews
+Accept: application/json
+
+###
+
+### Get recent Student Activities
+GET {{ChildrenPath.Platform_HostAddress}}/api/v1/student-activities?limit=20
+Accept: application/json
+
+###
+
+### Create Student
+POST {{ChildrenPath.Platform_HostAddress}}/api/v1/student-records
+Content-Type: application/json
+
+{
+  "firstName": "Lucía",
+  "lastName": "Vargas",
+  "grade": "4th Grade",
+  "school": "Lima Norte School",
+  "guardianName": "Rosa Vargas",
+  "guardianPhone": "+51 900 111 222",
+  "guardianEmail": "rosa.vargas@example.com",
+  "emergencyContact": "+51 900 111 223",
+  "routeName": "North School Route",
+  "pickupPoint": "Calle Pino 42",
+  "pickupWindow": "06:45 - 06:55",
+  "status": "active"
+}
+
+###
+
+### Update Student
+PUT {{ChildrenPath.Platform_HostAddress}}/api/v1/students/1
+Content-Type: application/json
+
+{
+  "firstName": "Lucía",
+  "lastName": "Vargas",
+  "grade": "5th Grade",
+  "school": "Lima Norte School",
+  "guardianName": "Rosa Vargas",
+  "guardianPhone": "+51 900 111 222",
+  "guardianEmail": "rosa.vargas@example.com",
+  "emergencyContact": "+51 900 111 223",
+  "routeName": "North School Route",
+  "pickupPoint": "Calle Pino 42",
+  "pickupWindow": "06:45 - 06:55",
+  "status": "active"
+}
+
+###
+
+### Delete Student
+DELETE {{ChildrenPath.Platform_HostAddress}}/api/v1/students/1
