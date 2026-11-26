@@ -8,7 +8,8 @@ using ChildrenPath.Platform.Profiles.Domain;
 using ChildrenPath.Platform.Subscriptions.Domain;
 using ChildrenPath.Platform.Drivers.Domain;
 using ChildrenPath.Platform.Iam.Domain;
-using ChildrenPath.Platform.Assignments.Domain;
+using ChildrenPath.Platform.Assignments.Domain.Model.Aggregate;
+using ChildrenPath.Platform.Assignments.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 using ChildrenPath.Platform.Tracking.Domain;
 
 using ChildrenPath.Platform.Alerts.Domain.Model.Aggregate;
@@ -143,7 +144,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         modelBuilder.Entity<Driver>().HasMany(d => d.Assignments).WithOne().HasForeignKey(a => a.DriverId).OnDelete(DeleteBehavior.Cascade);
         
         // Configuración de Assignments
-        modelBuilder.Entity<Assignment>().HasKey(a => a.Id);
+        modelBuilder.ApplyAssignmentsConfiguration();
         
         // Configuración de Tracking
         modelBuilder.Entity<TrackingSession>().HasKey(t => t.Id);
