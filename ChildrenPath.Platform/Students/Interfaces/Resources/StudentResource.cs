@@ -1,0 +1,25 @@
+namespace ChildrenPath.Platform.Students.Interfaces.Resources;
+
+public record StudentResource(
+    int Id,
+    string Code,
+    string FirstName,
+    string LastName,
+    string Grade,
+    string School,
+    string GuardianName,
+    string GuardianPhone,
+    string? GuardianEmail,
+    string? EmergencyContact,
+    string? RouteName,
+    string? RouteCode,
+    string? AssignedVehicle,
+    string? AssignedDriver,
+    string? PickupPoint,
+    string? DropOffPoint,
+    string? PickupWindow,
+    string AuthorizationStatus,
+    int AttendanceRate,
+    string LastAttendanceStatus,
+    string Status,
+    string? Notes);

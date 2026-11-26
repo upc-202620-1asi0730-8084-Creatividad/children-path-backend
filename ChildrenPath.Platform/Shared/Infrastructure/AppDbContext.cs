@@ -3,7 +3,9 @@ using ChildrenPath.Platform.Companies.Domain.Model.Entities;
 using ChildrenPath.Platform.Fleet.Domain.Model.Aggregates;
 using ChildrenPath.Platform.Fleet.Domain.Model.Entities;
 using ChildrenPath.Platform.Fleet.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
-using ChildrenPath.Platform.Students.Domain;
+using ChildrenPath.Platform.Students.Domain.Model.Aggregates;
+using ChildrenPath.Platform.Students.Domain.Model.Entities;
+using ChildrenPath.Platform.Students.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 using ChildrenPath.Platform.Profiles.Domain;
 using ChildrenPath.Platform.Subscriptions.Domain;
 using ChildrenPath.Platform.Drivers.Domain;
@@ -46,6 +48,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<Guardian> Guardians { get; set; }
     public DbSet<PickupPoint> PickupPoints { get; set; }
     public DbSet<MedicalNote> MedicalNotes { get; set; }
+    public DbSet<StudentActivity> StudentActivities { get; set; }
     
     public DbSet<Profile> Profiles { get; set; }
 
@@ -115,10 +118,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         modelBuilder.ApplyFleetConfiguration();
         
         // Students
-        modelBuilder.Entity<Student>().HasKey(s => s.Id);
-        modelBuilder.Entity<Student>().HasMany(s => s.Guardians).WithOne().HasForeignKey(g => g.StudentId);
-        modelBuilder.Entity<Student>().HasOne(s => s.PickupPoint).WithOne().HasForeignKey<PickupPoint>(p => p.StudentId);
-        modelBuilder.Entity<Student>().HasMany(s => s.MedicalNotes).WithOne().HasForeignKey(m => m.StudentId);
+        modelBuilder.ApplyStudentsConfiguration();
         
         // Profiles
         modelBuilder.Entity<Profile>().HasKey(p => p.Id);
