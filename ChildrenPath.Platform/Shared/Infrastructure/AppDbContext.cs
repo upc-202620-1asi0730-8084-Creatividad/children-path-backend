@@ -8,7 +8,9 @@ using ChildrenPath.Platform.Students.Domain.Model.Entities;
 using ChildrenPath.Platform.Students.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 using ChildrenPath.Platform.Profiles.Domain;
 using ChildrenPath.Platform.Subscriptions.Domain;
-using ChildrenPath.Platform.Drivers.Domain;
+using ChildrenPath.Platform.Drivers.Domain.Model.Aggregates;
+using ChildrenPath.Platform.Drivers.Domain.Model.Entities;
+using ChildrenPath.Platform.Drivers.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 using ChildrenPath.Platform.Iam.Domain;
 using ChildrenPath.Platform.Assignments.Domain.Model.Aggregate;
 using ChildrenPath.Platform.Assignments.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
@@ -60,6 +62,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<Driver> Drivers { get; set; }
     public DbSet<DriverAvailability> DriverAvailabilities { get; set; }
     public DbSet<DriverAssignment> DriverAssignments { get; set; }
+    public DbSet<DriverActivity> DriverActivities { get; set; }
 
     public DbSet<TransportFleet> Fleets { get; set; }
 
@@ -136,12 +139,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         // Composición: Factura -> Pagos
         modelBuilder.Entity<Invoice>().HasMany(i => i.Payments).WithOne().HasForeignKey(p => p.InvoiceId).OnDelete(DeleteBehavior.Cascade);
         
-        // Configuración de Drivers
-        modelBuilder.Entity<Driver>().HasKey(d => d.Id);
-        // Composición: Driver -> Availabilities
-        modelBuilder.Entity<Driver>().HasMany(d => d.Availabilities).WithOne().HasForeignKey(a => a.DriverId).OnDelete(DeleteBehavior.Cascade);
-        // Composición: Driver -> Assignments
-        modelBuilder.Entity<Driver>().HasMany(d => d.Assignments).WithOne().HasForeignKey(a => a.DriverId).OnDelete(DeleteBehavior.Cascade);
+        modelBuilder.ApplyDriversConfiguration();
         
         // Configuración de Assignments
         modelBuilder.ApplyAssignmentsConfiguration();
