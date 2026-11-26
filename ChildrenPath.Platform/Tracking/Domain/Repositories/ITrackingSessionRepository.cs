@@ -5,5 +5,5 @@ namespace ChildrenPath.Platform.Tracking.Domain.Repositories;
 
 public interface ITrackingSessionRepository : IBaseRepository<TrackingSession>
 {
-    
+    Task<IEnumerable<TrackingSession>> FindAllActiveAsync(CancellationToken cancellationToken = default);
 }

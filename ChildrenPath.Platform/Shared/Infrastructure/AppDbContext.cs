@@ -12,7 +12,7 @@ using ChildrenPath.Platform.Assignments.Domain;
 using ChildrenPath.Platform.Tracking.Domain.Model.Aggregate;
 using ChildrenPath.Platform.Tracking.Domain.Model.Entities;
 using ChildrenPath.Platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration.ValueConverters;
-
+using ChildrenPath.Platform.Profiles.Domain.Model.ValueObjects;
 using ChildrenPath.Platform.Alerts.Domain.Model.Aggregate;
 using ChildrenPath.Platform.Alerts.Domain.Model.Entities;
 using ChildrenPath.Platform.Alerts.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
@@ -28,6 +28,8 @@ using ChildrenPath.Platform.Attendance.Domain.Model.Entities;
 using ChildrenPath.Platform.Attendance.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 using ChildrenPath.Platform.Iam.Domain.Model.Aggregates;
 using ChildrenPath.Platform.Iam.Domain.Model.ValueObjects;
+using ChildrenPath.Platform.Profiles.Domain.Model.Aggregates;
+using ChildrenPath.Platform.Profiles.Domain.Model.Entities;
 using ChildrenPath.Platform.Tracking.Domain.Model.ValueObjects;
 using AttendanceEntity = ChildrenPath.Platform.Attendance.Domain.Model.Aggregate.Attendance;
 
@@ -131,11 +133,22 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         
         // Profiles
         modelBuilder.Entity<Profile>().HasKey(p => p.Id);
-        modelBuilder.Entity<Profile>().HasOne(p => p.Preferences).WithOne().HasForeignKey<Preferences>(pref => pref.Id);
+        modelBuilder.Entity<Profile>().Property(p => p.Id)
+            .HasConversion(new StronglyTypedIdConverter<ProfileId, int>(
+                id => id.Value,
+                value => new ProfileId(value)))
+            .ValueGeneratedOnAdd();
+
+        modelBuilder.Entity<Profile>().Property(p => p.FirstName).IsRequired().HasMaxLength(100);
+        modelBuilder.Entity<Profile>().Property(p => p.LastName).IsRequired().HasMaxLength(100);
+        modelBuilder.Entity<Profile>().Property(p => p.Phone).IsRequired().HasMaxLength(20);
+        modelBuilder.Entity<Profile>().Property(p => p.PhotoUrl).HasMaxLength(500);
+        modelBuilder.Entity<Profile>().Property(p => p.Role).HasConversion<string>().IsRequired();
+        modelBuilder.Entity<Profile>().HasIndex(p => p.UserId).IsUnique();
+
         modelBuilder.Entity<Profile>().HasOne(p => p.ParentProfile).WithOne().HasForeignKey<ParentProfile>(pp => pp.Id);
         modelBuilder.Entity<Profile>().HasOne(p => p.DriverProfile).WithOne().HasForeignKey<DriverProfile>(dp => dp.Id);
-        modelBuilder.Entity<Profile>().HasOne(p => p.CompanyProfile).WithOne().HasForeignKey<CompanyProfile>(cp => cp.Id);
-        
+        modelBuilder.Entity<Profile>().HasOne(p => p.CompanyProfile).WithOne().HasForeignKey<CompanyProfile>(cp => cp.Id);        
         // Configuración de Subscriptions y Payments
         modelBuilder.Entity<Plan>().HasKey(p => p.Id);
         modelBuilder.Entity<Subscription>().HasKey(s => s.Id);

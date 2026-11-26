@@ -7,7 +7,7 @@ public record AlertResource(
     string Priority,
     string Message,
     string Status,
-    DateTime CreatedAt,
+    DateTimeOffset? CreatedAt,
     List<NotificationResource> Notifications
 );
 

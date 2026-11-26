@@ -27,9 +27,13 @@ public class TrackingCommandService(ITrackingSessionRepository repository, IUnit
             await unitOfWork.CompleteAsync(cancellationToken);
             return Result<TrackingSession>.Success(session);
         }
+        catch (DbUpdateException)
+        {
+            return Result<TrackingSession>.Failure(TrackingErrors.DatabaseError);
+        }
         catch (Exception)
         {
-            return Result<TrackingSession>.Failure(TrackingErrors.SessionNotFound);
+            return Result<TrackingSession>.Failure(TrackingErrors.InternalServerError);
         }
     }
 }

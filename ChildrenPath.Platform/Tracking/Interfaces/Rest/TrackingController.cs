@@ -1,17 +1,22 @@
 using Microsoft.AspNetCore.Mvc;
 using ChildrenPath.Platform.Tracking.Application.CommandServices;
+using ChildrenPath.Platform.Tracking.Application.QueryServices;
 using ChildrenPath.Platform.Tracking.Domain.Model.Commands;
+using ChildrenPath.Platform.Tracking.Domain.Model.Queries;
 using ChildrenPath.Platform.Tracking.Interfaces.Resources;
+using ChildrenPath.Platform.Tracking.Interfaces.Transform;
 using ChildrenPath.Platform.Shared.Interfaces.Rest.Transform;
 
 namespace ChildrenPath.Platform.Tracking.Interfaces.Rest;
 
 [ApiController]
 [Route("api/v1/[controller]")]
-public class TrackingController(ITrackingCommandService trackingCommandService) : ControllerBase
+public class TrackingController(
+    ITrackingCommandService trackingCommandService,
+    ITrackingQueryService trackingQueryService) : ControllerBase
 {
-    // Endpoint limpio para crear una sesión de Tracking
     [HttpPost]
+    [EndpointSummary("Start tracking session")]
     public async Task<IActionResult> StartTracking([FromBody] CreateTrackingResource resource, CancellationToken cancellationToken)
     {
         var command = new CreateTrackingSessionCommand(
@@ -23,26 +28,32 @@ public class TrackingController(ITrackingCommandService trackingCommandService) 
 
         var result = await trackingCommandService.Handle(command, cancellationToken);
 
-        // Usamos el ResultActionResultAssembler del Shared
         return ResultActionResultAssembler.ToActionResult(this, result, session =>
         {
-            // Mapeamos la entidad a un objeto anónimo (o Resource) para el frontend
-            var response = new
-            {
-                id = session.Id.Value,
-                tripId = session.TripId,
-                vehicleId = session.VehicleId,
-                status = session.Status.ToString(),
-                startedAt = session.StartedAt,
-                initialLocation = new
-                {
-                    lat = session.Locations.First().Latitude,
-                    lng = session.Locations.First().Longitude,
-                    speed = session.Locations.First().Speed
-                }
-            };
-
-            return CreatedAtAction(nameof(StartTracking), new { id = session.Id.Value }, response);
+            var sessionResource = TrackingSessionResourceFromEntityAssembler.ToResourceFromEntity(session);
+            return CreatedAtAction(nameof(StartTracking), new { id = sessionResource.Id }, sessionResource);
         });
+    }
+
+    [HttpGet("dashboard")]
+    [EndpointSummary("Get active tracking dashboard")]
+    public async Task<IActionResult> GetDashboard(CancellationToken cancellationToken)
+    {
+        var activeSessions = await trackingQueryService.Handle(new GetActiveTrackingSessionsQuery(), cancellationToken);
+        
+        var resources = activeSessions.Select(TrackingSessionResourceFromEntityAssembler.ToResourceFromEntity).ToList();
+        
+        var response = new
+        {
+            summary = new
+            {
+                activeUnits = resources.Count,
+                averageSpeed = resources.Any() ? resources.Average(r => r.CurrentSpeed) : 0,
+                activeAlerts = 0
+            },
+            vehicles = resources
+        };
+
+        return Ok(response);
     }
 }
