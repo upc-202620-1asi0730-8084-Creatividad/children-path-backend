@@ -1,48 +1,97 @@
-using Microsoft.AspNetCore.Mvc;
-using ChildrenPath.Platform.Students.Domain;
+using System.Net.Mime;
+using ChildrenPath.Platform.Students.Application.CommandServices;
+using ChildrenPath.Platform.Students.Application.QueryServices;
+using ChildrenPath.Platform.Students.Domain.Model.Commands;
+using ChildrenPath.Platform.Students.Domain.Model.Queries;
 using ChildrenPath.Platform.Students.Interfaces.Resources;
+using ChildrenPath.Platform.Students.Interfaces.Transform;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ChildrenPath.Platform.Students.Interfaces.Rest;
 
 [ApiController]
-[Route("api/v1/[controller]")]
-public class StudentsController : ControllerBase
+[Route("api/v1/students")]
+[Route("api/v1/student-records")]
+[Route("api/v1/studentRecords")]
+[Produces(MediaTypeNames.Application.Json)]
+[Tags("Students")]
+public class StudentsController(
+    IStudentCommandService commandService,
+    IStudentQueryService queryService) : ControllerBase
 {
-    private static readonly List<Student> _mockStudents = new()
-    {
-        new Student { 
-            Id = 1, Code = "ST-001", FirstName = "María", LastName = "Vega", Grade = "4th Grade", SchoolName = "Lima Norte School",
-            Status = "active", AttendanceRate = 98,
-            Guardians = new List<Guardian> { new Guardian { FullName = "María López", Phone = "+51 951 111 222", Relationship = "Mother" } },
-            PickupPoint = new PickupPoint { Address = "Calle Pino 42", Latitude = -12.1195, Longitude = -77.0308 }
-        }
-    };
-
     [HttpGet]
-    public IActionResult GetAll() => Ok(_mockStudents);
+    [EndpointSummary("Get all students")]
+    [ProducesResponseType(typeof(IEnumerable<StudentResource>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
+    {
+        var students = await queryService.Handle(new GetAllStudentsQuery(), cancellationToken);
+        return Ok(students.Select(StudentResourceFromEntityAssembler.ToResourceFromEntity));
+    }
+
+    [HttpGet("{id:int}")]
+    [EndpointSummary("Get a student by ID")]
+    [ProducesResponseType(typeof(StudentResource), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetById(int id, CancellationToken cancellationToken)
+    {
+        var student = await queryService.Handle(new GetStudentByIdQuery(id), cancellationToken);
+        return student == null
+            ? NotFound(new { message = $"Student with id {id} not found." })
+            : Ok(StudentResourceFromEntityAssembler.ToResourceFromEntity(student));
+    }
 
     [HttpPost]
-    public IActionResult Create([FromBody] CreateStudentResource resource)
+    [EndpointSummary("Register a student")]
+    [ProducesResponseType(typeof(StudentResource), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> Create(
+        [FromBody] CreateStudentResource resource,
+        CancellationToken cancellationToken)
     {
-        var newId = _mockStudents.Any() ? _mockStudents.Max(s => s.Id) + 1 : 1;
-
-        var student = new Student
+        try
         {
-            Id = newId,
-            Code = $"ST-{newId:D3}",
-            FirstName = resource.FirstName,
-            LastName = resource.LastName,
-            Grade = resource.Grade,
-            SchoolName = resource.SchoolName,
-            Status = "active",
-            Guardians = new List<Guardian>
-            {
-                new Guardian { FullName = resource.GuardianFullName, Phone = resource.GuardianPhone, Relationship = resource.GuardianRelationship }
-            },
-            PickupPoint = new PickupPoint { Address = resource.PickupAddress }
-        };
+            var command = CreateStudentCommandFromResourceAssembler.ToCommandFromResource(resource);
+            var student = await commandService.Handle(command, cancellationToken);
+            var studentResource = StudentResourceFromEntityAssembler.ToResourceFromEntity(student);
+            return CreatedAtAction(nameof(GetById), new { id = student.Id }, studentResource);
+        }
+        catch (InvalidOperationException exception)
+        {
+            return BadRequest(new { message = exception.Message });
+        }
+    }
 
-        _mockStudents.Add(student);
-        return CreatedAtAction(nameof(GetAll), new { id = student.Id }, student);
+    [HttpPut("{id:int}")]
+    [EndpointSummary("Update a student")]
+    [ProducesResponseType(typeof(StudentResource), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> Update(
+        int id,
+        [FromBody] UpdateStudentResource resource,
+        CancellationToken cancellationToken)
+    {
+        try
+        {
+            var command = UpdateStudentCommandFromResourceAssembler.ToCommandFromResource(id, resource);
+            var student = await commandService.Handle(command, cancellationToken);
+            if (student == null) return NotFound(new { message = $"Student with id {id} not found." });
+
+            return Ok(StudentResourceFromEntityAssembler.ToResourceFromEntity(student));
+        }
+        catch (InvalidOperationException exception)
+        {
+            return BadRequest(new { message = exception.Message });
+        }
+    }
+
+    [HttpDelete("{id:int}")]
+    [EndpointSummary("Delete a student")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken)
+    {
+        var deleted = await commandService.Handle(new DeleteStudentCommand(id), cancellationToken);
+        return deleted ? NoContent() : NotFound(new { message = $"Student with id {id} not found." });
     }
 }
