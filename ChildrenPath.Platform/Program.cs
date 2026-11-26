@@ -47,6 +47,13 @@ using ChildrenPath.Platform.Attendance.Application.QueryServices;
 using ChildrenPath.Platform.Attendance.Application.Internal.CommandServices;
 using ChildrenPath.Platform.Attendance.Application.Internal.QueryServices;
 
+using ChildrenPath.Platform.Assignments.Domain.Repositories;
+using ChildrenPath.Platform.Assignments.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using ChildrenPath.Platform.Assignments.Application.CommandServices;
+using ChildrenPath.Platform.Assignments.Application.QueryServices;
+using ChildrenPath.Platform.Assignments.Application.Internal.CommandServices;
+using ChildrenPath.Platform.Assignments.Application.Internal.QueryServices;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // ==========================================
@@ -136,6 +143,11 @@ builder.Services.AddScoped<IReportQueryService, ReportQueryService>();
 builder.Services.AddScoped<IAttendanceRepository, AttendanceRepository>();
 builder.Services.AddScoped<IAttendanceCommandService, AttendanceCommandService>();
 builder.Services.AddScoped<IAttendanceQueryService, AttendanceQueryService>();
+
+// Assignments Bounded Context
+builder.Services.AddScoped<IAssignmentRepository, AssignmentRepository>();
+builder.Services.AddScoped<IAssignmentCommandService, AssignmentCommandService>();
+builder.Services.AddScoped<IAssignmentQueryService, AssignmentQueryService>();
 
 
 // (Compañeros, aquí iran agregando los repositorios de Students, Routes, etc.)
