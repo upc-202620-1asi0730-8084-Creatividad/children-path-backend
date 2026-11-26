@@ -58,6 +58,12 @@ using ChildrenPath.Platform.Assignments.Application.CommandServices;
 using ChildrenPath.Platform.Assignments.Application.QueryServices;
 using ChildrenPath.Platform.Assignments.Application.Internal.CommandServices;
 using ChildrenPath.Platform.Assignments.Application.Internal.QueryServices;
+using ChildrenPath.Platform.Drivers.Domain.Repositories;
+using ChildrenPath.Platform.Drivers.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using ChildrenPath.Platform.Drivers.Application.CommandServices;
+using ChildrenPath.Platform.Drivers.Application.QueryServices;
+using ChildrenPath.Platform.Drivers.Application.Internal.CommandServices;
+using ChildrenPath.Platform.Drivers.Application.Internal.QueryServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -127,6 +133,12 @@ builder.Services.AddScoped<IStudentRepository, StudentRepository>();
 builder.Services.AddScoped<IStudentActivityRepository, StudentActivityRepository>();
 builder.Services.AddScoped<IStudentCommandService, StudentCommandService>();
 builder.Services.AddScoped<IStudentQueryService, StudentQueryService>();
+
+// Drivers Bounded Context
+builder.Services.AddScoped<IDriverRepository, DriverRepository>();
+builder.Services.AddScoped<IDriverActivityRepository, DriverActivityRepository>();
+builder.Services.AddScoped<IDriverCommandService, DriverCommandService>();
+builder.Services.AddScoped<IDriverQueryService, DriverQueryService>();
 
 // Repositorios
 builder.Services.AddScoped<IAlertRepository, AlertRepository>();
