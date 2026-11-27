@@ -1,15 +1,17 @@
 using System.Net.Mime;
 using ChildrenPath.Platform.Companies.Application.CommandServices;
 using ChildrenPath.Platform.Companies.Application.QueryServices;
+using ChildrenPath.Platform.Companies.Domain.Model.Commands;
 using ChildrenPath.Platform.Companies.Domain.Model.Queries;
 using ChildrenPath.Platform.Companies.Interfaces.Rest.Resources;
 using ChildrenPath.Platform.Companies.Interfaces.Rest.Transform;
+using ChildrenPath.Platform.Shared.Interfaces.Rest.Transform;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ChildrenPath.Platform.Companies.Interfaces.Rest;
 
 [ApiController]
-[Route("api/v1/[controller]")]
+[Route("api/v1/companies")]
 [Produces(MediaTypeNames.Application.Json)]
 [Tags("Companies")]
 public class CompaniesController(
@@ -17,74 +19,75 @@ public class CompaniesController(
     ICompanyQueryService companyQueryService) : ControllerBase
 {
     [HttpGet]
-    [EndpointSummary("Get all companies")]
+    [EndpointSummary("get all companies")]
     [ProducesResponseType(typeof(IEnumerable<CompanyResource>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetAllCompanies(CancellationToken cancellationToken)
     {
         var query = new GetAllCompaniesQuery();
         var companies = await companyQueryService.Handle(query, cancellationToken);
-        var resources = companies.Select(CompanyResourceFromEntityAssembler.ToResourceFromEntity);
-        return Ok(resources);
+        return Ok(companies.Select(CompanyResourceFromEntityAssembler.ToResourceFromEntity));
     }
 
     [HttpGet("{id:int}")]
-    [EndpointSummary("Get company by ID")]
+    [EndpointSummary("get company by ID")]
     [ProducesResponseType(typeof(CompanyResource), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetCompanyById(int id, CancellationToken cancellationToken)
     {
         var query = new GetCompanyByIdQuery(id);
         var company = await companyQueryService.Handle(query, cancellationToken);
-        if (company == null) return NotFound(new { message = $"Company with id {id} not found." });
+        
+        if (company == null) return NotFound();
 
-        var resource = CompanyResourceFromEntityAssembler.ToResourceFromEntity(company);
-        return Ok(resource);
+        return Ok(CompanyResourceFromEntityAssembler.ToResourceFromEntity(company));
     }
 
     [HttpPost]
-    [EndpointSummary("Create a new company")]
+    [EndpointSummary("create a new company")]
     [ProducesResponseType(typeof(CompanyResource), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateCompany([FromBody] CreateCompanyResource resource, CancellationToken cancellationToken)
     {
-        try
-        {
-            var command = CreateCompanyCommandFromResourceAssembler.ToCommandFromResource(resource);
-            var company = await companyCommandService.Handle(command, cancellationToken);
-            if (company == null) return BadRequest(new { message = "Could not create company." });
+        var command = CreateCompanyCommandFromResourceAssembler.ToCommandFromResource(resource);
+        var result = await companyCommandService.Handle(command, cancellationToken);
 
-            var createdResource = CompanyResourceFromEntityAssembler.ToResourceFromEntity(company);
-            return CreatedAtAction(nameof(GetCompanyById), new { id = company.Id }, createdResource);
-        }
-        catch (InvalidOperationException ex)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
+        return ResultActionResultAssembler.ToActionResult(
+            this,
+            result,
+            created => 
+            {
+                var resource = CompanyResourceFromEntityAssembler.ToResourceFromEntity(created);
+                return CreatedAtAction(nameof(GetCompanyById), new { id = created.Id }, resource);
+            });
     }
 
     [HttpPut("{id:int}")]
-    [EndpointSummary("Update an existing company")]
+    [EndpointSummary("update an existing company")]
     [ProducesResponseType(typeof(CompanyResource), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> UpdateCompany(int id, [FromBody] UpdateCompanyResource resource, CancellationToken cancellationToken)
     {
         var command = UpdateCompanyCommandFromResourceAssembler.ToCommandFromResource(id, resource);
-        var updated = await companyCommandService.Handle(command, cancellationToken);
-        if (updated == null) return NotFound(new { message = $"Company with id {id} not found." });
+        var result = await companyCommandService.Handle(command, cancellationToken);
 
-        var updatedResource = CompanyResourceFromEntityAssembler.ToResourceFromEntity(updated);
-        return Ok(updatedResource);
+        return ResultActionResultAssembler.ToActionResult(
+            this,
+            result,
+            updated => Ok(CompanyResourceFromEntityAssembler.ToResourceFromEntity(updated)));
     }
 
     [HttpDelete("{id:int}")]
-    [EndpointSummary("Delete a company")]
+    [EndpointSummary("delete a company")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteCompany(int id, CancellationToken cancellationToken)
     {
-        var deleted = await companyCommandService.HandleDelete(id, cancellationToken);
-        if (!deleted) return NotFound(new { message = $"Company with id {id} not found." });
-
-        return NoContent();
+        var result = await companyCommandService.HandleDelete(id, cancellationToken);
+        
+        return ResultActionResultAssembler.ToActionResult(
+            this,
+            result,
+            _ => NoContent());
     }
 }
