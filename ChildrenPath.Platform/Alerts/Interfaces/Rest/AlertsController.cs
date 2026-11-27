@@ -13,11 +13,12 @@ namespace ChildrenPath.Platform.Alerts.Interfaces.Rest;
 [Route("api/v1/[controller]")]
 public class AlertsController(
     IAlertQueryService alertQueryService,
-    IAlertCommandService alertCommandService)
+    IAlertCommandService alertCommandService,
+    IAlertDashboardQueryService alertDashboardQueryService) 
     : ControllerBase
 {
     [HttpGet("{id:int}")]
-    [EndpointSummary("Get an alert by id")]
+    [EndpointSummary("get an alert by id")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AlertResource))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAlertById([FromRoute] int id, CancellationToken cancellationToken)
@@ -32,7 +33,7 @@ public class AlertsController(
     }
 
     [HttpGet("trip/{tripId:int}")]
-    [EndpointSummary("Get alerts by trip id")]
+    [EndpointSummary("get alerts by trip id")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<AlertResource>))]
     public async Task<IActionResult> GetAlertsByTripId([FromRoute] int tripId, CancellationToken cancellationToken)
     {
@@ -44,7 +45,7 @@ public class AlertsController(
     }
 
     [HttpPost]
-    [EndpointSummary("Create a new alert")]
+    [EndpointSummary("create a new alert")]
     [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(AlertResource))]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateAlert([FromBody] CreateAlertResource resource,
@@ -64,7 +65,7 @@ public class AlertsController(
     }
 
     [HttpPatch("{id:int}/resolve")]
-    [EndpointSummary("Resolve an alert")]
+    [EndpointSummary("resolve an alert")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AlertResource))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> ResolveAlert([FromRoute] int id, CancellationToken cancellationToken)
@@ -79,20 +80,22 @@ public class AlertsController(
         );
     }
 
-    [HttpGet("/api/v1/alertNotificationCenter")]
-    [EndpointSummary("Get Dashboard for Notifications Frontend")]
+    [HttpGet("notification-center")]              
+    [EndpointSummary("get notification center dashboard")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AlertDashboardResource))]
     public async Task<IActionResult> GetDashboard(CancellationToken cancellationToken)
     {
-        var alerts = await alertQueryService.Handle(new GetAllActiveAlertsQuery(), cancellationToken);
+        var result = await alertDashboardQueryService
+            .Handle(new GetAlertDashboardQuery(), cancellationToken);
 
-        var resource = AlertDashboardAssembler.ToDashboardResource(alerts);
-
-        return Ok(resource);
+        return ResultActionResultAssembler.ToActionResult(
+            this,
+            result,
+            snapshot => Ok(AlertDashboardAssembler.ToDashboardResource(snapshot)));
     }
     
     [HttpPatch("{id:int}/read")]
-    [EndpointSummary("Mark an alert as read")]
+    [EndpointSummary("mark an alert as read")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AlertResource))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> MarkAlertAsRead([FromRoute] int id, CancellationToken cancellationToken)
