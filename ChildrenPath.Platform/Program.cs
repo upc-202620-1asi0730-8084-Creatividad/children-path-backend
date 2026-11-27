@@ -96,19 +96,35 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowVueApp", policy =>
     {
-        policy.WithOrigins("http://localhost:5173", "http://localhost:3000")
+        policy
+            .WithOrigins(
+                "http://localhost:5173",
+                "http://localhost:3000",
+                "https://children-path-4d5c3.web.app",
+                "https://children-path-4d5c3.firebaseapp.com"
+            )
             .AllowAnyHeader()
             .AllowAnyMethod();
     });
 });
 
-// Configurar Base de Datos (MySQL)
-// builder.Services.AddDbContext<AppDbContext>(options =>
-//    options.UseMySQL(builder.Configuration.GetConnectionString("DefaultConnection")));
+// ==========================================
+// CONFIGURACIÓN DE BASE DE DATOS
+// ==========================================
 
-// AHORA (Temporal para desarrollo):
+var connectionString =
+    builder.Configuration.GetConnectionString("DefaultConnection");
+
+if (string.IsNullOrWhiteSpace(connectionString))
+{
+    throw new InvalidOperationException(
+        "No se encontró la cadena de conexión DefaultConnection."
+    );
+}
+
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseInMemoryDatabase("ChildrenPathDb_Dev")); 
+    options.UseMySQL(connectionString)
+);; 
 
 // --- INYECCIÓN DE DEPENDENCIAS (BOUNDED CONTEXTS) ---
 
@@ -194,7 +210,7 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
-    
+
     app.MapScalarApiReference(options =>
     {
         options.WithTitle("Children Path API Reference")
@@ -202,9 +218,10 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-//app.UseHttpsRedirection();
 app.UseCors("AllowVueApp");
+
 app.UseAuthorization();
+
 app.MapControllers();
 
 app.Run();
