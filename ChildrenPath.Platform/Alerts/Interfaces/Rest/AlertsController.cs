@@ -1,3 +1,4 @@
+using ChildrenPath.Platform.Shared.Interfaces.Rest.Transform;
 using ChildrenPath.Platform.Alerts.Application.CommandServices;
 using ChildrenPath.Platform.Alerts.Application.QueryServices;
 using ChildrenPath.Platform.Alerts.Domain.Model.Commands;
@@ -52,7 +53,7 @@ public class AlertsController(
         var command = CreateAlertCommandFromResourceAssembler.ToCommandFromResource(resource);
         var result = await alertCommandService.Handle(command, cancellationToken);
 
-        return AlertActionResultAssembler.ToActionResult(
+        return ResultActionResultAssembler.ToActionResult(
             this,
             result,
             createdAlert => CreatedAtAction(
@@ -71,7 +72,7 @@ public class AlertsController(
         var command = new ResolveAlertCommand(id);
         var result = await alertCommandService.Handle(command, cancellationToken);
 
-        return AlertActionResultAssembler.ToActionResult(
+        return ResultActionResultAssembler.ToActionResult(
             this,
             result,
             resolvedAlert => Ok(AlertResourceFromEntityAssembler.ToResourceFromEntity(resolvedAlert))
@@ -99,7 +100,7 @@ public class AlertsController(
         var command = new MarkAlertAsReadCommand(id);
         var result = await alertCommandService.Handle(command, cancellationToken);
 
-        return AlertActionResultAssembler.ToActionResult(
+        return ResultActionResultAssembler.ToActionResult(
             this,
             result,
             updatedAlert => Ok(AlertResourceFromEntityAssembler.ToResourceFromEntity(updatedAlert))

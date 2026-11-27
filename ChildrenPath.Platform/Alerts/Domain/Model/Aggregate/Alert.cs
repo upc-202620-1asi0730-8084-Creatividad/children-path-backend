@@ -1,4 +1,6 @@
+using ChildrenPath.Platform.Alerts.Domain.Model.Events;
 using ChildrenPath.Platform.Alerts.Domain.Model.ValueObjects;
+using ChildrenPath.Platform.Shared.Domain.Model.Aggregates;
 
 namespace ChildrenPath.Platform.Alerts.Domain.Model.Aggregate;
 
@@ -9,7 +11,7 @@ namespace ChildrenPath.Platform.Alerts.Domain.Model.Aggregate;
 ///     Encapsulates the core data and behavior of an alert, acting as an
 ///     aggregate root to ensure consistency of its contained entities.
 /// </remarks>
-public partial class Alert
+public partial class Alert :  AggregateRoot
 {
     /// <summary>
     ///     Default constructor (used by persistence).
@@ -48,7 +50,4 @@ public partial class Alert
 
     /// <summary>Gets the human-readable message.</summary>
     public string Message { get; private set; }
-
-    /// <summary>Gets the creation timestamp.</summary>
-    public DateTime CreatedAt { get; private set; } = DateTime.UtcNow;
 }

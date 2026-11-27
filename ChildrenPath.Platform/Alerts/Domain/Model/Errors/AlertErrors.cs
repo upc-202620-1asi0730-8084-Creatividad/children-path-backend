@@ -5,20 +5,20 @@ namespace ChildrenPath.Platform.Alerts.Domain.Model.Errors;
 public static class AlertErrors
 {
     public static readonly Error AlertCreationFailed =
-        new("Alerts.AlertCreationFailed", "An error occurred while creating the alert.");
+        Error.Failure("Alerts.AlertCreationFailed", "An error occurred while creating the alert.");
 
     public static readonly Error AlertNotFound =
-        new("Alerts.AlertNotFound", "The specified alert was not found.");
+        Error.NotFound("Alerts.AlertNotFound", "The specified alert was not found."); // <-- 404
 
     public static readonly Error AlertAlreadyResolved =
-        new("Alerts.AlertAlreadyResolved", "The alert has already been resolved.");
+        Error.Conflict("Alerts.AlertAlreadyResolved", "The alert has already been resolved."); // <-- 409
 
     public static readonly Error OperationCancelled =
-        new("Alerts.OperationCancelled", "The operation was cancelled.");
+        Error.Conflict("Alerts.OperationCancelled", "The operation was cancelled.");
 
     public static readonly Error DatabaseError =
-        new("Alerts.DatabaseError", "A database error occurred while processing the request.");
+        Error.Unexpected("Alerts.DatabaseError", "A database error occurred while processing the request.");
 
     public static readonly Error InternalServerError =
-        new("Alerts.InternalServerError", "An internal server error occurred.");
+        Error.Unexpected("Alerts.InternalServerError", "An internal server error occurred.");
 }

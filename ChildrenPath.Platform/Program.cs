@@ -51,6 +51,27 @@ using ChildrenPath.Platform.Attendance.Application.CommandServices;
 using ChildrenPath.Platform.Attendance.Application.QueryServices;
 using ChildrenPath.Platform.Attendance.Application.Internal.CommandServices;
 using ChildrenPath.Platform.Attendance.Application.Internal.QueryServices;
+using ChildrenPath.Platform.Iam.Application.CommandServices;
+using ChildrenPath.Platform.Iam.Application.Internal.CommandServices;
+using ChildrenPath.Platform.Iam.Application.Internal.OutboundServices;
+using ChildrenPath.Platform.Iam.Application.Internal.QueryServices;
+using ChildrenPath.Platform.Iam.Application.QueryServices;
+using ChildrenPath.Platform.Iam.Domain.Repositories;
+using ChildrenPath.Platform.Iam.Infrastructure.Hashing.BCrypt.Services;
+using ChildrenPath.Platform.Iam.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using ChildrenPath.Platform.Iam.Infrastructure.Tokens.Jwt.Services;
+using ChildrenPath.Platform.Profiles.Application.CommandServices;
+using ChildrenPath.Platform.Profiles.Application.Internal.CommandServices;
+using ChildrenPath.Platform.Profiles.Application.QueryServices;
+using ChildrenPath.Platform.Tracking.Application.CommandServices;
+using ChildrenPath.Platform.Tracking.Application.Internal.CommandServices;
+using ChildrenPath.Platform.Tracking.Application.Internal.QueryServices;
+using ChildrenPath.Platform.Tracking.Application.QueryServices;
+using ChildrenPath.Platform.Tracking.Domain.Repositories;
+using ChildrenPath.Platform.Tracking.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using ChildrenPath.Platform.Profiles.Application.Internal.QueryServices;
+using ChildrenPath.Platform.Profiles.Domain.Repositories;
+using ChildrenPath.Platform.Profiles.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 
 using ChildrenPath.Platform.Assignments.Domain.Repositories;
 using ChildrenPath.Platform.Assignments.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
@@ -128,6 +149,18 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 // --- INYECCIÓN DE DEPENDENCIAS (BOUNDED CONTEXTS) ---
 
+// Repositorios y UoW
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+// builder.Services.AddScoped<IUnitOfWork, UnitOfWork>(); // Ya lo tienes registrado del Shared
+
+// Servicios
+builder.Services.AddScoped<IUserCommandService, UserCommandService>();
+builder.Services.AddScoped<IUserQueryService, UserQueryService>();
+
+// Infraestructura IAM
+builder.Services.AddScoped<IHashingService, HashingService>();
+builder.Services.AddScoped<ITokenService, TokenService>();
+
 // Shared Context
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
@@ -186,6 +219,15 @@ builder.Services.AddScoped<IAttendanceRepository, AttendanceRepository>();
 builder.Services.AddScoped<IAttendanceCommandService, AttendanceCommandService>();
 builder.Services.AddScoped<IAttendanceQueryService, AttendanceQueryService>();
 
+// Tracking Bounded Context
+builder.Services.AddScoped<ITrackingSessionRepository, TrackingSessionRepository>();
+builder.Services.AddScoped<ITrackingCommandService, TrackingCommandService>();
+builder.Services.AddScoped<ITrackingQueryService, TrackingQueryService>();
+
+// Profiles Bounded Context
+builder.Services.AddScoped<IProfileRepository, ProfileRepository>();   // ← AGREGAR
+builder.Services.AddScoped<IProfileCommandService, ProfileCommandService>();
+builder.Services.AddScoped<IProfileQueryService, ProfileQueryService>();
 // Assignments Bounded Context
 builder.Services.AddScoped<IAssignmentRepository, AssignmentRepository>();
 builder.Services.AddScoped<IAssignmentCommandService, AssignmentCommandService>();

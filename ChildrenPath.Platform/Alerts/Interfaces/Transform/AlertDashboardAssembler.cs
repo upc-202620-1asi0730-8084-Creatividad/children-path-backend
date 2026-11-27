@@ -10,22 +10,27 @@ public static class AlertDashboardAssembler
     {
         var alertList = alerts.ToList();
 
-        var items = alertList.Select(a => new AlertDashboardItemResource(
-            Id: $"al-{a.Id:D3}",
-            Category: a.Type == AlertType.Delay || a.Type == AlertType.Emergency ? "alert" : "notification",
-            Type: a.Type.ToString().ToLower(),
-            Priority: a.Priority.ToString().ToLower(),
-            Status: a.Status == AlertStatus.Resolved ? "acknowledged" : "new", // Mapeo de estados
-            Title: a.Type == AlertType.Delay ? "Route delay detected" : "Incident report",
-            Message: a.Message,
-            Time: a.CreatedAt.ToString("h:mm tt"),
-            Date: a.CreatedAt.Date == DateTime.UtcNow.Date ? "Today" : a.CreatedAt.ToString("MMM dd"),
-            SourceBc: "Trip Management",
-            RecipientRole: "Company Admin",
-            RouteName: "San Isidro Morning Route",
-            VehiclePlate: "KW-118",
-            ActionLabel: "Review alert"
-        )).ToList();
+        var items = alertList.Select(a => 
+        {
+            var createdAt = a.CreatedAt ?? DateTimeOffset.UtcNow;
+
+            return new AlertDashboardItemResource(
+                Id: $"al-{a.Id:D3}",
+                Category: a.Type == AlertType.Delay || a.Type == AlertType.Emergency ? "alert" : "notification",
+                Type: a.Type.ToString().ToLower(),
+                Priority: a.Priority.ToString().ToLower(),
+                Status: a.Status == AlertStatus.Resolved ? "acknowledged" : "new",
+                Title: a.Type == AlertType.Delay ? "Route delay detected" : "Incident report",
+                Message: a.Message,
+                Time: createdAt.ToString("h:mm tt"), 
+                Date: createdAt.Date == DateTimeOffset.UtcNow.Date ? "Today" : createdAt.ToString("MMM dd"),
+                SourceBc: "Trip Management",
+                RecipientRole: "Company Admin",
+                RouteName: "San Isidro Morning Route",
+                VehiclePlate: "KW-118",
+                ActionLabel: "Review alert"
+            );
+        }).ToList();
 
         var summary = new AlertDashboardSummaryResource(
             Total: items.Count,

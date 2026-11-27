@@ -26,7 +26,6 @@ public class Result<T>
 public class Result : Result<object>
 {
     private Result(bool isSuccess, Error? error) : base(isSuccess, null, error) { }
-
     public static Result Success() => new(true, Error.None);
     public static new Result Failure(Error error) => new(false, error);
 }
