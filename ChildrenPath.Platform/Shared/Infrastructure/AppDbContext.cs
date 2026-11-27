@@ -36,6 +36,7 @@ using ChildrenPath.Platform.Trips.Infrastructure.Persistence.EntityFrameworkCore
 using Microsoft.EntityFrameworkCore;
 using ChildrenPath.Platform.Attendance.Domain.Model.Entities;
 using ChildrenPath.Platform.Attendance.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
+using ChildrenPath.Platform.Dashboard.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 using ChildrenPath.Platform.Iam.Domain.Model.Aggregates;
 using ChildrenPath.Platform.Iam.Domain.Model.ValueObjects;
 using ChildrenPath.Platform.Profiles.Domain.Model.Aggregates;
@@ -137,6 +138,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         modelBuilder.Entity<CompanyActivity>().HasKey(ca => ca.Id);
         modelBuilder.Entity<CompanyActivity>().Property(ca => ca.Title).IsRequired().HasMaxLength(150);
         
+        // Dashboard 
+        modelBuilder.ApplyDashboardConfiguration();
         // Fleet
         modelBuilder.ApplyFleetConfiguration();
         
