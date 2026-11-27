@@ -24,6 +24,7 @@
 
     <ItemGroup>
       <Folder Include="Companies\Interfaces\" />
+      <Folder Include="Subscriptions\Interfaces\" />
       <Folder Include="Trips\Interfaces\Rest\" />
     </ItemGroup>
 
