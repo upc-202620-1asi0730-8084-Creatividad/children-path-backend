@@ -13,82 +13,78 @@ namespace ChildrenPath.Platform.Analytics.Interfaces.Rest;
 [Route("api/v1/[controller]")]
 public class AnalyticsController(
     IReportCommandService reportCommandService,
-    IReportQueryService reportQueryService) 
+    IReportQueryService reportQueryService,
+    IAnalyticsDashboardQueryService analyticsDashboardQueryService)
     : ControllerBase
 {
-    [HttpGet("/api/v1/analyticsDashboard")]
+    [HttpGet("dashboard")]
+    [EndpointSummary("get analytics dashboard")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AnalyticsDashboardResource))]
     public async Task<IActionResult> GetDashboard(CancellationToken cancellationToken)
     {
-        var reports = await reportQueryService.Handle(new GetAnalyticsDashboardQuery(), cancellationToken);
-        var reportResources = reports.Select(ReportResourceFromEntityAssembler.ToResourceFromEntity).ToList();
+        var result = await analyticsDashboardQueryService
+            .Handle(new GetAnalyticsDashboardQuery(), cancellationToken);
 
-        var response = new
-        {
-            summary = new
-            {
-                totalTrips = 184,
-                transportedStudents = 2450,
-                onTimeRate = 91,
-                averageDelayMinutes = 7,
-                attendanceRate = 96.8,
-                serviceQualityScore = 93,
-                fleetUsage = 88,
-                incidentRate = 1.8
-            },
-            monitoringMetrics = new[]
-            {
-                new { id = "m1", label = "Active monitored routes", value = "14", helper = "Routes sending operational data", icon = "route", status = "healthy", trend = "up" },
-                new { id = "m2", label = "Live tracking sessions", value = "12", helper = "Vehicles currently reporting GPS", icon = "gps_fixed", status = "healthy", trend = "stable" },
-                new { id = "m3", label = "Attention signals", value = "3", helper = "Delays, incidents or attendance gaps", icon = "notification_important", status = "attention", trend = "down" }
-            },
-            routes = new[]
-            {
-                new { id = "rt-001", routeName = "Miraflores School Route", district = "Miraflores", driverName = "Carlos Pérez", vehiclePlate = "KW-204", onTimeRate = 96, attendanceRate = 98, delayMinutes = 4, completedTrips = 42, incidentCount = 0, serviceScore = 97, status = "healthy" },
-                new { id = "rt-003", routeName = "Surco Pickup Route", district = "Santiago de Surco", driverName = "Luis Torres", vehiclePlate = "KW-076", onTimeRate = 78, attendanceRate = 92, delayMinutes = 18, completedTrips = 36, incidentCount = 2, serviceScore = 82, status = "risk" }
-            },
-            insights = new[]
-            {
-                new { id = "i1", title = "Surco route requires optimization", description = "Delay minutes increased during the last three service days.", impact = "high", source = "Route and trip analytics", action = "Review stop sequence" }
-            },
-            trend = new[]
-            {
-                new { label = "Mon", onTimeRate = 89, attendanceRate = 96, delayMinutes = 10 },
-                new { label = "Tue", onTimeRate = 91, attendanceRate = 95, delayMinutes = 8 }
-            },
-            
-            reports = reportResources,
-            
-            activities = new[]
-            {
-                new { id = "a1", time = DateTime.UtcNow.AddHours(-1).ToString("o"), title = "Monitoring snapshot updated", description = "Live indicators were refreshed.", status = "healthy" }
-            },
-            lastUpdated = DateTime.UtcNow.ToString("o")
-        };
+        return ResultActionResultAssembler.ToActionResult(
+            this,
+            result,
+            snapshot => Ok(AnalyticsDashboardResourceFromSnapshotAssembler.ToResourceFromSnapshot(snapshot)));
+    }
 
-        return Ok(response);
+    [HttpGet("reports")]
+    [EndpointSummary("list all reports")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ReportResource>))]
+    public async Task<IActionResult> GetAllReports(CancellationToken cancellationToken)
+    {
+        var reports = await reportQueryService.Handle(new GetAllReportsQuery(), cancellationToken);
+        return Ok(reports.Select(ReportResourceFromEntityAssembler.ToResourceFromEntity));
+    }
+
+    [HttpGet("reports/{id:int}")]
+    [EndpointSummary("get a report by id")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ReportResource))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetReportById([FromRoute] int id, CancellationToken cancellationToken)
+    {
+        var report = await reportQueryService.Handle(new GetReportByIdQuery(id), cancellationToken);
+        if (report is null) return NotFound();
+        return Ok(ReportResourceFromEntityAssembler.ToResourceFromEntity(report));
     }
 
     [HttpPost("reports")]
-    public async Task<IActionResult> CreateReport([FromBody] CreateReportResource resource, CancellationToken cancellationToken)
+    [EndpointSummary("create a new report")]
+    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(ReportResource))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> CreateReport(
+        [FromBody] CreateReportResource resource,
+        CancellationToken cancellationToken)
     {
         var command = CreateReportCommandFromResourceAssembler.ToCommandFromResource(resource);
         var result = await reportCommandService.Handle(command, cancellationToken);
 
         return ResultActionResultAssembler.ToActionResult(this, result, report =>
         {
-            var reportResource = ReportResourceFromEntityAssembler.ToResourceFromEntity(report);
-            return CreatedAtAction(nameof(GetDashboard), new { id = reportResource.Id }, reportResource);
+            var resource = ReportResourceFromEntityAssembler.ToResourceFromEntity(report);
+            return CreatedAtAction(nameof(GetReportById), new { id = resource.Id }, resource);
         });
     }
 
     [HttpGet("reports/{id:int}/export")]
-    public async Task<IActionResult> ExportReport(int id, [FromQuery] string format = "pdf", CancellationToken cancellationToken = default)
+    [EndpointSummary("export a report to the given format")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ExportReportResource))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> ExportReport(
+        [FromRoute] int id,
+        [FromQuery] string format = "pdf",
+        CancellationToken cancellationToken = default)
     {
         var command = new ExportReportCommand(id, format);
         var result = await reportCommandService.Handle(command, cancellationToken);
 
-        return ResultActionResultAssembler.ToActionResult(this, result, exportMessage => 
-            Ok(new { message = exportMessage })
-        );
+        return ResultActionResultAssembler.ToActionResult(
+            this,
+            result,
+            message => Ok(new ExportReportResource(id, format, message)));
     }
 }
