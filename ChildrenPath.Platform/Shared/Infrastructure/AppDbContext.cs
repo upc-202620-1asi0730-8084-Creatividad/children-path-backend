@@ -7,7 +7,9 @@ using ChildrenPath.Platform.Students.Domain.Model.Aggregates;
 using ChildrenPath.Platform.Students.Domain.Model.Entities;
 using ChildrenPath.Platform.Students.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 using ChildrenPath.Platform.Profiles.Domain;
-using ChildrenPath.Platform.Subscriptions.Domain;
+using ChildrenPath.Platform.Subscriptions.Domain.Model.Aggregate;
+using ChildrenPath.Platform.Subscriptions.Domain.Model.Entities;
+using ChildrenPath.Platform.Subscriptions.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 using ChildrenPath.Platform.Drivers.Domain.Model.Aggregates;
 using ChildrenPath.Platform.Drivers.Domain.Model.Entities;
 using ChildrenPath.Platform.Drivers.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
@@ -53,11 +55,14 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<StudentActivity> StudentActivities { get; set; }
     
     public DbSet<Profile> Profiles { get; set; }
-
+    
+    // Subscriptions DbSets
     public DbSet<Plan> Plans { get; set; }
     public DbSet<Subscription> Subscriptions { get; set; }
     public DbSet<Invoice> Invoices { get; set; }
     public DbSet<Payment> Payments { get; set; }
+    public DbSet<SavedPaymentMethod> PaymentMethods { get; set; }
+    
     
     public DbSet<Driver> Drivers { get; set; }
     public DbSet<DriverAvailability> DriverAvailabilities { get; set; }
@@ -131,13 +136,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         modelBuilder.Entity<Profile>().HasOne(p => p.CompanyProfile).WithOne().HasForeignKey<CompanyProfile>(cp => cp.Id);
         
         // Configuración de Subscriptions y Payments
-        modelBuilder.Entity<Plan>().HasKey(p => p.Id);
-        modelBuilder.Entity<Subscription>().HasKey(s => s.Id);
-        modelBuilder.Entity<Subscription>().HasOne(s => s.Plan).WithMany().HasForeignKey(s => s.PlanId);
-        // Composición: Suscripción -> Facturas
-        modelBuilder.Entity<Subscription>().HasMany(s => s.Invoices).WithOne().HasForeignKey(i => i.SubscriptionId).OnDelete(DeleteBehavior.Cascade);
-        // Composición: Factura -> Pagos
-        modelBuilder.Entity<Invoice>().HasMany(i => i.Payments).WithOne().HasForeignKey(p => p.InvoiceId).OnDelete(DeleteBehavior.Cascade);
+        modelBuilder.ApplySubscriptionsConfiguration();
+        
         
         modelBuilder.ApplyDriversConfiguration();
         

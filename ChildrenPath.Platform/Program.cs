@@ -65,6 +65,13 @@ using ChildrenPath.Platform.Drivers.Application.QueryServices;
 using ChildrenPath.Platform.Drivers.Application.Internal.CommandServices;
 using ChildrenPath.Platform.Drivers.Application.Internal.QueryServices;
 
+using ChildrenPath.Platform.Subscriptions.Domain.Repositories;
+using ChildrenPath.Platform.Subscriptions.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using ChildrenPath.Platform.Subscriptions.Application.CommandServices;
+using ChildrenPath.Platform.Subscriptions.Application.QueryServices;
+using ChildrenPath.Platform.Subscriptions.Application.Internal.CommandServices;
+using ChildrenPath.Platform.Subscriptions.Application.Internal.QueryServices;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // ==========================================
@@ -168,6 +175,13 @@ builder.Services.AddScoped<IAssignmentRepository, AssignmentRepository>();
 builder.Services.AddScoped<IAssignmentCommandService, AssignmentCommandService>();
 builder.Services.AddScoped<IAssignmentQueryService, AssignmentQueryService>();
 
+// Subscriptions Bounded Context
+builder.Services.AddScoped<IPlanRepository, PlanRepository>();
+builder.Services.AddScoped<ISubscriptionRepository, SubscriptionRepository>();
+builder.Services.AddScoped<IPlanCommandService, PlanCommandService>();
+builder.Services.AddScoped<IPlanQueryService, PlanQueryService>();
+builder.Services.AddScoped<ISubscriptionCommandService, SubscriptionCommandService>();
+builder.Services.AddScoped<ISubscriptionQueryService, SubscriptionQueryService>();
 
 // ==========================================
 // 2. CONSTRUCCIÓN DE LA APP
