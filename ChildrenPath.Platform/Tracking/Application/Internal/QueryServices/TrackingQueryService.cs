@@ -11,4 +11,9 @@ public class TrackingQueryService(ITrackingSessionRepository repository) : ITrac
     {
         return await repository.FindAllActiveAsync(cancellationToken);
     }
+
+    public async Task<TrackingSession?> Handle(GetTrackingSessionByIdQuery query, CancellationToken cancellationToken)
+    {
+        return await repository.FindByIdAsync(query.Id, cancellationToken);
+    }
 }

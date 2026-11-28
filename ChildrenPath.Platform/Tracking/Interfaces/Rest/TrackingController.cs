@@ -1,22 +1,29 @@
-using Microsoft.AspNetCore.Mvc;
+using System.Net.Mime;
+using ChildrenPath.Platform.Shared.Interfaces.Rest.Transform;
 using ChildrenPath.Platform.Tracking.Application.CommandServices;
 using ChildrenPath.Platform.Tracking.Application.QueryServices;
 using ChildrenPath.Platform.Tracking.Domain.Model.Commands;
 using ChildrenPath.Platform.Tracking.Domain.Model.Queries;
 using ChildrenPath.Platform.Tracking.Interfaces.Resources;
 using ChildrenPath.Platform.Tracking.Interfaces.Transform;
-using ChildrenPath.Platform.Shared.Interfaces.Rest.Transform;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ChildrenPath.Platform.Tracking.Interfaces.Rest;
 
 [ApiController]
 [Route("api/v1/[controller]")]
+[Produces(MediaTypeNames.Application.Json)]
+[Tags("Tracking")]
 public class TrackingController(
     ITrackingCommandService trackingCommandService,
-    ITrackingQueryService trackingQueryService) : ControllerBase
+    ITrackingQueryService trackingQueryService,
+    ITrackingDashboardQueryService trackingDashboardQueryService)
+    : ControllerBase
 {
     [HttpPost]
-    [EndpointSummary("Start tracking session")]
+    [EndpointSummary("Start a tracking session")]
+    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(TrackingSessionResource))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> StartTracking([FromBody] CreateTrackingResource resource, CancellationToken cancellationToken)
     {
         var command = new CreateTrackingSessionCommand(
@@ -31,29 +38,45 @@ public class TrackingController(
         return ResultActionResultAssembler.ToActionResult(this, result, session =>
         {
             var sessionResource = TrackingSessionResourceFromEntityAssembler.ToResourceFromEntity(session);
-            return CreatedAtAction(nameof(StartTracking), new { id = sessionResource.Id }, sessionResource);
+            return CreatedAtAction(nameof(GetSessionById), new { id = sessionResource.Id }, sessionResource);
         });
+    }
+
+    [HttpGet("{id:int}")]
+    [EndpointSummary("Get a tracking session by id")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(TrackingSessionResource))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetSessionById([FromRoute] int id, CancellationToken cancellationToken)
+    {
+        var session = await trackingQueryService.Handle(new GetTrackingSessionByIdQuery(id), cancellationToken);
+        if (session is null) return NotFound();
+        
+        return Ok(TrackingSessionResourceFromEntityAssembler.ToResourceFromEntity(session));
     }
 
     [HttpGet("dashboard")]
     [EndpointSummary("Get active tracking dashboard")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(TrackingDashboardResource))]
     public async Task<IActionResult> GetDashboard(CancellationToken cancellationToken)
     {
-        var activeSessions = await trackingQueryService.Handle(new GetActiveTrackingSessionsQuery(), cancellationToken);
-        
-        var resources = activeSessions.Select(TrackingSessionResourceFromEntityAssembler.ToResourceFromEntity).ToList();
-        
-        var response = new
-        {
-            summary = new
-            {
-                activeUnits = resources.Count,
-                averageSpeed = resources.Any() ? resources.Average(r => r.CurrentSpeed) : 0,
-                activeAlerts = 0
-            },
-            vehicles = resources
-        };
+        var result = await trackingDashboardQueryService.Handle(new GetTrackingDashboardQuery(), cancellationToken);
 
-        return Ok(response);
+        return ResultActionResultAssembler.ToActionResult(
+            this,
+            result,
+            snapshot => 
+            {
+                var vehicles = snapshot.Sessions.Select(TrackingSessionResourceFromEntityAssembler.ToResourceFromEntity);
+                
+                var dashboardResource = new TrackingDashboardResource(
+                    Summary: new TrackingDashboardSummaryResource(
+                        snapshot.Summary.ActiveUnits,
+                        snapshot.Summary.AverageSpeed,
+                        snapshot.Summary.ActiveAlerts),
+                    Vehicles: vehicles
+                );
+                
+                return Ok(dashboardResource);
+            });
     }
 }
