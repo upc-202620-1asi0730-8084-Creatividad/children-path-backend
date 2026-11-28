@@ -1,70 +1,37 @@
+using ChildrenPath.Platform.Attendance.Domain.Model.ReadModels;
 using ChildrenPath.Platform.Attendance.Domain.Model.ValueObjects;
 using ChildrenPath.Platform.Attendance.Interfaces.Resources;
 using AttendanceEntity = ChildrenPath.Platform.Attendance.Domain.Model.Aggregate.Attendance;
 
 namespace ChildrenPath.Platform.Attendance.Interfaces.Transform;
 
-/// <summary>
-///     Assembles frontend dashboard resources from collections of <see cref="AttendanceEntity" /> aggregates.
-/// </summary>
 public static class AttendanceDashboardAssembler
 {
-    /// <summary>
-    ///     Builds a complete <see cref="AttendanceDashboardResource" /> from a collection of attendance aggregates.
-    /// </summary>
-    /// <param name="attendances">The attendance records retrieved from persistence.</param>
-    /// <returns>An <see cref="AttendanceDashboardResource" /> ready for the frontend view.</returns>
-    public static AttendanceDashboardResource ToDashboardResource(IEnumerable<AttendanceEntity> attendances)
+    public static AttendanceDashboardResource ToDashboardResource(AttendanceDashboardSnapshot snapshot)
     {
-        var list = attendances.ToList();
-
-        var records = list.Select(ToDashboardRecordResource).ToList();
-
-        var totalAssigned = records.Count;
-        var onBoard = records.Count(r => r.Status == "on_board");
-        var arrived = records.Count(r => r.Status == "arrived");
-        var waiting = records.Count(r => r.Status == "waiting");
-        var absent = records.Count(r => r.Status == "absent");
-        var pendingConfirmation = records.Count(r => r.Status == "pending_confirmation");
-
-        var attended = onBoard + arrived;
-        var denominator = Math.Max(totalAssigned - pendingConfirmation, 1);
-        var attendanceReliability = totalAssigned == 0
-            ? 0.0
-            : Math.Round((double)attended / denominator * 1000.0) / 10.0;
+        var records = snapshot.Records.Select(ToDashboardRecordResource).ToList();
 
         var summary = new AttendanceDashboardSummaryResource(
-            TotalAssigned: totalAssigned,
-            OnBoard: onBoard,
-            Arrived: arrived,
-            Waiting: waiting,
-            Absent: absent,
-            PendingConfirmation: pendingConfirmation,
-            AttendanceReliability: attendanceReliability);
+            TotalAssigned: snapshot.Summary.TotalAssigned,
+            OnBoard: snapshot.Summary.OnBoard,
+            Arrived: snapshot.Summary.Arrived,
+            Waiting: snapshot.Summary.Waiting,
+            Absent: snapshot.Summary.Absent,
+            PendingConfirmation: snapshot.Summary.PendingConfirmation,
+            AttendanceReliability: snapshot.Summary.AttendanceReliability
+        );
 
-        var activities = list
-            .OrderByDescending(a => a.Timestamp)
-            .Take(10)
-            .Select(a => new AttendanceDashboardActivityResource(
-                Id: $"AA-{a.Id:D3}",
-                Time: a.Timestamp.ToString("HH:mm"),
-                Title: MapActivityTitle(a.Status),
-                Description: MapActivityDescription(a),
-                Status: a.Status is AttendanceStatus.Absent or AttendanceStatus.PendingConfirmation
-                    ? "pending"
-                    : a.Status == AttendanceStatus.Boarded
-                        ? "active"
-                        : "completed"))
-            .ToList();
+        var activities = snapshot.Activities.Select(a => new AttendanceDashboardActivityResource(
+            Id: $"AA-{a.AttendanceId:D3}",
+            Time: a.Timestamp.ToString("HH:mm"),
+            Title: a.Title,
+            Description: a.Description,
+            Status: a.Status
+        )).ToList();
 
         return new AttendanceDashboardResource(summary, records, activities);
     }
 
-    /// <summary>
-    ///     Maps a single <see cref="AttendanceEntity" /> aggregate to an <see cref="AttendanceDashboardRecordResource" />.
-    /// </summary>
-    /// <param name="entity">The attendance aggregate to transform.</param>
-    /// <returns>The dashboard-formatted attendance record.</returns>
     public static AttendanceDashboardRecordResource ToDashboardRecordResource(AttendanceEntity entity)
     {
         var frontendStatus = MapFrontendStatus(entity.Status);
@@ -117,16 +84,6 @@ public static class AttendanceDashboardAssembler
         AttendanceStatus.Late => "Late boarding recorded",
         AttendanceStatus.PendingConfirmation => "Attendance review requested",
         _ => "Attendance updated"
-    };
-
-    private static string MapActivityDescription(AttendanceEntity entity) => entity.Status switch
-    {
-        AttendanceStatus.Boarded => $"Student ST-{entity.StudentId:D3} boarded at {entity.BoardingRecord?.Location ?? "pickup point"}.",
-        AttendanceStatus.DroppedOff => $"Student ST-{entity.StudentId:D3} arrived at destination.",
-        AttendanceStatus.Absent => $"Student ST-{entity.StudentId:D3} marked absent: {entity.AbsenceRecord?.Reason ?? "No reason provided"}.",
-        AttendanceStatus.Late => $"Student ST-{entity.StudentId:D3} boarded late.",
-        AttendanceStatus.PendingConfirmation => $"Student ST-{entity.StudentId:D3} requires attendance confirmation.",
-        _ => $"Student ST-{entity.StudentId:D3} is waiting for pickup."
     };
 
     private static string MapNotes(AttendanceEntity entity)

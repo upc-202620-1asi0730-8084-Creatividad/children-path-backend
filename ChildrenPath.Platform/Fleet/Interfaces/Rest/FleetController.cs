@@ -5,6 +5,7 @@ using ChildrenPath.Platform.Fleet.Domain.Model.Commands;
 using ChildrenPath.Platform.Fleet.Domain.Model.Queries;
 using ChildrenPath.Platform.Fleet.Interfaces.Rest.Resources;
 using ChildrenPath.Platform.Fleet.Interfaces.Rest.Transform;
+using ChildrenPath.Platform.Shared.Interfaces.Rest.Transform;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ChildrenPath.Platform.Fleet.Interfaces.Rest;
@@ -18,7 +19,7 @@ public class FleetController(
     IFleetQueryService fleetQueryService) : ControllerBase
 {
     [HttpGet("dashboard")]
-    [EndpointSummary("Get fleet dashboard comprehensive data")]
+    [EndpointSummary("get fleet dashboard comprehensive data")]
     [ProducesResponseType(typeof(FleetDashboardResource), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetFleetDashboard(CancellationToken cancellationToken)
     {
@@ -29,7 +30,7 @@ public class FleetController(
     }
 
     [HttpGet("summary")]
-    [EndpointSummary("Get fleet operational summary")]
+    [EndpointSummary("get fleet operational summary")]
     [ProducesResponseType(typeof(FleetSummaryResource), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetFleetSummary(CancellationToken cancellationToken)
     {
@@ -40,7 +41,7 @@ public class FleetController(
     }
 
     [HttpGet("alerts")]
-    [EndpointSummary("Get all maintenance alerts")]
+    [EndpointSummary("get all maintenance alerts")]
     [ProducesResponseType(typeof(IEnumerable<MaintenanceAlertResource>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetAllMaintenanceAlerts(CancellationToken cancellationToken)
     {
@@ -50,11 +51,27 @@ public class FleetController(
         return Ok(resources);
     }
 
+    [HttpGet("alerts/{id:int}")]
+    [EndpointSummary("get a maintenance alert by id")]
+    [ProducesResponseType(typeof(MaintenanceAlertResource), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetMaintenanceAlertById([FromRoute] int id, CancellationToken cancellationToken)
+    {
+        var query = new GetMaintenanceAlertByIdQuery(id);
+        var alert = await fleetQueryService.Handle(query, cancellationToken);
+        
+        if (alert is null) return NotFound();
+
+        return Ok(MaintenanceAlertResourceFromEntityAssembler.ToResourceFromEntity(alert));
+    }
+
     [HttpPost("alerts")]
-    [EndpointSummary("Create a maintenance alert")]
+    [EndpointSummary("create a maintenance alert")]
     [ProducesResponseType(typeof(MaintenanceAlertResource), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> CreateMaintenanceAlert([FromBody] CreateMaintenanceAlertResource resource, CancellationToken cancellationToken)
+    public async Task<IActionResult> CreateMaintenanceAlert(
+        [FromBody] CreateMaintenanceAlertResource resource, 
+        CancellationToken cancellationToken)
     {
         var command = new CreateMaintenanceAlertCommand(
             resource.VehicleCode,
@@ -66,23 +83,33 @@ public class FleetController(
             resource.VehicleId
         );
 
-        var alert = await fleetCommandService.Handle(command, cancellationToken);
-        if (alert == null) return BadRequest(new { message = "Could not create maintenance alert." });
+        var result = await fleetCommandService.Handle(command, cancellationToken);
 
-        var createdResource = MaintenanceAlertResourceFromEntityAssembler.ToResourceFromEntity(alert);
-        return CreatedAtAction(nameof(GetAllMaintenanceAlerts), null, createdResource);
+        return ResultActionResultAssembler.ToActionResult(
+            this,
+            result,
+            createdAlert => 
+            {
+                var createdResource = MaintenanceAlertResourceFromEntityAssembler.ToResourceFromEntity(createdAlert);
+                return CreatedAtAction(
+                    nameof(GetMaintenanceAlertById), 
+                    new { id = createdAlert.Id }, 
+                    createdResource);
+            });
     }
 
     [HttpPatch("alerts/{id:int}/resolve")]
-    [EndpointSummary("Resolve a maintenance alert")]
+    [EndpointSummary("resolve a maintenance alert")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> ResolveMaintenanceAlert(int id, CancellationToken cancellationToken)
     {
         var command = new ResolveMaintenanceAlertCommand(id);
-        var resolved = await fleetCommandService.Handle(command, cancellationToken);
-        if (!resolved) return NotFound(new { message = $"Maintenance alert with id {id} not found." });
+        var result = await fleetCommandService.Handle(command, cancellationToken);
 
-        return Ok(new { message = "Maintenance alert resolved successfully." });
+        return ResultActionResultAssembler.ToActionResult(
+            this,
+            result,
+            _ => Ok(new { message = "Maintenance alert resolved successfully." }));
     }
 }

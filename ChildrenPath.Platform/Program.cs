@@ -3,20 +3,25 @@ using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 using ChildrenPath.Platform.Shared.Infrastructure;
 using ChildrenPath.Platform.Shared.Domain.Repositories;
+using ChildrenPath.Platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 
-// Repositorios
+using ChildrenPath.Platform.Dashboard.Domain.Repositories;
+using ChildrenPath.Platform.Dashboard.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+
 using ChildrenPath.Platform.Fleet.Domain.Repositories;
 using ChildrenPath.Platform.Fleet.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 using ChildrenPath.Platform.Fleet.Application.CommandServices;
 using ChildrenPath.Platform.Fleet.Application.QueryServices;
 using ChildrenPath.Platform.Fleet.Application.Internal.CommandServices;
 using ChildrenPath.Platform.Fleet.Application.Internal.QueryServices;
+
 using ChildrenPath.Platform.Companies.Domain.Repositories;
 using ChildrenPath.Platform.Companies.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 using ChildrenPath.Platform.Companies.Application.CommandServices;
 using ChildrenPath.Platform.Companies.Application.QueryServices;
 using ChildrenPath.Platform.Companies.Application.Internal.CommandServices;
 using ChildrenPath.Platform.Companies.Application.Internal.QueryServices;
+
 using ChildrenPath.Platform.Students.Domain.Repositories;
 using ChildrenPath.Platform.Students.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 using ChildrenPath.Platform.Students.Application.CommandServices;
@@ -30,7 +35,7 @@ using ChildrenPath.Platform.Alerts.Application.CommandServices;
 using ChildrenPath.Platform.Alerts.Application.QueryServices;
 using ChildrenPath.Platform.Alerts.Application.Internal.CommandServices;
 using ChildrenPath.Platform.Alerts.Application.Internal.QueryServices;
-using ChildrenPath.Platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+
 using ChildrenPath.Platform.Trips.Domain.Repositories;
 using ChildrenPath.Platform.Trips.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 using ChildrenPath.Platform.Trips.Application.CommandServices;
@@ -44,6 +49,8 @@ using ChildrenPath.Platform.Analytics.Application.CommandServices;
 using ChildrenPath.Platform.Analytics.Application.QueryServices;
 using ChildrenPath.Platform.Analytics.Application.Internal.CommandServices;
 using ChildrenPath.Platform.Analytics.Application.Internal.QueryServices;
+using ChildrenPath.Platform.Analytics.Application.QueryServices;
+using ChildrenPath.Platform.Analytics.Application.Internal.QueryServices;
 
 using ChildrenPath.Platform.Attendance.Domain.Repositories;
 using ChildrenPath.Platform.Attendance.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
@@ -51,6 +58,7 @@ using ChildrenPath.Platform.Attendance.Application.CommandServices;
 using ChildrenPath.Platform.Attendance.Application.QueryServices;
 using ChildrenPath.Platform.Attendance.Application.Internal.CommandServices;
 using ChildrenPath.Platform.Attendance.Application.Internal.QueryServices;
+
 using ChildrenPath.Platform.Iam.Application.CommandServices;
 using ChildrenPath.Platform.Iam.Application.Internal.CommandServices;
 using ChildrenPath.Platform.Iam.Application.Internal.OutboundServices;
@@ -60,15 +68,17 @@ using ChildrenPath.Platform.Iam.Domain.Repositories;
 using ChildrenPath.Platform.Iam.Infrastructure.Hashing.BCrypt.Services;
 using ChildrenPath.Platform.Iam.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 using ChildrenPath.Platform.Iam.Infrastructure.Tokens.Jwt.Services;
-using ChildrenPath.Platform.Profiles.Application.CommandServices;
-using ChildrenPath.Platform.Profiles.Application.Internal.CommandServices;
-using ChildrenPath.Platform.Profiles.Application.QueryServices;
+
 using ChildrenPath.Platform.Tracking.Application.CommandServices;
 using ChildrenPath.Platform.Tracking.Application.Internal.CommandServices;
 using ChildrenPath.Platform.Tracking.Application.Internal.QueryServices;
 using ChildrenPath.Platform.Tracking.Application.QueryServices;
 using ChildrenPath.Platform.Tracking.Domain.Repositories;
 using ChildrenPath.Platform.Tracking.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+
+using ChildrenPath.Platform.Profiles.Application.CommandServices;
+using ChildrenPath.Platform.Profiles.Application.Internal.CommandServices;
+using ChildrenPath.Platform.Profiles.Application.QueryServices;
 using ChildrenPath.Platform.Profiles.Application.Internal.QueryServices;
 using ChildrenPath.Platform.Profiles.Domain.Repositories;
 using ChildrenPath.Platform.Profiles.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
@@ -79,6 +89,7 @@ using ChildrenPath.Platform.Assignments.Application.CommandServices;
 using ChildrenPath.Platform.Assignments.Application.QueryServices;
 using ChildrenPath.Platform.Assignments.Application.Internal.CommandServices;
 using ChildrenPath.Platform.Assignments.Application.Internal.QueryServices;
+
 using ChildrenPath.Platform.Drivers.Domain.Repositories;
 using ChildrenPath.Platform.Drivers.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 using ChildrenPath.Platform.Drivers.Application.CommandServices;
@@ -92,6 +103,8 @@ using ChildrenPath.Platform.Subscriptions.Application.CommandServices;
 using ChildrenPath.Platform.Subscriptions.Application.QueryServices;
 using ChildrenPath.Platform.Subscriptions.Application.Internal.CommandServices;
 using ChildrenPath.Platform.Subscriptions.Application.Internal.QueryServices;
+
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -203,6 +216,8 @@ builder.Services.AddScoped<IAlertRepository, AlertRepository>();
 // Servicios de Aplicación (Commands & Queries)
 builder.Services.AddScoped<IAlertCommandService, AlertCommandService>();
 builder.Services.AddScoped<IAlertQueryService, AlertQueryService>();
+builder.Services.AddScoped<IAlertDashboardQueryService, AlertDashboardQueryService>();   // ← NUEVO
+
 // Trips Bounded Context
 builder.Services.AddScoped<ITripRepository, TripRepository>();
 
@@ -213,6 +228,7 @@ builder.Services.AddScoped<ITripQueryService, TripQueryService>();
 builder.Services.AddScoped<IReportRepository, ReportRepository>();
 builder.Services.AddScoped<IReportCommandService, ReportCommandService>();
 builder.Services.AddScoped<IReportQueryService, ReportQueryService>();
+builder.Services.AddScoped<IAnalyticsDashboardQueryService, AnalyticsDashboardQueryService>(); // ← NUEVO
 
 // Attendance Bounded Context
 builder.Services.AddScoped<IAttendanceRepository, AttendanceRepository>();
@@ -223,11 +239,13 @@ builder.Services.AddScoped<IAttendanceQueryService, AttendanceQueryService>();
 builder.Services.AddScoped<ITrackingSessionRepository, TrackingSessionRepository>();
 builder.Services.AddScoped<ITrackingCommandService, TrackingCommandService>();
 builder.Services.AddScoped<ITrackingQueryService, TrackingQueryService>();
+builder.Services.AddScoped<ITrackingDashboardQueryService, TrackingDashboardQueryService>();
 
 // Profiles Bounded Context
 builder.Services.AddScoped<IProfileRepository, ProfileRepository>();   // ← AGREGAR
 builder.Services.AddScoped<IProfileCommandService, ProfileCommandService>();
 builder.Services.AddScoped<IProfileQueryService, ProfileQueryService>();
+
 // Assignments Bounded Context
 builder.Services.AddScoped<IAssignmentRepository, AssignmentRepository>();
 builder.Services.AddScoped<IAssignmentCommandService, AssignmentCommandService>();
@@ -240,6 +258,8 @@ builder.Services.AddScoped<IPlanCommandService, PlanCommandService>();
 builder.Services.AddScoped<IPlanQueryService, PlanQueryService>();
 builder.Services.AddScoped<ISubscriptionCommandService, SubscriptionCommandService>();
 builder.Services.AddScoped<ISubscriptionQueryService, SubscriptionQueryService>();
+
+builder.Services.AddScoped<IDashboardRepository, DashboardRepository>();
 
 // ==========================================
 // 2. CONSTRUCCIÓN DE LA APP

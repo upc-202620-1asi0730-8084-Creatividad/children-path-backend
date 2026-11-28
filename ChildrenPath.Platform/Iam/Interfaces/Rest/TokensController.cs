@@ -16,6 +16,9 @@ public class TokensController(IUserCommandService userCommandService) : Controll
 {
     [HttpPost]
     [AllowAnonymous]
+    [EndpointSummary("authenticate user and generate a JWT token")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AuthenticatedUserResource))]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> CreateToken([FromBody] SignInResource signInResource, CancellationToken cancellationToken)
     {
         var signInCommand = SignInCommandFromResourceAssembler.ToCommandFromResource(signInResource);

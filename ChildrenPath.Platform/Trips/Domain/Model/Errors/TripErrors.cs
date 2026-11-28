@@ -24,4 +24,10 @@ public static class TripErrors
 
     public static readonly Error InternalServerError =
         new("Trips.InternalServerError", "An internal server error occurred.");
+    
+    public static readonly Error InvalidStatus = Error.Validation(
+        "Trips.InvalidStatus", "The provided trip status is not valid.");
+
+    public static readonly Error InvalidShift = Error.Validation(
+        "Trips.InvalidShift", "The provided trip shift is not valid.");
 }

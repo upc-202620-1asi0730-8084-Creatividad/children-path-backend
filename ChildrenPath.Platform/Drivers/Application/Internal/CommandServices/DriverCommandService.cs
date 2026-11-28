@@ -5,7 +5,10 @@ using ChildrenPath.Platform.Drivers.Domain.Model.ValueObjects;
 using ChildrenPath.Platform.Drivers.Domain.Model.Commands;
 using ChildrenPath.Platform.Drivers.Domain.Model.Entities;
 using ChildrenPath.Platform.Drivers.Domain.Repositories;
+using ChildrenPath.Platform.Shared.Domain;
+using ChildrenPath.Platform.Shared.Domain.Model;
 using ChildrenPath.Platform.Shared.Domain.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace ChildrenPath.Platform.Drivers.Application.Internal.CommandServices;
 
@@ -14,65 +17,106 @@ public class DriverCommandService(
     IDriverActivityRepository activityRepository,
     IUnitOfWork unitOfWork) : IDriverCommandService
 {
-    public async Task<Driver> Handle(CreateDriverCommand command, CancellationToken cancellationToken = default)
+    public async Task<Result<Driver>> Handle(CreateDriverCommand command, CancellationToken cancellationToken = default)
     {
-        var normalized = Normalize(command);
-        Validate(normalized);
+        try
+        {
+            var normalized = Normalize(command);
+            Validate(normalized);
 
-        if (await driverRepository.ExistsByEmailAsync(normalized.Email, cancellationToken: cancellationToken))
-            throw new InvalidOperationException("A driver with this email already exists.");
-        if (await driverRepository.ExistsByLicenseNumberAsync(normalized.LicenseNumber, cancellationToken: cancellationToken))
-            throw new InvalidOperationException("A driver with this license number already exists.");
+            if (await driverRepository.ExistsByEmailAsync(normalized.Email, cancellationToken: cancellationToken))
+                return Result<Driver>.Failure(Error.Conflict("Drivers.DuplicateEmail", "A driver with this email already exists."));
+                
+            if (await driverRepository.ExistsByLicenseNumberAsync(normalized.LicenseNumber, cancellationToken: cancellationToken))
+                return Result<Driver>.Failure(Error.Conflict("Drivers.DuplicateLicense", "A driver with this license number already exists."));
 
-        var driver = new Driver(normalized);
-        await driverRepository.AddAsync(driver, cancellationToken);
-        await unitOfWork.CompleteAsync(cancellationToken);
+            var driver = new Driver(normalized);
+            await driverRepository.AddAsync(driver, cancellationToken);
+            await unitOfWork.CompleteAsync(cancellationToken);
 
-        driver.Code = $"DRV-{driver.Id:D3}";
-        await activityRepository.AddAsync(
-            CreateActivity(driver, "Driver registered", "The driver profile was created."), cancellationToken);
-        await unitOfWork.CompleteAsync(cancellationToken);
-        return driver;
+            driver.Code = $"DRV-{driver.Id:D3}";
+            await activityRepository.AddAsync(
+                CreateActivity(driver, "Driver registered", "The driver profile was created."), cancellationToken);
+            await unitOfWork.CompleteAsync(cancellationToken);
+            
+            return Result<Driver>.Success(driver);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return Result<Driver>.Failure(Error.Validation("Drivers.InvalidData", ex.Message));
+        }
+        catch (DbUpdateException)
+        {
+            return Result<Driver>.Failure(Error.Unexpected("Drivers.DatabaseError", "A database error occurred."));
+        }
     }
 
-    public async Task<Driver?> Handle(UpdateDriverCommand command, CancellationToken cancellationToken = default)
+    public async Task<Result<Driver>> Handle(UpdateDriverCommand command, CancellationToken cancellationToken = default)
     {
-        var normalized = Normalize(command);
-        Validate(normalized);
+        try
+        {
+            var normalized = Normalize(command);
+            Validate(normalized);
 
-        var driver = await driverRepository.FindWithRelationsByIdAsync(normalized.Id, cancellationToken);
-        if (driver == null) return null;
+            var driver = await driverRepository.FindWithRelationsByIdAsync(normalized.Id, cancellationToken);
+            if (driver == null) 
+                return Result<Driver>.Failure(Error.NotFound("Drivers.NotFound", "The specified driver was not found."));
 
-        if (await driverRepository.ExistsByEmailAsync(normalized.Email, normalized.Id, cancellationToken))
-            throw new InvalidOperationException("A driver with this email already exists.");
-        if (await driverRepository.ExistsByLicenseNumberAsync(normalized.LicenseNumber, normalized.Id, cancellationToken))
-            throw new InvalidOperationException("A driver with this license number already exists.");
+            if (await driverRepository.ExistsByEmailAsync(normalized.Email, normalized.Id, cancellationToken))
+                return Result<Driver>.Failure(Error.Conflict("Drivers.DuplicateEmail", "A driver with this email already exists."));
+                
+            if (await driverRepository.ExistsByLicenseNumberAsync(normalized.LicenseNumber, normalized.Id, cancellationToken))
+                return Result<Driver>.Failure(Error.Conflict("Drivers.DuplicateLicense", "A driver with this license number already exists."));
 
-        var previousStatus = driver.Status;
-        driver.Update(normalized);
-        driverRepository.Update(driver);
+            var previousStatus = driver.Status;
+            driver.Update(normalized);
+            driverRepository.Update(driver);
 
-        var activity = previousStatus == driver.Status
-            ? CreateActivity(driver, "Driver profile updated", "The driver profile was updated.")
-            : CreateActivity(driver, "Driver status updated",
-                $"Driver status changed from {ToDisplayStatus(previousStatus)} to {ToDisplayStatus(driver.Status)}.");
-        await activityRepository.AddAsync(activity, cancellationToken);
-        await unitOfWork.CompleteAsync(cancellationToken);
-        return driver;
+            var activity = previousStatus == driver.Status
+                ? CreateActivity(driver, "Driver profile updated", "The driver profile was updated.")
+                : CreateActivity(driver, "Driver status updated",
+                    $"Driver status changed from {ToDisplayStatus(previousStatus)} to {ToDisplayStatus(driver.Status)}.");
+                    
+            await activityRepository.AddAsync(activity, cancellationToken);
+            await unitOfWork.CompleteAsync(cancellationToken);
+            
+            return Result<Driver>.Success(driver);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return Result<Driver>.Failure(Error.Validation("Drivers.InvalidData", ex.Message));
+        }
+        catch (DbUpdateException)
+        {
+            return Result<Driver>.Failure(Error.Unexpected("Drivers.DatabaseError", "A database error occurred."));
+        }
     }
 
-    public async Task<bool> Handle(DeleteDriverCommand command, CancellationToken cancellationToken = default)
+    public async Task<Result> Handle(DeleteDriverCommand command, CancellationToken cancellationToken = default)
     {
         var driver = await driverRepository.FindWithRelationsByIdAsync(command.Id, cancellationToken);
-        if (driver == null) return false;
+        if (driver == null) 
+            return Result.Failure(Error.NotFound("Drivers.NotFound", "The specified driver was not found."));
 
-        await activityRepository.AddAsync(
-            CreateActivity(driver, "Driver removed", $"The driver record for {driver.FullName} was removed."),
-            cancellationToken);
-        driverRepository.Remove(driver);
-        await unitOfWork.CompleteAsync(cancellationToken);
-        return true;
+        try
+        {
+            await activityRepository.AddAsync(
+                CreateActivity(driver, "Driver removed", $"The driver record for {driver.FullName} was removed."),
+                cancellationToken);
+            driverRepository.Remove(driver);
+            await unitOfWork.CompleteAsync(cancellationToken);
+            
+            return Result.Success();
+        }
+        catch (DbUpdateException)
+        {
+            return Result.Failure(Error.Unexpected("Drivers.DatabaseError", "A database error occurred."));
+        }
     }
+
+    // ==========================================
+    // A PARTIR DE AQUÍ, TUS MÉTODOS PRIVADOS SE MANTIENEN EXACTAMENTE IGUAL
+    // ==========================================
 
     private static CreateDriverCommand Normalize(CreateDriverCommand command)
     {

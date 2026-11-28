@@ -20,6 +20,10 @@ public class UsersController(
 {
     [HttpPost]
     [AllowAnonymous]
+    [EndpointSummary("register a new user")]
+    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(UserResource))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<IActionResult> CreateUser([FromBody] SignUpResource signUpResource, CancellationToken cancellationToken)
     {
         var signUpCommand = SignUpCommandFromResourceAssembler.ToCommandFromResource(signUpResource);
@@ -32,19 +36,17 @@ public class UsersController(
         });
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("{id:int}")]
     [AllowAnonymous]
-    public async Task<IActionResult> GetUserById(int id, CancellationToken cancellationToken)
+    [EndpointSummary("get a user by id")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserResource))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetUserById([FromRoute] int id, CancellationToken cancellationToken)
     {
         var query = new GetUserByIdQuery(id);
         var user = await userQueryService.Handle(query, cancellationToken);
 
-        if (user is null)
-        {
-            var errorResult = Shared.Domain.Result<Domain.Model.Aggregates.User>.Failure(
-                Domain.Model.Errors.IamErrors.UserNotFound);
-            return ResultActionResultAssembler.ToActionResult(this, errorResult, _ => BadRequest());
-        }
+        if (user is null) return NotFound();
 
         return Ok(UserResourceFromEntityAssembler.ToResourceFromEntity(user));
     }

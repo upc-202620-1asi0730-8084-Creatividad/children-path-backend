@@ -3,7 +3,10 @@ using ChildrenPath.Platform.Companies.Domain.Model.Aggregates;
 using ChildrenPath.Platform.Companies.Domain.Model.Commands;
 using ChildrenPath.Platform.Companies.Domain.Model.Entities;
 using ChildrenPath.Platform.Companies.Domain.Repositories;
+using ChildrenPath.Platform.Shared.Domain;
+using ChildrenPath.Platform.Shared.Domain.Model;
 using ChildrenPath.Platform.Shared.Domain.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace ChildrenPath.Platform.Companies.Application.Internal.CommandServices;
 
@@ -15,112 +18,160 @@ public class CompanyCommandService(
     ICompanyActivityRepository companyActivityRepository,
     IUnitOfWork unitOfWork) : ICompanyCommandService
 {
-    public async Task<Company?> Handle(CreateCompanyCommand command, CancellationToken cancellationToken = default)
+    public async Task<Result<Company>> Handle(CreateCompanyCommand command, CancellationToken cancellationToken = default)
     {
-        if (await companyRepository.ExistsByRucAsync(command.Ruc, cancellationToken))
+        try
         {
-            throw new InvalidOperationException($"Una empresa con el RUC {command.Ruc} ya se encuentra registrada.");
+            if (await companyRepository.ExistsByRucAsync(command.Ruc, cancellationToken))
+            {
+                return Result<Company>.Failure(Error.Conflict("Companies.DuplicateRuc", $"Una empresa con el RUC {command.Ruc} ya se encuentra registrada."));
+            }
+
+            var company = new Company(command);
+            await companyRepository.AddAsync(company, cancellationToken);
+            await unitOfWork.CompleteAsync(cancellationToken);
+
+            var activity = new CompanyActivity(new CreateCompanyActivityCommand(
+                company.Id,
+                DateTime.UtcNow,
+                "Registro de empresa completado",
+                $"La empresa '{company.CommercialName}' fue dada de alta en el sistema.",
+                "completed"
+            ));
+            await companyActivityRepository.AddAsync(activity, cancellationToken);
+            await unitOfWork.CompleteAsync(cancellationToken);
+
+            return Result<Company>.Success(company);
         }
-
-        var company = new Company(command);
-        await companyRepository.AddAsync(company, cancellationToken);
-        await unitOfWork.CompleteAsync(cancellationToken);
-
-        var activity = new CompanyActivity(new CreateCompanyActivityCommand(
-            company.Id,
-            DateTime.UtcNow,
-            "Registro de empresa completado",
-            $"La empresa '{company.CommercialName}' fue dada de alta en el sistema.",
-            "completed"
-        ));
-        await companyActivityRepository.AddAsync(activity, cancellationToken);
-        await unitOfWork.CompleteAsync(cancellationToken);
-
-        return company;
+        catch (InvalidOperationException ex)
+        {
+            return Result<Company>.Failure(Error.Validation("Companies.InvalidData", ex.Message));
+        }
+        catch (DbUpdateException)
+        {
+            return Result<Company>.Failure(Error.Unexpected("Companies.DatabaseError", "A database error occurred."));
+        }
     }
 
-    public async Task<Company?> Handle(UpdateCompanyCommand command, CancellationToken cancellationToken = default)
+    public async Task<Result<Company>> Handle(UpdateCompanyCommand command, CancellationToken cancellationToken = default)
     {
         var company = await companyRepository.FindByIdAsync(command.Id, cancellationToken);
-        if (company == null) return null;
+        if (company == null) 
+            return Result<Company>.Failure(Error.NotFound("Companies.NotFound", "The specified company was not found."));
 
-        company.Update(command);
-        companyRepository.Update(company);
+        try
+        {
+            company.Update(command);
+            companyRepository.Update(company);
 
-        var activity = new CompanyActivity(new CreateCompanyActivityCommand(
-            company.Id,
-            DateTime.UtcNow,
-            "Perfil corporativo actualizado",
-            "Se modificaron los datos comerciales y de contacto de la empresa.",
-            "completed"
-        ));
-        await companyActivityRepository.AddAsync(activity, cancellationToken);
+            var activity = new CompanyActivity(new CreateCompanyActivityCommand(
+                company.Id,
+                DateTime.UtcNow,
+                "Perfil corporativo actualizado",
+                "Se modificaron los datos comerciales y de contacto de la empresa.",
+                "completed"
+            ));
+            await companyActivityRepository.AddAsync(activity, cancellationToken);
 
-        await unitOfWork.CompleteAsync(cancellationToken);
-        return company;
+            await unitOfWork.CompleteAsync(cancellationToken);
+            return Result<Company>.Success(company);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return Result<Company>.Failure(Error.Validation("Companies.InvalidData", ex.Message));
+        }
+        catch (DbUpdateException)
+        {
+            return Result<Company>.Failure(Error.Unexpected("Companies.DatabaseError", "A database error occurred."));
+        }
     }
 
-    public async Task<bool> HandleDelete(int id, CancellationToken cancellationToken = default)
+    public async Task<Result> HandleDelete(int id, CancellationToken cancellationToken = default)
     {
         var company = await companyRepository.FindByIdAsync(id, cancellationToken);
-        if (company == null) return false;
+        if (company == null) 
+            return Result.Failure(Error.NotFound("Companies.NotFound", "The specified company was not found."));
 
-        companyRepository.Remove(company);
-        await unitOfWork.CompleteAsync(cancellationToken);
-        return true;
+        try
+        {
+            companyRepository.Remove(company);
+            await unitOfWork.CompleteAsync(cancellationToken);
+            return Result.Success();
+        }
+        catch (DbUpdateException)
+        {
+            return Result.Failure(Error.Unexpected("Companies.DatabaseError", "A database error occurred."));
+        }
     }
 
-    public async Task<ComplianceItem?> Handle(UpdateComplianceItemStatusCommand command, CancellationToken cancellationToken = default)
+    public async Task<Result<ComplianceItem>> Handle(UpdateComplianceItemStatusCommand command, CancellationToken cancellationToken = default)
     {
         var item = await complianceItemRepository.FindByIdAsync(command.Id, cancellationToken);
-        if (item == null) return null;
+        if (item == null) 
+            return Result<ComplianceItem>.Failure(Error.NotFound("Companies.ComplianceItemNotFound", "Compliance item not found."));
 
-        item.UpdateStatus(command.Status);
-        complianceItemRepository.Update(item);
+        try
+        {
+            item.UpdateStatus(command.Status);
+            complianceItemRepository.Update(item);
 
-        var activity = new CompanyActivity(new CreateCompanyActivityCommand(
-            item.CompanyId,
-            DateTime.UtcNow,
-            $"Auditoría actualizada: {item.Title}",
-            $"El estado del ítem fue cambiado a '{command.Status}'.",
-            "completed"
-        ));
-        await companyActivityRepository.AddAsync(activity, cancellationToken);
+            var activity = new CompanyActivity(new CreateCompanyActivityCommand(
+                item.CompanyId,
+                DateTime.UtcNow,
+                $"Auditoría actualizada: {item.Title}",
+                $"El estado del ítem fue cambiado a '{command.Status}'.",
+                "completed"
+            ));
+            await companyActivityRepository.AddAsync(activity, cancellationToken);
 
-        await unitOfWork.CompleteAsync(cancellationToken);
-        return item;
+            await unitOfWork.CompleteAsync(cancellationToken);
+            return Result<ComplianceItem>.Success(item);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return Result<ComplianceItem>.Failure(Error.Validation("Companies.InvalidData", ex.Message));
+        }
+        catch (DbUpdateException)
+        {
+            return Result<ComplianceItem>.Failure(Error.Unexpected("Companies.DatabaseError", "A database error occurred."));
+        }
     }
 
-    public async Task<SchoolContract?> Handle(CreateSchoolContractCommand command, CancellationToken cancellationToken = default)
+    // ==========================================
+    // LOS SIGUIENTES MÉTODOS SE MANTIENEN IGUAL 
+    // (Devuelven entidades, no usan Result)
+    // ==========================================
+
+    public async Task<Result<SchoolContract>> Handle(CreateSchoolContractCommand command, CancellationToken cancellationToken = default)
     {
         var contract = new SchoolContract(command);
         await schoolContractRepository.AddAsync(contract, cancellationToken);
         await unitOfWork.CompleteAsync(cancellationToken);
-        return contract;
+        return Result<SchoolContract>.Success(contract);
     }
 
-    public async Task<CompanyMember?> Handle(CreateCompanyMemberCommand command, CancellationToken cancellationToken = default)
+    public async Task<Result<CompanyMember>> Handle(CreateCompanyMemberCommand command, CancellationToken cancellationToken = default)
     {
         var member = new CompanyMember(command);
         await companyMemberRepository.AddAsync(member, cancellationToken);
         await unitOfWork.CompleteAsync(cancellationToken);
-        return member;
+        return Result<CompanyMember>.Success(member);
     }
 
-    public async Task<ComplianceItem?> Handle(CreateComplianceItemCommand command, CancellationToken cancellationToken = default)
+    public async Task<Result<ComplianceItem>> Handle(CreateComplianceItemCommand command, CancellationToken cancellationToken = default)
     {
         var item = new ComplianceItem(command);
         await complianceItemRepository.AddAsync(item, cancellationToken);
         await unitOfWork.CompleteAsync(cancellationToken);
-        return item;
+        return Result<ComplianceItem>.Success(item);
     }
 
-    public async Task<CompanyActivity?> Handle(CreateCompanyActivityCommand command, CancellationToken cancellationToken = default)
+    public async Task<Result<CompanyActivity>> Handle(CreateCompanyActivityCommand command, CancellationToken cancellationToken = default)
     {
         var activity = new CompanyActivity(command);
         await companyActivityRepository.AddAsync(activity, cancellationToken);
         await unitOfWork.CompleteAsync(cancellationToken);
-        return activity;
+        return Result<CompanyActivity>.Success(activity);
     }
 
     public async Task SeedInitialDataAsync(CancellationToken cancellationToken = default)

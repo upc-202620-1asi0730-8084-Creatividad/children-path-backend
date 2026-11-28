@@ -1,50 +1,50 @@
-﻿using ChildrenPath.Platform.Alerts.Domain.Model.Aggregate;
-using ChildrenPath.Platform.Alerts.Domain.Model.ValueObjects;
+﻿using ChildrenPath.Platform.Alerts.Domain.Model.ReadModels;
 using ChildrenPath.Platform.Alerts.Interfaces.Resources;
 
 namespace ChildrenPath.Platform.Alerts.Interfaces.Transform;
 
 public static class AlertDashboardAssembler
 {
-    public static AlertDashboardResource ToDashboardResource(IEnumerable<Alert> alerts)
+    public static AlertDashboardResource ToDashboardResource(AlertDashboardSnapshot snapshot)
     {
-        var alertList = alerts.ToList();
+        var now = DateTimeOffset.UtcNow;
 
-        var items = alertList.Select(a => 
-        {
-            var createdAt = a.CreatedAt ?? DateTimeOffset.UtcNow;
-
-            return new AlertDashboardItemResource(
-                Id: $"al-{a.Id:D3}",
-                Category: a.Type == AlertType.Delay || a.Type == AlertType.Emergency ? "alert" : "notification",
-                Type: a.Type.ToString().ToLower(),
-                Priority: a.Priority.ToString().ToLower(),
-                Status: a.Status == AlertStatus.Resolved ? "acknowledged" : "new",
-                Title: a.Type == AlertType.Delay ? "Route delay detected" : "Incident report",
-                Message: a.Message,
-                Time: createdAt.ToString("h:mm tt"), 
-                Date: createdAt.Date == DateTimeOffset.UtcNow.Date ? "Today" : createdAt.ToString("MMM dd"),
-                SourceBc: "Trip Management",
-                RecipientRole: "Company Admin",
-                RouteName: "San Isidro Morning Route",
-                VehiclePlate: "KW-118",
-                ActionLabel: "Review alert"
-            );
-        }).ToList();
+        var items = snapshot.Items.Select(i => new AlertDashboardItemResource(
+            Id: $"al-{i.AlertId:D3}",
+            Category: i.Category,
+            Type: i.Type,
+            Priority: i.Priority,
+            Status: i.Status,
+            Title: i.Title,
+            Message: i.Message,
+            Time: i.CreatedAt.ToString("h:mm tt"),
+            Date: i.CreatedAt.Date == now.Date ? "Today" : i.CreatedAt.ToString("MMM dd"),
+            SourceBc: i.SourceBc,
+            RecipientRole: i.RecipientRole,
+            RouteName: i.RouteName,
+            VehiclePlate: i.VehiclePlate,
+            ActionLabel: i.ActionLabel
+        )).ToList();
 
         var summary = new AlertDashboardSummaryResource(
-            Total: items.Count,
-            Unread: items.Count(i => i.Status == "new"),
-            CriticalAlerts: alertList.Count(a => a.Priority == AlertPriority.Critical),
-            DeliveryRate: 98.4,
-            Acknowledged: items.Count(i => i.Status == "acknowledged")
-        );
+            Total: snapshot.Summary.Total,
+            Unread: snapshot.Summary.Unread,
+            CriticalAlerts: snapshot.Summary.CriticalAlerts,
+            DeliveryRate: snapshot.Summary.DeliveryRate,
+            Acknowledged: snapshot.Summary.Acknowledged);
 
-        var activities = new List<AlertDashboardActivityResource>
-        {
-            new("act-001", "Just now", "System Active", "Connected to backend.", "completed")
-        };
+        var activities = snapshot.Activities.Select(a => new AlertDashboardActivityResource(
+            a.Id, FormatRelativeTime(a.Time, now), a.Title, a.Description, a.Status)).ToList();
 
         return new AlertDashboardResource(summary, items, activities);
+    }
+
+    private static string FormatRelativeTime(DateTimeOffset time, DateTimeOffset now)
+    {
+        var diff = now - time;
+        if (diff.TotalMinutes < 1) return "Just now";
+        if (diff.TotalMinutes < 60) return $"{(int)diff.TotalMinutes} min ago";
+        if (diff.TotalHours   < 24) return $"{(int)diff.TotalHours} h ago";
+        return time.ToString("MMM dd, h:mm tt");
     }
 }

@@ -8,10 +8,8 @@ public class Location
     public DateTime Timestamp { get; private set; }
     public double Speed { get; private set; }
 
-    // Constructor vacío requerido por Entity Framework
     public Location() { }
 
-    // Constructor que pide tu Agregado
     public Location(double latitude, double longitude, double speed)
     {
         Latitude = latitude;

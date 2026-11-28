@@ -42,4 +42,9 @@ public static class AssignmentErrors
     public static readonly Error InternalServerError = Error.Unexpected(
         "Assignments.InternalServerError",
         "An unexpected error occurred while processing the assignment.");
+    
+    public static readonly Error InvalidId = Error.Validation(
+        "Assignments.InvalidId",
+        "The provided assignment identifier is not valid.");
+    
 }

@@ -9,7 +9,6 @@ public enum TrackingStatus { Active, Paused, Stopped, Lost }
 
 public partial class TrackingSession : AggregateRoot
 {
-    // Listas encapsuladas (solo lectura hacia afuera)
     private readonly List<Location> _locations = new();
     private readonly List<ETA> _etas = new();
 

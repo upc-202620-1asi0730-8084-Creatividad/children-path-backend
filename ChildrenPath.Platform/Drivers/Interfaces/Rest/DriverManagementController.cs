@@ -8,15 +8,13 @@ using Microsoft.AspNetCore.Mvc;
 namespace ChildrenPath.Platform.Drivers.Interfaces.Rest;
 
 [ApiController]
-[Route("api/v1")]
+[Route("api/v1/drivers/management")]
 [Produces(MediaTypeNames.Application.Json)]
 [Tags("Driver Management")]
 public class DriverManagementController(IDriverQueryService queryService) : ControllerBase
 {
-    [HttpGet("driver-summary")]
-    [HttpGet("driverSummary")]
-    [HttpGet("drivers/summary")]
-    [EndpointSummary("Get driver summary metrics")]
+    [HttpGet("summary")]
+    [EndpointSummary("get driver summary metrics")]
     [ProducesResponseType(typeof(DriverSummaryResource), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetSummary(CancellationToken cancellationToken)
     {
@@ -24,10 +22,8 @@ public class DriverManagementController(IDriverQueryService queryService) : Cont
         return Ok(DriverDashboardResourceAssembler.ToSummaryResource(summary));
     }
 
-    [HttpGet("driver-reviews")]
-    [HttpGet("driverReviews")]
-    [HttpGet("drivers/reviews")]
-    [EndpointSummary("Get drivers requiring review")]
+    [HttpGet("reviews")]
+    [EndpointSummary("get drivers requiring review")]
     [ProducesResponseType(typeof(IEnumerable<DriverReviewResource>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetReviews(CancellationToken cancellationToken)
     {
@@ -35,14 +31,10 @@ public class DriverManagementController(IDriverQueryService queryService) : Cont
         return Ok(reviews.Select(DriverDashboardResourceAssembler.ToReviewResource));
     }
 
-    [HttpGet("driver-shifts")]
-    [HttpGet("driverShifts")]
-    [HttpGet("drivers/shifts")]
-    [EndpointSummary("Get recent driver activity")]
+    [HttpGet("shifts")]
+    [EndpointSummary("get recent driver activity")]
     [ProducesResponseType(typeof(IEnumerable<DriverShiftResource>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetShifts(
-        [FromQuery] int limit = 20,
-        CancellationToken cancellationToken = default)
+    public async Task<IActionResult> GetShifts([FromQuery] int limit = 20, CancellationToken cancellationToken = default)
     {
         var activities = await queryService.Handle(new GetDriverShiftsQuery(limit), cancellationToken);
         return Ok(activities.Select(DriverDashboardResourceAssembler.ToShiftResource));
