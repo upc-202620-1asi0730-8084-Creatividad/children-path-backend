@@ -8,14 +8,13 @@ using Microsoft.AspNetCore.Mvc;
 namespace ChildrenPath.Platform.Students.Interfaces.Rest;
 
 [ApiController]
-[Route("api/v1")]
+[Route("api/v1/students/management")]
 [Produces(MediaTypeNames.Application.Json)]
 [Tags("Student Management")]
 public class StudentManagementController(IStudentQueryService queryService) : ControllerBase
 {
-    [HttpGet("student-summary")]
-    [HttpGet("studentSummary")]
-    [EndpointSummary("Get student summary metrics")]
+    [HttpGet("summary")]
+    [EndpointSummary("get student summary metrics")]
     [ProducesResponseType(typeof(StudentSummaryResource), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetSummary(CancellationToken cancellationToken)
     {
@@ -23,9 +22,8 @@ public class StudentManagementController(IStudentQueryService queryService) : Co
         return Ok(StudentDashboardResourceAssembler.ToSummaryResource(summary));
     }
 
-    [HttpGet("student-reviews")]
-    [HttpGet("studentReviews")]
-    [EndpointSummary("Get student reviews")]
+    [HttpGet("reviews")]
+    [EndpointSummary("get student reviews")]
     [ProducesResponseType(typeof(IEnumerable<StudentReviewResource>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetReviews(CancellationToken cancellationToken)
     {
@@ -33,13 +31,10 @@ public class StudentManagementController(IStudentQueryService queryService) : Co
         return Ok(reviews.Select(StudentDashboardResourceAssembler.ToReviewResource));
     }
 
-    [HttpGet("student-activities")]
-    [HttpGet("studentActivities")]
-    [EndpointSummary("Get recent student activities")]
+    [HttpGet("activities")]
+    [EndpointSummary("get recent student activities")]
     [ProducesResponseType(typeof(IEnumerable<StudentActivityResource>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetActivities(
-        [FromQuery] int limit = 20,
-        CancellationToken cancellationToken = default)
+    public async Task<IActionResult> GetActivities([FromQuery] int limit = 20, CancellationToken cancellationToken = default)
     {
         var activities = await queryService.Handle(new GetStudentActivitiesQuery(limit), cancellationToken);
         return Ok(activities.Select(StudentDashboardResourceAssembler.ToActivityResource));
