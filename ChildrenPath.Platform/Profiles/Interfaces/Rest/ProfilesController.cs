@@ -16,7 +16,7 @@ public class ProfilesController(
     IProfileQueryService profileQueryService) : ControllerBase
 {
     [HttpPost]
-    [EndpointSummary("Create a new profile")]
+    [EndpointSummary("create a new profile")]
     [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(ProfileResource))]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
@@ -38,7 +38,7 @@ public class ProfilesController(
     }
 
     [HttpGet("{id:int}")]
-    [EndpointSummary("Get a profile by id")]
+    [EndpointSummary("get a profile by id")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ProfileResource))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetById([FromRoute] int id, CancellationToken cancellationToken)
@@ -49,7 +49,7 @@ public class ProfilesController(
     }
 
     [HttpGet]
-    [EndpointSummary("List all profiles")]
+    [EndpointSummary("list all profiles")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ProfileResource>))]
     public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
     {
