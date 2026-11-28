@@ -5,6 +5,7 @@ using ChildrenPath.Platform.Fleet.Domain.Model.Commands;
 using ChildrenPath.Platform.Fleet.Domain.Model.Queries;
 using ChildrenPath.Platform.Fleet.Interfaces.Rest.Resources;
 using ChildrenPath.Platform.Fleet.Interfaces.Rest.Transform;
+using ChildrenPath.Platform.Shared.Interfaces.Rest.Transform;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ChildrenPath.Platform.Fleet.Interfaces.Rest;
@@ -18,89 +19,90 @@ public class VehiclesController(
     IVehicleQueryService vehicleQueryService) : ControllerBase
 {
     [HttpGet]
-    [EndpointSummary("Get all vehicles")]
+    [EndpointSummary("get all vehicles")]
     [ProducesResponseType(typeof(IEnumerable<VehicleResource>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetAllVehicles(CancellationToken cancellationToken)
     {
         var query = new GetAllVehiclesQuery();
         var vehicles = await vehicleQueryService.Handle(query, cancellationToken);
-        var resources = vehicles.Select(VehicleResourceFromEntityAssembler.ToResourceFromEntity);
-        return Ok(resources);
+        return Ok(vehicles.Select(VehicleResourceFromEntityAssembler.ToResourceFromEntity));
     }
 
     [HttpGet("{id:int}")]
-    [EndpointSummary("Get vehicle by ID")]
+    [EndpointSummary("get vehicle by ID")]
     [ProducesResponseType(typeof(VehicleResource), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetVehicleById(int id, CancellationToken cancellationToken)
     {
         var query = new GetVehicleByIdQuery(id);
         var vehicle = await vehicleQueryService.Handle(query, cancellationToken);
-        if (vehicle == null) return NotFound(new { message = $"Vehicle with id {id} not found." });
+        
+        if (vehicle == null) return NotFound();
 
-        var resource = VehicleResourceFromEntityAssembler.ToResourceFromEntity(vehicle);
-        return Ok(resource);
+        return Ok(VehicleResourceFromEntityAssembler.ToResourceFromEntity(vehicle));
     }
 
     [HttpGet("plate/{plate}")]
-    [EndpointSummary("Get vehicle by license plate")]
+    [EndpointSummary("get vehicle by license plate")]
     [ProducesResponseType(typeof(VehicleResource), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetVehicleByPlate(string plate, CancellationToken cancellationToken)
     {
         var query = new GetVehicleByPlateQuery(plate);
         var vehicle = await vehicleQueryService.Handle(query, cancellationToken);
-        if (vehicle == null) return NotFound(new { message = $"Vehicle with plate '{plate}' not found." });
+        
+        if (vehicle == null) return NotFound();
 
-        var resource = VehicleResourceFromEntityAssembler.ToResourceFromEntity(vehicle);
-        return Ok(resource);
+        return Ok(VehicleResourceFromEntityAssembler.ToResourceFromEntity(vehicle));
     }
 
     [HttpPost]
-    [EndpointSummary("Create a new vehicle")]
+    [EndpointSummary("create a new vehicle")]
     [ProducesResponseType(typeof(VehicleResource), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateVehicle([FromBody] CreateVehicleResource resource, CancellationToken cancellationToken)
     {
-        try
-        {
-            var command = CreateVehicleCommandFromResourceAssembler.ToCommandFromResource(resource);
-            var vehicle = await vehicleCommandService.Handle(command, cancellationToken);
-            if (vehicle == null) return BadRequest(new { message = "Could not create vehicle." });
+        var command = CreateVehicleCommandFromResourceAssembler.ToCommandFromResource(resource);
+        var result = await vehicleCommandService.Handle(command, cancellationToken);
 
-            var createdResource = VehicleResourceFromEntityAssembler.ToResourceFromEntity(vehicle);
-            return CreatedAtAction(nameof(GetVehicleById), new { id = vehicle.Id }, createdResource);
-        }
-        catch (InvalidOperationException ex)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
+        return ResultActionResultAssembler.ToActionResult(
+            this,
+            result,
+            createdVehicle => 
+            {
+                var createdResource = VehicleResourceFromEntityAssembler.ToResourceFromEntity(createdVehicle);
+                return CreatedAtAction(nameof(GetVehicleById), new { id = createdVehicle.Id }, createdResource);
+            });
     }
 
     [HttpPut("{id:int}")]
-    [EndpointSummary("Update an existing vehicle")]
+    [EndpointSummary("update an existing vehicle")]
     [ProducesResponseType(typeof(VehicleResource), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> UpdateVehicle(int id, [FromBody] UpdateVehicleResource resource, CancellationToken cancellationToken)
     {
         var command = UpdateVehicleCommandFromResourceAssembler.ToCommandFromResource(id, resource);
-        var updated = await vehicleCommandService.Handle(command, cancellationToken);
-        if (updated == null) return NotFound(new { message = $"Vehicle with id {id} not found." });
+        var result = await vehicleCommandService.Handle(command, cancellationToken);
 
-        var updatedResource = VehicleResourceFromEntityAssembler.ToResourceFromEntity(updated);
-        return Ok(updatedResource);
+        return ResultActionResultAssembler.ToActionResult(
+            this,
+            result,
+            updatedVehicle => Ok(VehicleResourceFromEntityAssembler.ToResourceFromEntity(updatedVehicle)));
     }
 
     [HttpDelete("{id:int}")]
-    [EndpointSummary("Delete a vehicle")]
+    [EndpointSummary("delete a vehicle")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteVehicle(int id, CancellationToken cancellationToken)
     {
         var command = new DeleteVehicleCommand(id);
-        var deleted = await vehicleCommandService.Handle(command, cancellationToken);
-        if (!deleted) return NotFound(new { message = $"Vehicle with id {id} not found." });
+        var result = await vehicleCommandService.Handle(command, cancellationToken);
 
-        return NoContent();
+        return ResultActionResultAssembler.ToActionResult(
+            this,
+            result,
+            _ => NoContent());
     }
 }

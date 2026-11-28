@@ -59,4 +59,10 @@ public class FleetQueryService(
 
         return new FleetDashboardData(summary, vehicles, alerts);
     }
+    
+    public async Task<MaintenanceAlert?> Handle(GetMaintenanceAlertByIdQuery query, CancellationToken cancellationToken)
+    {
+        return await maintenanceAlertRepository.FindByIdAsync(query.Id, cancellationToken);
+    }
+    
 }
